@@ -14,6 +14,9 @@ public:
 	void SetIB(IndexBuffer* ib);
 	Material* material_;
 protected:
+	void BeginDo();
+	void EndDo();
+
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
 };

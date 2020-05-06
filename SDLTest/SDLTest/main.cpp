@@ -64,11 +64,7 @@ void GLRender()
 	for (auto& dc : GOD.drawcalls_)
 	{
 		dc->material_->UpdateParam("maxTheta", globalK * PI*6.0f);
-		//? ;
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);
 		dc->Do();
-		glDisable(GL_BLEND);
 	}
 
 	//???
@@ -380,6 +376,7 @@ int main(int argc, char* argv[]) {
 	}
 	vortexMat->UpdateParam("maxTheta", PI / 4);
 	vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
+	vortexMat->SetBlendType(Blend_Alpha);
 	scene7->Show(new ShaderImage(vortexImage, vortexMat), 1);
 
 	SDL_Event e;

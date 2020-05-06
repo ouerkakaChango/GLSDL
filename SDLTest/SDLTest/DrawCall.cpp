@@ -15,8 +15,28 @@ DrawCall::~DrawCall()
 {
 }
 
+void DrawCall::BeginDo()
+{
+	auto blend = material_->blendType_;
+	if (blend == Blend_Alpha)
+	{
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	}
+}
+
+void DrawCall::EndDo()
+{
+	auto blend = material_->blendType_;
+	if (blend == Blend_Alpha)
+	{
+		glDisable(GL_BLEND);
+	}
+}
+
 void DrawCall::Do()
 {
+	BeginDo();
 	glUseProgram(material_->programID_);
 
 	glBindVertexArray(vb_->vao_);
@@ -49,6 +69,7 @@ void DrawCall::Do()
 	//Unbind program
 	glUseProgram(NULL);
 	//___ clear things
+	EndDo();
 
 }
 

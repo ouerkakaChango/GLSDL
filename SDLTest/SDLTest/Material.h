@@ -78,6 +78,12 @@ struct paramInfo
 
 bool operator==(const paramInfo& info1, const paramInfo& info2);
 
+enum MaterialBlendType
+{
+	Blend_Opaque,
+	Blend_Alpha,
+};
+
 //导入类（用户材质->dc可用的数据） 面向用户的抽象材质类
 class Material
 {
@@ -86,6 +92,7 @@ public:
 	~Material();
 
 	bool CompileShader(const Path& vsPath, const Path& fsPath);
+	void SetBlendType(MaterialBlendType blend) { blendType_ = blend; }
 
 	template <class T>
 	T* GetParam(const std::string& paramName)
@@ -139,9 +146,10 @@ protected:
 	MaterialParam* AddParam(const std::string& paramName, float defaultValue);
 	MaterialParam* AddParam(const std::string& paramName, SDL_Surface* textureSurface);
 
-	GLuint vertexShader_;
-	GLuint fragmentShader_;
 	std::vector<paramInfo> attributeInfos_;	
 	std::vector<paramInfo> paramInfos_;
+	MaterialBlendType blendType_{ Blend_Alpha };
+	GLuint vertexShader_;
+	GLuint fragmentShader_;
 
 };
