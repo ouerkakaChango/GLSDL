@@ -3,7 +3,7 @@
 
 void Action::Check(float time)
 {
-	if (!bDone_ && Equals(time, time_, errorAccept_))
+	if (!bDone_ && time>time_)
 	{
 		DoAction();
 		bDone_ = true;

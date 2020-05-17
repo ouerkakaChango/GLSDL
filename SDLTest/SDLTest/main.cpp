@@ -37,18 +37,6 @@ Material* gMaterial=nullptr;
 VertexBuffer gVB;
 IndexBuffer gIB;
 
-//???
-//1s内从0到1，过了之后再为0
-//因为很多程序都用到，不如全局
-//现在应该会有问题，舍弃了少数时间
-float globalK = 0.0f;
-
-void LogicTick(float deltaTime)
-{
-	globalK += deltaTime;
-	globalK = globalK > 4.0f ? 0.0f : globalK;
-}
-
 void GLRender()
 {
 	//Clear color buffer
@@ -64,8 +52,6 @@ void GLRender()
 
 	for (auto& dc : GOD.drawcalls_)
 	{
-		//???
-		//dc->material_->UpdateParam("maxScale", globalK * 1.5f);
 		dc->Do();
 	}
 
@@ -370,21 +356,24 @@ int main(int argc, char* argv[]) {
 	{
 		abort();
 	}
-	vortexMat->UpdateParam("maxScale", 0.2);
+	vortexMat->UpdateParam("maxScale", 0.1f);
 	vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
 	vortexMat->SetBlendType(Blend_Alpha);
 	Image* vortexImage = new Image(1600, 900);
 	vortexImage->SetPosition(800, 450);
-	//???
+
 	EffectShaderParam* paramEffect = new EffectShaderParam;
-	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, nullptr);
+	paramEffect->Bind(vortexMat, "maxScale");
+	paramEffect->AddPoint(0.f, 0.1f);
+	paramEffect->AddPoint(3.f, 0.1f);
+	paramEffect->AddPoint(7.f, 6.f);
+	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, paramEffect);
 	//////////////////////////////////////////////////////////////
 
 
 	bool bLoop = true;
 	long last = 0;
 	float deltaTime = 0.0;
-	globalK = 0;
 
 	SDL_Event e;
 	while (bLoop)
@@ -428,9 +417,7 @@ int main(int argc, char* argv[]) {
 				//std::cout << deltaTime << std::endl;
 				last = now;
 
-				//逻辑循环
-				LogicTick(deltaTime);
-				//渲染循环
+				//主循环
 				SDL_RenderClear(renderer);
 				GOD.Update(deltaTime);
 				//??? 把d3d画的保存为图

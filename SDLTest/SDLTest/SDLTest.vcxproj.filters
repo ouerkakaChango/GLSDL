@@ -153,6 +153,9 @@
     <ClCompile Include="EffectShaderParam.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TimeCurve.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -290,9 +293,15 @@
     <ClInclude Include="EffectShaderParam.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TimeCurve.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Utility.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="TimeCurve.inl">
       <Filter>头文件</Filter>
     </None>
   </ItemGroup>
