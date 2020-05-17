@@ -27,6 +27,7 @@
 #include "IndexBuffer.h"
 #include "DrawCall.h"
 #include "ShaderImage.h"
+#include "Timeline.h"
 
 #include "GameUtility.h"
 #include "Debug.h"
@@ -63,7 +64,8 @@ void GLRender()
 
 	for (auto& dc : GOD.drawcalls_)
 	{
-		dc->material_->UpdateParam("maxTheta", globalK * PI*6.0f);
+		//???
+		//dc->material_->UpdateParam("maxScale", globalK * 1.5f);
 		dc->Do();
 	}
 
@@ -140,6 +142,49 @@ int main(int argc, char* argv[]) {
 		abort();
 	}
 
+	//???
+	//-----------------------------------------------------------------
+	// core version
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+#ifdef GL_CORE
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#else
+	//由于代码中还有“过时”，或者不在PROFILE_CORE中的写法，所以使用兼容性版本
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+#endif
+
+	//Create context
+	auto gContext = SDL_GL_CreateContext(window);
+	if (gContext == NULL)
+	{
+		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
+		abort();
+	}
+	else
+	{
+		//Initialize GLEW
+		//glewExperimental = GL_TRUE;
+		GLenum glewError = glewInit();
+		if (glewError != GLEW_OK)
+		{
+			printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
+		}
+
+		//Use Vsync
+		if (SDL_GL_SetSwapInterval(1) < 0)
+		{
+			printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		}
+
+		//Initialize OpenGL
+		if (!initGL())
+		{
+			printf("Unable to initialize OpenGL!\n");
+			//abort();
+		}
+	}
+	//_______________
 	//###
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -309,75 +354,37 @@ int main(int argc, char* argv[]) {
 	SceneTransition* transition7 = new SceneTransition("fadeOutIn", 2);
 	sceneMgr.AddTransition(Int<2>(5, 6), transition7);
 
-	//???
-	//带shader特效
-	Image* vortexImage = new Image(400, 400);
-	vortexImage->SetPosition(800, 450);
-	vortexImage->Load("D:/HumanTree/vortex2.png");
+	Func stopWarningFunc = [&]()
+	{;
+		w1.Stop(3);
+		w2.Stop(3);
+		w3.Stop(3);
+		redFlash.SetActive(false);
+	};
 
-	///////////////////////////////////////////////////////////////////////
-	//SDL_RenderSetClipRect(renderer, &r);
-	//SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	//SDL_RenderDrawRect(renderer, &rect);
+	//红色警报事件
+	scene7->AddCustomAction(1, stopWarningFunc);
+
+	Material* vortexMat = new Material;
+	if (!vortexMat->CompileShader("D:/HumanTree/code/vortex.vs", "D:/HumanTree/code/vortex2.fs"))
+	{
+		abort();
+	}
+	vortexMat->UpdateParam("maxScale", 0.2);
+	vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
+	vortexMat->SetBlendType(Blend_Alpha);
+	Image* vortexImage = new Image(1600, 900);
+	vortexImage->SetPosition(800, 450);
+	//???
+	EffectShaderParam* paramEffect = new EffectShaderParam;
+	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, nullptr);
+	//////////////////////////////////////////////////////////////
 
 
 	bool bLoop = true;
 	long last = 0;
 	float deltaTime = 0.0;
-
-	//???
-
-	// core version
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-#ifdef GL_CORE
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#else
-	//由于代码中还有“过时”，或者不在PROFILE_CORE中的写法，所以使用兼容性版本
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-#endif
-
-	//Create context
-	auto gContext = SDL_GL_CreateContext(window);
-	if (gContext == NULL)
-	{
-		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-		abort();
-	}
-	else
-	{
-		//Initialize GLEW
-		//glewExperimental = GL_TRUE;
-		GLenum glewError = glewInit();
-		if (glewError != GLEW_OK)
-		{
-			printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
-		}
-
-		//Use Vsync
-		if (SDL_GL_SetSwapInterval(1) < 0)
-		{
-			printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-		}
-
-		//Initialize OpenGL
-		if (!initGL())
-		{
-			printf("Unable to initialize OpenGL!\n");
-			//abort();
-		}
-	}
 	globalK = 0;
-
-	Material* vortexMat = new Material;
-	if (!vortexMat->CompileShader("D:/HumanTree/code/vortex.vs","D:/HumanTree/code/vortex.fs"))
-	{
-		abort();
-	}
-	vortexMat->UpdateParam("maxTheta", PI / 4);
-	vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
-	vortexMat->SetBlendType(Blend_Alpha);
-	scene7->Show(new ShaderImage(vortexImage, vortexMat), 1);
 
 	SDL_Event e;
 	while (bLoop)
@@ -425,7 +432,7 @@ int main(int argc, char* argv[]) {
 				LogicTick(deltaTime);
 				//渲染循环
 				SDL_RenderClear(renderer);
-				GOD.Update(deltaTime*3);
+				GOD.Update(deltaTime);
 				//??? 把d3d画的保存为图
 				saveScreenshot("D:/22.bmp", window, renderer);
 				//???

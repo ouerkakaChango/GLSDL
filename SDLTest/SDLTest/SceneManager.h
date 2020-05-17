@@ -18,7 +18,7 @@ public:
 	void ToNext();
 	void SetSceneActive(int inx,bool active);
 	int GetNowSceneIndex() { return sceneInx_; }
-	void AddCrossEffect(Effect* effect);
+	void AddCrossEffect(Effect* effect);			//¿çsceneµÄeffect
 	void ClearScenes();
 
 protected:

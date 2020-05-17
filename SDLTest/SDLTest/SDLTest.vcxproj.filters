@@ -150,6 +150,9 @@
     <ClCompile Include="File.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="EffectShaderParam.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -282,6 +285,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="File.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectShaderParam.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

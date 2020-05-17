@@ -33,7 +33,7 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img)
 	dc_->SetVB(vb_);
 	dc_->SetIB(ib_);
 
-	GOD.drawcalls_.push_back(dc_);
+	
 }
 
 
@@ -45,4 +45,10 @@ ShaderImage::~ShaderImage()
 void ShaderImage::Render()
 {
 	//image_->Render();
+	static bool bPushedDrawcall = false;
+	if (!bPushedDrawcall)
+	{
+		GOD.drawcalls_.push_back(dc_);
+		bPushedDrawcall = true;
+	}
 }

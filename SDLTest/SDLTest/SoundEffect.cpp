@@ -48,3 +48,19 @@ void SoundEffect::Play(float duration)
 		Mix_PlayChannelTimed(-1, sound_, -1, duration * 1000);
 	}
 }
+
+void SoundEffect::Stop()
+{
+	if (sound_ != NULL)
+	{
+		Mix_FadeOutChannel(-1,0);
+	}
+}
+
+void SoundEffect::Stop(float duration)
+{
+	if (sound_ != NULL)
+	{
+		Mix_FadeOutChannel(-1, duration*1000);
+	}
+}
