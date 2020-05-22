@@ -24,6 +24,6 @@ void ShowAction::DoAction()
 	{
 		effect_->Start();
 	}
-	scene_->AddDrawable(drawable_);
+	scene_->AddDrawable(drawable_,true);
 	std::cout << "do show action\n";
 }

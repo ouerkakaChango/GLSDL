@@ -42,13 +42,21 @@ ShaderImage::~ShaderImage()
 
 }
 
-void ShaderImage::Render()
-{
-	//image_->Render();
-	static bool bPushedDrawcall = false;
-	if (!bPushedDrawcall)
+void ShaderImage::SetActive(bool active) 
+{ 
+	if (!bActive_ && active)
 	{
 		GOD.drawcalls_.push_back(dc_);
-		bPushedDrawcall = true;
 	}
+	else if(bActive_&& !active)
+	{
+		auto& god = GOD;
+		sure(STL_Remove(GOD.drawcalls_, dc_));
+	}
+	Drawable::SetActive(active);
+}
+
+void ShaderImage::Render()
+{
+	//???
 }

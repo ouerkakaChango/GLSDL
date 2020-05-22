@@ -105,3 +105,15 @@ void SceneManager::ClearScenes()
 {
 	scenes_.clear();
 }
+
+void SceneManager::JumpToScene(int sceneInx)
+{
+	for (unsigned i = 0; i < sceneInx; i++)
+	{
+		scenes_[i]->SetActive(false);
+		transitions_[Int<2>(-1, 0)]->SetActive(false);
+
+	}
+	sceneInx_ = sceneInx;
+	scenes_[sceneInx_]->SetActive(true);
+}

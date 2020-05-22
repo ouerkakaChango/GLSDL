@@ -83,6 +83,50 @@ bool initGL()
 	return true;
 }
 
+void InitSDL_OpenGL(SDL_Window *window)
+{
+	// core version
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+#ifdef GL_CORE
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#else
+	//由于代码中还有“过时”，或者不在PROFILE_CORE中的写法，所以使用兼容性版本
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+#endif
+
+	//Create context
+	auto gContext = SDL_GL_CreateContext(window);
+	if (gContext == NULL)
+	{
+		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
+		abort();
+	}
+	else
+	{
+		//Initialize GLEW
+		//glewExperimental = GL_TRUE;
+		GLenum glewError = glewInit();
+		if (glewError != GLEW_OK)
+		{
+			printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
+		}
+
+		//Use Vsync
+		if (SDL_GL_SetSwapInterval(1) < 0)
+		{
+			printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		}
+
+		//Initialize OpenGL
+		if (!initGL())
+		{
+			printf("Unable to initialize OpenGL!\n");
+			//abort();
+		}
+	}
+}
+
 int main(int argc, char* argv[]) {
 
 	SDL_Window *window;                    // Declare a pointer
@@ -129,49 +173,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	//???
-	//-----------------------------------------------------------------
-	// core version
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-#ifdef GL_CORE
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#else
-	//由于代码中还有“过时”，或者不在PROFILE_CORE中的写法，所以使用兼容性版本
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-#endif
-
-	//Create context
-	auto gContext = SDL_GL_CreateContext(window);
-	if (gContext == NULL)
-	{
-		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-		abort();
-	}
-	else
-	{
-		//Initialize GLEW
-		//glewExperimental = GL_TRUE;
-		GLenum glewError = glewInit();
-		if (glewError != GLEW_OK)
-		{
-			printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
-		}
-
-		//Use Vsync
-		if (SDL_GL_SetSwapInterval(1) < 0)
-		{
-			printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-		}
-
-		//Initialize OpenGL
-		if (!initGL())
-		{
-			printf("Unable to initialize OpenGL!\n");
-			//abort();
-		}
-	}
-	//_______________
-	//###
+	InitSDL_OpenGL(window);
+	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 
@@ -332,11 +335,10 @@ int main(int argc, char* argv[]) {
 	sceneMgr.AddTransition(Int<2>(4, 5), transition6);
 
 	///////////////////////////////////////////////////////////////////////
-	//scene7
-	//???
-	sceneMgr.ClearScenes();
+	//scene7 
 
 	auto scene7 = sceneMgr.InsertScene("D:/HumanTree/19.bmp");
+	
 	SceneTransition* transition7 = new SceneTransition("fadeOutIn", 2);
 	sceneMgr.AddTransition(Int<2>(5, 6), transition7);
 
@@ -368,7 +370,16 @@ int main(int argc, char* argv[]) {
 	paramEffect->AddPoint(3.f, 0.1f);
 	paramEffect->AddPoint(7.f, 6.f);
 	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, paramEffect);
+	scene7->SetAutoEnd(8.0f);
+
+	//???
+	//sceneMgr.JumpToScene(6);
 	//////////////////////////////////////////////////////////////
+	auto scene8 = sceneMgr.InsertScene("D:/HumanTree/5.bmp");
+	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 2);
+	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
+
+	//scene8->SetAutoEnd(7);
 
 
 	bool bLoop = true;

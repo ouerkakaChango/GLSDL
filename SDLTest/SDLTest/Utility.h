@@ -16,6 +16,8 @@ public:
 	Utility();
 	~Utility();
 };
+
+void sure(bool b);
 //////////////////////////////////////////////////////////////
 //type
 //把string转为其他类型
@@ -66,6 +68,9 @@ public:
 	std::map<std::string, T> map_;
 	inline bool Find(std::string key, T*& result);
 };
+
+template <class T>
+bool STL_Remove(std::vector<T>& vec,const T& elem);
 
 //////////////////////////////////////////////////////////////
 //math

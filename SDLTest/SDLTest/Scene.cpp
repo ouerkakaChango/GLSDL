@@ -24,6 +24,17 @@ void Scene::AddDrawable(Drawable* drawable)
 {
 	if (drawable != nullptr)
 	{
+		drawable->SetOwnerScene(this);;
+		drawables_.push_back(drawable);
+	}
+}
+
+void Scene::AddDrawable(Drawable* drawable, bool bActive)
+{
+	if (drawable != nullptr)
+	{
+		drawable->SetOwnerScene(this);
+		drawable->SetActive(bActive);
 		drawables_.push_back(drawable);
 	}
 }

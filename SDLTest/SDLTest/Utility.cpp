@@ -9,6 +9,14 @@ Utility::~Utility()
 {
 }
 
+void sure(bool b)
+{
+	if (!b)
+	{
+		abort();
+	}
+}
+
 bool IsExtention(const Path& filePath, const std::string& extention)
 {
 	return filePath.find(extention) == filePath.size() - extention.size();

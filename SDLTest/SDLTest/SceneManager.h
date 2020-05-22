@@ -18,9 +18,11 @@ public:
 	void ToNext();
 	void SetSceneActive(int inx,bool active);
 	int GetNowSceneIndex() { return sceneInx_; }
+	const Scene* GetNowScene() { return scenes_[sceneInx_]; }
 	void AddCrossEffect(Effect* effect);			//¿çsceneµÄeffect
 	void ClearScenes();
 
+	void JumpToScene(int sceneInx);
 protected:
 	std::vector<Scene*> scenes_;
 	std::vector<Effect*> crossEffects_;

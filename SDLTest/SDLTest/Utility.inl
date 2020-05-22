@@ -43,3 +43,17 @@ bool StringMap<T>::Find(std::string key, T*& result)
 		return false;
 	}
 }
+
+template <class T>
+bool STL_Remove(std::vector<T>& vec, const T& elem)
+{
+	for (auto iter = vec.begin(); iter != vec.end(); iter++)
+	{
+		if (*iter == elem)
+		{
+			vec.erase(iter);
+			return true;
+		}
+	}
+	return false;
+}
