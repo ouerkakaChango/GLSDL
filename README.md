@@ -1,2 +1,2 @@
 # GLSDL
-混用SDL的OpenGL渲染引擎
+混用SDL的OpenGL2D游戏引擎
