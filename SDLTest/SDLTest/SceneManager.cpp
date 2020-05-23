@@ -5,6 +5,7 @@
 #include "God.h"
 #include "Image.h"
 #include "Effect.h"
+#include "ShaderImage.h"
 
 Scene* SceneManager::InsertScene(Path bgPath)
 {
@@ -19,6 +20,26 @@ Scene* SceneManager::InsertScene(Path bgPath)
 		{
 			bgImg->SetPosition(bgW / 2, bgH / 2 );
 			newScene->AddDrawable(bgImg);
+		}
+	}
+	scenes_.push_back(newScene);
+	return newScene;
+}
+
+Scene* SceneManager::AddScene(Path bgPath)
+{
+	Scene* newScene = new Scene;
+	if (!bgPath.empty())
+	{
+		unsigned bgW, bgH;
+		bgW = GOD.gameConfig_.Get<int>("windowWidth");
+		bgH = GOD.gameConfig_.Get<int>("windowHeight");
+		Image *img = new Image(bgW, bgH);
+		if (img->ReadFile(bgPath))
+		{
+			img->SetPosition(bgW / 2, bgH / 2);
+			ShaderImage* bg = new ShaderImage(img);
+			newScene->AddDrawable(bg);
 		}
 	}
 	scenes_.push_back(newScene);

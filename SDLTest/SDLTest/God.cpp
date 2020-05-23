@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "SceneManager.h"
 #include "Drawable.h"
+#include "Material.h"
 
 God& God::GetInstance()
 {
@@ -14,6 +15,12 @@ God& God::GetInstance()
 God::God()
 {
 
+}
+
+void God::Init()
+{
+	defaultMaterial_ = new Material;
+	defaultMaterial_->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quad.fs");
 }
 
 void God::BroadCast(Event* event)
@@ -57,4 +64,9 @@ void God::Update(float deltaTime)
 	{
 		drawable->Render();
 	}
+}
+
+Material* God::CloneDefaultMaterial()
+{
+	return defaultMaterial_->Clone();
 }

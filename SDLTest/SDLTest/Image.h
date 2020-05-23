@@ -18,20 +18,25 @@ public:
 
 	void Render() override;
 
-	bool Load(const Path& path);
+	bool Load(const Path& path); //(deprecated)
 	void SetPosition(int x, int y);
 	unsigned GetWidth() { return width_; }
 	unsigned GetHeight() { return height_; }
 	SDL_Rect GetSDLRect();
 	SDL_Rect GetSDLRect(AnchorType type);
 
-	SDL_Texture* texture_;
-protected:
+	//--- 新写法相关
+	bool ReadFile(const Path& path);
+	SDL_Surface* GetSurface() { return surface_; }
+	//___
 
+	SDL_Texture* texture_;//(deprecated)
+
+protected:
+	SDL_Surface* surface_;
 	unsigned width_;
 	unsigned height_;
 	AnchorType anchorType_;
-
 	int posx_;
 	int posy_;
 };

@@ -9,6 +9,13 @@
 
 ShaderImage::ShaderImage(Image* img, Material* material):image_(img)
 {
+	if (material == nullptr)
+	{
+		material = GOD.CloneDefaultMaterial();
+		//???
+		material->UpdateParam("tex", image_->GetSurface());
+	}
+
 	dc_ = new DrawCall;
 	dc_->SetMaterial(material);
 
@@ -18,7 +25,7 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img)
 	//??? 根据当前分辨率和image大小位置，计算屏幕坐标
 	int w = GOD.gameConfig_.Get<int>("windowWidth");
 	int h = GOD.gameConfig_.Get<int>("windowHeight");
-	SDL_Rect rect = img->GetSDLRect();
+	SDL_Rect rect = image_->GetSDLRect();
 	Rect quad;
 	quad.x = rect.x / (float)w * 2.0f - 1;
 	quad.y = rect.y / (float)h * 2.0f - 1;

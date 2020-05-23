@@ -29,6 +29,12 @@ bool Image::Load(const Path& path)
 	return texture_ != nullptr;
 }
 
+bool Image::ReadFile(const Path& path)
+{
+	surface_ = IMG_Load(path.c_str());
+	return true;
+}
+
 SDL_Rect Image::GetSDLRect()
 {
 	SDL_Rect re{0,0,0,0};

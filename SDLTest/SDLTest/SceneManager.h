@@ -10,8 +10,8 @@ class Effect;
 class SceneManager
 {
 public:
-	//常用，设置背景图片新建scene插入
-	Scene* InsertScene(Path bgPath = "");
+	Scene* InsertScene(Path bgPath = "");	//(deprecated)设置背景图片新建scene插入
+	Scene* AddScene(Path bgPath = "");
 	void AddTransition(const Int<2>& int2, SceneTransition* transition);
 	void Update(float deltaTime);
 

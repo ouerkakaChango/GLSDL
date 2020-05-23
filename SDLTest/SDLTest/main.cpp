@@ -33,42 +33,44 @@
 #include "Debug.h"
 
 DrawCall gDC;
-Material* gMaterial=nullptr;
 VertexBuffer gVB;
 IndexBuffer gIB;
+bool bOldDraw = true;
 
 void GLRender()
 {
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//??? 把d3d画的背景作为参数传进来
-	SDL_Surface* Surface = IMG_Load("D:/22.bmp");
-	
+	if (bOldDraw)
+	{
+		//??? 把d3d画的背景作为参数传进来
+		SDL_Surface* Surface = IMG_Load("D:/22.bmp");
 
-	//???
-	gDC.material_->UpdateParam("tex", Surface);
-	gDC.Do();
 
+		//???
+		gDC.material_->UpdateParam("tex", Surface);
+		gDC.Do();
+		SDL_FreeSurface(Surface);
+	}
+
+	auto& god = GOD;
 	for (auto& dc : GOD.drawcalls_)
 	{
 		dc->Do();
 	}
-
-	//???
-	SDL_FreeSurface(Surface);
 }
 
 bool initGL()
 {
-	gMaterial = new Material;
+	auto oldBackgroundMaterial = new Material;
 
-	if (!gMaterial->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quad.fs"))
+	if (!oldBackgroundMaterial->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadBMP.fs"))
 	{
 		return false;
 	}
 
-	gDC.SetMaterial(gMaterial);
+	gDC.SetMaterial(oldBackgroundMaterial);
 	gVB.name_ = "backgroundVB";
 	gDC.SetVB(&gVB);
 	gDC.SetIB(&gIB);
@@ -174,6 +176,7 @@ int main(int argc, char* argv[]) {
 
 	//???
 	InitSDL_OpenGL(window);
+	GOD.Init(); //必须在SDL Init了GL之后
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -330,7 +333,7 @@ int main(int argc, char* argv[]) {
 	///////////////////////////////////////////////////////////////////////
 	//scene6
 	auto scene6 = sceneMgr.InsertScene("D:/HumanTree/18.bmp");
-	scene6->SetAutoEnd(3);
+	scene6->SetAutoEnd(1.5);
 	SceneTransition* transition6 = new SceneTransition("fadeOutIn", 2);
 	sceneMgr.AddTransition(Int<2>(4, 5), transition6);
 
@@ -350,7 +353,7 @@ int main(int argc, char* argv[]) {
 		redFlash.SetActive(false);
 	};
 
-	//红色警报事件
+	//关音效，关红闪特效
 	scene7->AddCustomAction(0.1f, stopWarningFunc);
 
 	Material* vortexMat = new Material;
@@ -372,9 +375,19 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(8.0f);
 
 	//////////////////////////////////////////////////////////////
-	auto scene8 = sceneMgr.InsertScene("D:/HumanTree/5.bmp");
-	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 0.5);
+	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");
+	//???
+	//直接黑屏3s，然后2s缓出,并带后期模糊参数
+	//SceneTransition* transition8 = new FastBlackWithBlurInTransition(3.0f,2.0f);
+	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 2);
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
+
+	Func closeOldDraw = [&]()
+	{;
+		bOldDraw = false;
+	};
+
+	scene8->AddCustomAction(0.1f, closeOldDraw);
 
 	//scene8->SetAutoEnd(7);
 
@@ -431,9 +444,11 @@ int main(int argc, char* argv[]) {
 				//主循环
 				SDL_RenderClear(renderer);
 				GOD.Update(deltaTime);
-				//??? 把d3d画的保存为图
-				saveScreenshot("D:/22.bmp", window, renderer);
-				//???
+				if (bOldDraw)
+				{
+					//??? 把d3d画的保存为图
+					saveScreenshot("D:/22.bmp", window, renderer);
+				}
 				GLRender();
 				SDL_GL_SwapWindow(window);
 			}
