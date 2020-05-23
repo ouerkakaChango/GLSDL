@@ -310,16 +310,16 @@ int main(int argc, char* argv[]) {
 	}
 	EffectFlash redFlash(red, 1);
 
-	Func stopBGMFunc = [&]()
+	Func changeBGMFunc = [&]()
 	{
-		bgm.StopBGM();
+		bgm.ChangeBGM("D:/HumanTree/DeeperThanSpace.wav");
 		w1.Play(true);
 		w2.Play(true);
 		w3.Play(true);
 		sceneMgr.AddCrossEffect(&redFlash);
 	};
 	//红色警报事件
-	scene5->AddCustomAction(4, stopBGMFunc);
+	scene5->AddCustomAction(4, changeBGMFunc);
 	SoundEffect cat2("D:/HumanTree/cat2.wav");
 	scene5->AddSound(&cat2, 6);
 	scene5->SetAutoEnd(7);
@@ -351,7 +351,7 @@ int main(int argc, char* argv[]) {
 	};
 
 	//红色警报事件
-	scene7->AddCustomAction(1, stopWarningFunc);
+	scene7->AddCustomAction(0.1f, stopWarningFunc);
 
 	Material* vortexMat = new Material;
 	if (!vortexMat->CompileShader("D:/HumanTree/code/vortex.vs", "D:/HumanTree/code/vortex2.fs"))
@@ -366,20 +366,20 @@ int main(int argc, char* argv[]) {
 
 	EffectShaderParam* paramEffect = new EffectShaderParam;
 	paramEffect->Bind(vortexMat, "maxScale");
-	paramEffect->AddPoint(0.f, 0.1f);
-	paramEffect->AddPoint(3.f, 0.1f);
+	paramEffect->AddPoint(0.1f, 0.1f);
 	paramEffect->AddPoint(7.f, 6.f);
 	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, paramEffect);
 	scene7->SetAutoEnd(8.0f);
 
-	//???
-	//sceneMgr.JumpToScene(6);
 	//////////////////////////////////////////////////////////////
 	auto scene8 = sceneMgr.InsertScene("D:/HumanTree/5.bmp");
-	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 2);
+	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 0.5);
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
 
 	//scene8->SetAutoEnd(7);
+
+	/////////////////////////////////////////////
+	sceneMgr.JumpToScene(4);
 
 
 	bool bLoop = true;

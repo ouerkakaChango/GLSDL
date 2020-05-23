@@ -13,15 +13,37 @@ BGMSystem::~BGMSystem()
 
 void BGMSystem::SetBGM(const Path& filePath)
 {
-	gMusic_ = Mix_LoadMUS(filePath.c_str());
-	if (gMusic_ == NULL)
-	{
-		abort();
-	}
-	Mix_PlayMusic(gMusic_, -1);
+	nowMusic_ = GetMixMusic(filePath);
+	sure(nowMusic_ != nullptr);
+	Mix_PlayMusic(nowMusic_, -1);
 }
 
 void BGMSystem::StopBGM()
 {
 	Mix_HaltMusic();
+}
+
+void BGMSystem::ChangeBGM(const Path& filePath)
+{
+	StopBGM();
+	SetBGM(filePath);
+}
+
+Mix_Music* BGMSystem::GetMixMusic(const Path& filePath)
+{
+	Mix_Music* re = nullptr;
+	if (musics_[filePath] == nullptr)
+	{
+		re = Mix_LoadMUS(filePath.c_str());
+		if (re == NULL)
+		{
+			abort();
+		}
+		musics_[filePath] = re;
+	}
+	else
+	{
+		re = musics_[filePath];
+	}
+	return re;
 }
