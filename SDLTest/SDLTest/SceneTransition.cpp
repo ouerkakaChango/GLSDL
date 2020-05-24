@@ -2,6 +2,7 @@
 
 #include "Image.h"
 #include "God.h"
+#include "ShaderImage.h"
 
 #include "Debug.h"
 
@@ -14,9 +15,9 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 	}
 }
 
-SceneTransition::SceneTransition(const string& effectName, Params<float> params)
+SceneTransition::SceneTransition(const string& effectName, Params<float> params) :effectName_(effectName)
 {
-	? ;
+	
 }
 
 void SceneTransition::Update(float deltaTime)
@@ -83,6 +84,11 @@ void SceneTransition::Update(float deltaTime)
 		Uint8 a = static_cast<int>(255 * nowa);
 		SDL_SetTextureAlphaMod(tex, a);
 		blackImg_->Render();
+	}
+	else if (effectName_ == "fastBlackWithBlurIn")
+	{
+		GOD.sceneManager_.SetSceneActive(frontInx_, false);
+		GOD.blackBackground_->SetActive(true);
 	}
 }
 

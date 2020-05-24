@@ -1,5 +1,6 @@
 #pragma once
 #include "Activeable.h"
+#include "Nameable.h"
 
 #include "Utility.h"
 
@@ -10,7 +11,7 @@ class Event;
 typedef std::function<void(Event*)> EventHandler;
 typedef std::function<bool(Event*)> EventGate;
 
-class Object : public Activeable
+class Object : public Activeable,public Nameable
 {
 public:
 	Object();

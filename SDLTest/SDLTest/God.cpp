@@ -5,6 +5,8 @@
 #include "SceneManager.h"
 #include "Drawable.h"
 #include "Material.h"
+#include "Image.h"
+#include "ShaderImage.h"
 
 God& God::GetInstance()
 {
@@ -21,6 +23,15 @@ void God::Init()
 {
 	defaultMaterial_ = new Material;
 	defaultMaterial_->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quad.fs");
+
+	unsigned bgW, bgH;
+	bgW = GOD.gameConfig_.Get<int>("windowWidth");
+	bgH = GOD.gameConfig_.Get<int>("windowHeight");
+	Image* blackBGImg = new Image(bgW,bgH);
+	blackBGImg->ReadFile("D:/HumanTree/ResEngine/black.png");
+	blackBGImg->SetPosition(bgW / 2, bgH / 2);
+	blackBackground_ = new ShaderImage(blackBGImg);
+	blackBackground_->name_ = "blackBackground_";
 }
 
 void God::BroadCast(Event* event)

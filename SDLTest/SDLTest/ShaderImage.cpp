@@ -7,17 +7,17 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-ShaderImage::ShaderImage(Image* img, Material* material):image_(img)
+ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(material)
 {
-	if (material == nullptr)
+	if (material_ == nullptr)
 	{
-		material = GOD.CloneDefaultMaterial();
+		material_ = GOD.CloneDefaultMaterial();
 		//???
-		material->UpdateParam("tex", image_->GetSurface());
+		material_->UpdateParam("tex", image_->GetSurface());
 	}
 
 	dc_ = new DrawCall;
-	dc_->SetMaterial(material);
+	dc_->SetMaterial(material_);
 
 	//vb
 	vb_ = new VertexBuffer;
@@ -53,7 +53,13 @@ void ShaderImage::SetActive(bool active)
 { 
 	if (!bActive_ && active)
 	{
+		material_->UpdateParam("tex", image_->GetSurface());
 		GOD.drawcalls_.push_back(dc_);
+		//???
+		if (name_ == "D:/HumanTree/test.png")
+		{
+			auto qqqa = 1;
+		}
 	}
 	else if(bActive_&& !active)
 	{

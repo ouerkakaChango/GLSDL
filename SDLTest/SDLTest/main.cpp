@@ -361,17 +361,20 @@ int main(int argc, char* argv[]) {
 	{
 		abort();
 	}
-	vortexMat->UpdateParam("maxScale", 0.1f);
-	vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
+	//vortexMat->UpdateParam("maxScale", 0.1f);
+	//vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
 	vortexMat->SetBlendType(Blend_Alpha);
 	Image* vortexImage = new Image(1600, 900);
 	vortexImage->SetPosition(800, 450);
+	vortexImage->ReadFile("D:/HumanTree/vortex2.png");
 
 	EffectShaderParam* paramEffect = new EffectShaderParam;
 	paramEffect->Bind(vortexMat, "maxScale");
 	paramEffect->AddPoint(0.1f, 0.1f);
 	paramEffect->AddPoint(7.f, 6.f);
-	scene7->Show(new ShaderImage(vortexImage, vortexMat), 0.1f, paramEffect);
+	auto vortexShaderImg = new ShaderImage(vortexImage, vortexMat);
+	vortexShaderImg->name_ = "vortexShaderImg";
+	scene7->Show(vortexShaderImg, 0.1f, paramEffect);
 	scene7->SetAutoEnd(8.0f);
 
 	//////////////////////////////////////////////////////////////

@@ -10,6 +10,7 @@ class Object;
 class Drawable;
 class DrawCall;
 class Material;
+class ShaderImage;
 
 class God
 {
@@ -23,11 +24,12 @@ public:
 	void BindEvent(std::string eventName,Object* object);
 	void Update(float deltaTime);
 	void AddPostDrawable(Drawable* drawable); //(deprecated)
-	void ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable);
+	void ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable); //(deprecated)
 	Material* CloneDefaultMaterial();
 
 	SceneManager sceneManager_;
 	GameConfig gameConfig_;
+	ShaderImage* blackBackground_{ nullptr };
 	std::vector<DrawCall*> drawcalls_;
 
 private:

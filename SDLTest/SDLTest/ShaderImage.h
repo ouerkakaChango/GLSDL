@@ -18,6 +18,7 @@ public:
 	void SetActive(bool active) override;
 protected:
 	Image* image_;
+	Material* material_;
 	//???
 	DrawCall* dc_;
 	VertexBuffer* vb_;

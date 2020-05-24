@@ -39,6 +39,7 @@ Scene* SceneManager::AddScene(Path bgPath)
 		{
 			img->SetPosition(bgW / 2, bgH / 2);
 			ShaderImage* bg = new ShaderImage(img);
+			bg->name_ = bgPath;
 			newScene->AddDrawable(bg);
 		}
 	}
