@@ -70,6 +70,34 @@ public:
 };
 
 template <class T>
+class Params
+{
+public:
+	std::vector<T> datas_;
+};
+
+template <class T1,class... T>
+Params<T1> MakeParam(T1 start,T... var)
+{
+	Params<T1> re;
+	re.datas_.push_back(start);
+	return MakeParam(re, var...);
+}
+
+template <class T1, class... T>
+Params<T1> MakeParam(Params<T1> re, T1 start, T... var)
+{
+	re.datas_.push_back(start);
+	return MakeParam(re, var...);
+}
+
+template <class T1>
+Params<T1> MakeParam(Params<T1> re)
+{
+	return re;
+}
+
+template <class T>
 bool STL_Remove(std::vector<T>& vec,const T& elem);
 
 //////////////////////////////////////////////////////////////

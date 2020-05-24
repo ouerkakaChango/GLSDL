@@ -378,8 +378,8 @@ int main(int argc, char* argv[]) {
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");
 	//???
 	//直接黑屏3s，然后2s缓出,并带后期模糊参数
-	//SceneTransition* transition8 = new FastBlackWithBlurInTransition(3.0f,2.0f);
-	SceneTransition* transition8 = new SceneTransition("fadeOutIn", 2);
+	//SceneTransition* transition8 = new TransitionFastBlackWithBlurIn(3.0f,2.0f);
+	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,4.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
 
 	Func closeOldDraw = [&]()

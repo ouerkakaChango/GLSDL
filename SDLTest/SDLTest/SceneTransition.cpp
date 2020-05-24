@@ -14,6 +14,11 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 	}
 }
 
+SceneTransition::SceneTransition(const string& effectName, Params<float> params)
+{
+	? ;
+}
+
 void SceneTransition::Update(float deltaTime)
 {
 	//??? 转场特效
