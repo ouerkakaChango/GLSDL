@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "Image.h"
 #include "ShaderImage.h"
+#include "Timeline.h"
 
 God& God::GetInstance()
 {
@@ -16,7 +17,8 @@ God& God::GetInstance()
 
 God::God()
 {
-
+	timeline_ = new Timeline;
+	timeline_->Reset();
 }
 
 void God::Init()
@@ -70,6 +72,7 @@ void God::ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable)
 
 void God::Update(float deltaTime)
 {
+	timeline_->Update(deltaTime);
 	sceneManager_.Update(deltaTime);
 	for (auto& drawable : postDrawables_)
 	{
@@ -80,4 +83,10 @@ void God::Update(float deltaTime)
 Material* God::CloneDefaultMaterial()
 {
 	return defaultMaterial_->Clone();
+}
+
+void God::SetTimer(float delay, Func function)
+{
+
+	timeline_->AddAction(timeline_->Now()+delay, function);
 }

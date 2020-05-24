@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 
+#include "Timeline.h"
 #include "Utility.h"
 using std::string;
 
@@ -20,5 +21,6 @@ public:
 protected:
 	string effectName_;
 	Image* blackImg_;//(deprecated)
+	Timeline timeline_;
 };
 

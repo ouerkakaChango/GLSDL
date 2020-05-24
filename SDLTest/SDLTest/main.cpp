@@ -353,6 +353,12 @@ int main(int argc, char* argv[]) {
 		redFlash.SetActive(false);
 	};
 
+	Func heavyDropFunc = [&]()
+	{
+		bgm.StopBGM();
+		bgm.PlayChunk("D:/HumanTree/HeaveFall.wav",3,4);
+	};
+
 	//关音效，关红闪特效
 	scene7->AddCustomAction(0.1f, stopWarningFunc);
 
@@ -361,8 +367,6 @@ int main(int argc, char* argv[]) {
 	{
 		abort();
 	}
-	//vortexMat->UpdateParam("maxScale", 0.1f);
-	//vortexMat->UpdateParam("tex", IMG_Load("D:/HumanTree/vortex2.png"));
 	vortexMat->SetBlendType(Blend_Alpha);
 	Image* vortexImage = new Image(1600, 900);
 	vortexImage->SetPosition(800, 450);
@@ -371,11 +375,13 @@ int main(int argc, char* argv[]) {
 	EffectShaderParam* paramEffect = new EffectShaderParam;
 	paramEffect->Bind(vortexMat, "maxScale");
 	paramEffect->AddPoint(0.1f, 0.1f);
-	paramEffect->AddPoint(7.f, 6.f);
+	paramEffect->AddPoint(2.f, 0.1f);
+	paramEffect->AddPoint(9.f, 6.f);
 	auto vortexShaderImg = new ShaderImage(vortexImage, vortexMat);
 	vortexShaderImg->name_ = "vortexShaderImg";
 	scene7->Show(vortexShaderImg, 0.1f, paramEffect);
-	scene7->SetAutoEnd(8.0f);
+	scene7->AddCustomAction(9.f, heavyDropFunc);
+	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");

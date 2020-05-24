@@ -73,6 +73,7 @@ template <class T>
 class Params
 {
 public:
+	T operator[](unsigned i) { return datas_[i]; }
 	std::vector<T> datas_;
 };
 

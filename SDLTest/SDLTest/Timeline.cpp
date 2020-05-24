@@ -1,6 +1,7 @@
 #include "Timeline.h"
 
 #include "Action.h"
+#include "FuncAction.h"
 
 void Timeline::AddAction(float time, Action* action)
 {
@@ -11,7 +12,13 @@ void Timeline::AddAction(float time, Action* action)
 	}
 }
 
-void Timeline::Start()
+void Timeline::AddAction(float time, Func function)
+{
+	FuncAction* action = new FuncAction(function);
+	AddAction(time, action);
+}
+
+void Timeline::Reset()
 {
 	now_ = 0.0f;
 }

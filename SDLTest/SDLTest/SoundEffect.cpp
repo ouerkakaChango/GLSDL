@@ -1,5 +1,7 @@
 #include "SoundEffect.h"
 
+#include "God.h"
+#include "FuncAction.h"
 #include "Debug.h"
 
 SoundEffect::SoundEffect(const Path& path)
@@ -63,4 +65,16 @@ void SoundEffect::Stop(float duration)
 	{
 		Mix_FadeOutChannel(-1, duration*1000);
 	}
+}
+
+void SoundEffect::PlayWithFadeOut(float fadeStart, float fadeEnd)
+{
+	Mix_PlayChannel(-1, sound_, 0);
+	static float dur = fadeEnd - fadeStart;
+	//由于是延时调用，必须用生命周期还存在的static变量
+	Func fade = [&]()
+	{
+		Mix_FadeOutChannel(-1, dur * 1000);
+	};
+	GOD.SetTimer(fadeStart, fade);
 }

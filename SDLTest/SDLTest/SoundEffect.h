@@ -12,6 +12,7 @@ public:
 	bool Load(const Path& path);
 	void Play(bool bLoop=false);
 	void Play(float duration);
+	void PlayWithFadeOut(float fadeStart,float fadeEnd);
 	void Stop();
 	void Stop(float duration);
 protected:

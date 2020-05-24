@@ -1,5 +1,5 @@
 #include "BGMSystem.h"
-
+#include "SoundEffect.h"
 
 
 BGMSystem::BGMSystem()
@@ -46,4 +46,16 @@ Mix_Music* BGMSystem::GetMixMusic(const Path& filePath)
 		re = musics_[filePath];
 	}
 	return re;
+}
+
+void BGMSystem::PlayChunk(const Path& filePath)
+{
+	SoundEffect temp(filePath);
+	temp.Play();
+}
+
+void BGMSystem::PlayChunk(const Path& filePath, float fadeStart, float fadeEnd)
+{
+	SoundEffect temp(filePath);
+	temp.PlayWithFadeOut(fadeStart,fadeEnd);
 }

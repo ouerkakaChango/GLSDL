@@ -89,7 +89,7 @@ void Scene::SetActive(bool active)
 
 	if (active)
 	{
-		timeline_->Start();
+		timeline_->Reset();
 	}
 }
 

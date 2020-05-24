@@ -3,6 +3,7 @@
 #include "Image.h"
 #include "God.h"
 #include "ShaderImage.h"
+#include "FuncAction.h"
 
 #include "Debug.h"
 
@@ -17,7 +18,23 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 
 SceneTransition::SceneTransition(const string& effectName, Params<float> params) :effectName_(effectName)
 {
-	
+	if (effectName_ == "fastBlackWithBlurIn")
+	{
+		Func func1 = [&]()
+		{
+			GOD.sceneManager_.SetSceneActive(frontInx_, false);
+			GOD.blackBackground_->SetActive(true);
+		};
+		Func func2 = [&]()
+		{
+			GOD.blackBackground_->SetActive(false);
+			GOD.sceneManager_.SetSceneActive(nextInx_, true);
+		};
+		FuncAction* action1 = new FuncAction(func1);
+		FuncAction* action2 = new FuncAction(func2);
+		timeline_.AddAction(0, action1);
+		timeline_.AddAction(params[0],action2);
+	}
 }
 
 void SceneTransition::Update(float deltaTime)
@@ -87,8 +104,7 @@ void SceneTransition::Update(float deltaTime)
 	}
 	else if (effectName_ == "fastBlackWithBlurIn")
 	{
-		GOD.sceneManager_.SetSceneActive(frontInx_, false);
-		GOD.blackBackground_->SetActive(true);
+		timeline_.Update(deltaTime);
 	}
 }
 

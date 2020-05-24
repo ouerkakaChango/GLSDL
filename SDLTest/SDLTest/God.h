@@ -11,6 +11,7 @@ class Drawable;
 class DrawCall;
 class Material;
 class ShaderImage;
+class Timeline;
 
 class God
 {
@@ -23,6 +24,7 @@ public:
 	void BroadCast(Event* event);
 	void BindEvent(std::string eventName,Object* object);
 	void Update(float deltaTime);
+	void SetTimer(float delay, Func function);
 	void AddPostDrawable(Drawable* drawable); //(deprecated)
 	void ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable); //(deprecated)
 	Material* CloneDefaultMaterial();
@@ -37,8 +39,9 @@ private:
 
 	MapVector<Object*> eventMapVector_;
 	std::list<Drawable*> postDrawables_;
-	SDL_Renderer* renderer_;
+	SDL_Renderer* renderer_; //(deprecated)
 	Material* defaultMaterial_{nullptr};
+	Timeline* timeline_{nullptr};
 };
 
 #define GOD God::GetInstance()
