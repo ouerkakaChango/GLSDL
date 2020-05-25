@@ -77,10 +77,10 @@ std::string Texture2DParam::TypeName()
 Texture2DParam::Texture2DParam(SDL_Surface* textureSurface):nowSurface_(textureSurface)
 {
 	//??? 
-	GLuint TextureID = 0;
+	textureID_ = 0;
 
-	glGenTextures(1, &TextureID);
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	glGenTextures(1, &textureID_);
+	glBindTexture(GL_TEXTURE_2D, textureID_);
 
 	int Mode = GL_RGB;
 
@@ -99,17 +99,35 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface):nowSurface_(textureS
 
 void Texture2DParam::UpdateValue()
 {
-	if (toUpdateSurface_ && toUpdateSurface_ != nowSurface_)
+	if (updateType_ == TextureUpdate_Surface)
 	{
-		int Mode = GL_RGB;
+		if (toUpdateSurface_ && toUpdateSurface_ != nowSurface_)
+		{
+			int Mode = GL_RGB;
 
-		if (toUpdateSurface_->format->BytesPerPixel == 4) {
-			Mode = GL_RGBA;
+			if (toUpdateSurface_->format->BytesPerPixel == 4) {
+				Mode = GL_RGBA;
+			}
+			//??? 目前只用1个texture
+			glTexImage2D(GL_TEXTURE_2D, 0, Mode, toUpdateSurface_->w, toUpdateSurface_->h, 0, Mode, GL_UNSIGNED_BYTE, toUpdateSurface_->pixels);
+			//bNeedUpdate_ = false;
 		}
-		//??? 目前只用1个texture
-		glTexImage2D(GL_TEXTURE_2D, 0, Mode, toUpdateSurface_->w, toUpdateSurface_->h, 0, Mode, GL_UNSIGNED_BYTE, toUpdateSurface_->pixels);
 	}
-	//由于只用一个texture，不同drawcall间公用GL_TEXTURE_2D，所以每次dc都要更新，保持bNeedUpdate_为true
+	else if (updateType_ == TextureUpdate_ID)
+	{
+		if (textureID_ != toUpdateID_)
+		{
+			textureID_ = toUpdateID_;
+			glBindTexture(GL_TEXTURE_2D, textureID_);
+			//???
+			//int Mode = GL_RGB;
+			//void* pixels =nullptr;
+			//glReadPixels(0, 0, 1600, 900, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+			//glTexImage2D(GL_TEXTURE_2D, 0, Mode, 1600, 900, 0, Mode, GL_UNSIGNED_BYTE, pixels);
+		}
+	}
+
+	//由于只用一个GL_TEXTURE_2D，不同drawcall间公用GL_TEXTURE_2D，所以每次dc都要更新，保持bNeedUpdate_为true
 }
 
 bool paramInfo::operator==(const std::string& name)
@@ -252,7 +270,7 @@ MaterialParam* Material::AddParamByInfo(const paramInfo& info)
 {
 	if (info.typeName_ == "sampler2D")
 	{
-		return AddParam(info.name_, IMG_Load("D:/HumanTree/1.jpg"));
+		return AddParam(info.name_, IMG_Load("D:/HumanTree/dante.png"));
 	}
 	else if (info.typeName_ == "float")
 	{
@@ -350,6 +368,24 @@ void Material::UpdateParam(const std::string& paramName, SDL_Surface* newTexture
 			{
 				realParam->bNeedUpdate_ = true;
 				realParam->toUpdateSurface_ = newTextureSurface;
+				break;
+			}
+		}
+	}
+}
+
+void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID)
+{
+	for (auto& param : params_)
+	{
+		if (param->typeName_ == "texture2d" && param->name_ == paramName)
+		{
+			Texture2DParam* realParam = static_cast<Texture2DParam*>(param);
+			if (realParam)
+			{
+				realParam->bNeedUpdate_ = true;
+				realParam->updateType_ = TextureUpdate_ID;
+				realParam->toUpdateID_ = textureID;
 				break;
 			}
 		}

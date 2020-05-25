@@ -75,3 +75,51 @@ void printProgramLog(GLuint program)
 		printf("Name %d is not a program\n", program);
 	}
 }
+
+void SaveRTToFile(const Path& path)
+{
+	FILE    *output_image;
+	int     output_width, output_height;
+
+	//???
+	output_width = 1600;
+	output_height = 900;
+
+	/// READ THE PIXELS VALUES from FBO AND SAVE TO A .PPM FILE
+	int             i, j, k;
+	unsigned char   *pixels = (unsigned char*)malloc(output_width*output_height * 3);
+
+	/// READ THE CONTENT FROM THE FBO
+	//glReadBuffer(GL_COLOR_ATTACHMENT0);
+	//glReadBuffer(GL_FRAMEBUFFER);
+	glReadPixels(0, 0, output_width, output_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	//glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	output_image = fopen(path.c_str(), "wt");
+	fprintf(output_image, "P3\n");
+	fprintf(output_image, "# Created by Ricao\n");
+	fprintf(output_image, "%d %d\n", output_width, output_height);
+	fprintf(output_image, "255\n");
+
+	k = 0;
+	for (i = 0; i < output_width; i++)
+	{
+		for (j = 0; j < output_height; j++)
+		{
+			fprintf(output_image, "%u %u %u ", (unsigned int)pixels[k], (unsigned int)pixels[k + 1],
+				(unsigned int)pixels[k + 2]);
+			k = k + 3;
+		}
+		fprintf(output_image, "\n");
+	}
+	free(pixels);
+}
+
+void checkgl()
+{
+	GLenum t = glGetError();
+	if (t != GL_NO_ERROR)
+	{
+		abort();
+	}
+}

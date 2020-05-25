@@ -8,6 +8,7 @@ class Image;
 class DrawCall;
 class VertexBuffer;
 class IndexBuffer;
+class Pass;
 
 class ShaderImage : public Drawable
 {
@@ -17,12 +18,15 @@ public:
 	void Render() override;
 	void SetActive(bool active) override;
 	void ChangeMaterial(Material* material);
+	void UsePass(Pass* pass);
 protected:
 	Image* image_;
 	Material* material_;
+	Pass* pass_;
 	//???
 	DrawCall* dc_;
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
+	bool bUsePass_{false};
 };
 

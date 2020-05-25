@@ -28,6 +28,7 @@
 #include "DrawCall.h"
 #include "ShaderImage.h"
 #include "Timeline.h"
+#include "Pass.h"
 
 #include "GameUtility.h"
 #include "Debug.h"
@@ -400,12 +401,25 @@ int main(int argc, char* argv[]) {
 
 	//???
 	ShaderImage* bg8 = dynamic_cast<ShaderImage*>(scene8->GetBackgroundDrawable());
-	Material* horizenGaussianblurMat = new Material;
-	if (!horizenGaussianblurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/horizenGaussianBlur.fs"))
-	{
-		abort();
-	}
-	bg8->ChangeMaterial(horizenGaussianblurMat);
+	
+	//Material* horizenGaussianblurMat = new Material;
+	//if (!horizenGaussianblurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/horizenGaussianBlur.fs"))
+	//{
+	//	abort();
+	//}
+
+	Pass* GBlur1Pass = new Pass;
+	GBlur1Pass->SetShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
+	Pass* GBlur2Pass = new Pass;
+	GBlur2Pass->SetShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
+	Pass* GBlurOncePass = new Pass;
+	GBlurOncePass->AddChild(GBlur1Pass);
+	GBlurOncePass->AddChild(GBlur2Pass);
+	Pass* blur = new Pass;
+	blur->AddChild(GBlurOncePass,5);
+	bg8->UsePass(blur);
+
+	//bg8->ChangeMaterial(horizenGaussianblurMat);
 	//scene8->SetAutoEnd(7);
 
 	/////////////////////////////////////////////
@@ -459,7 +473,10 @@ int main(int argc, char* argv[]) {
 				last = now;
 
 				//Ö÷Ñ­»·
-				SDL_RenderClear(renderer);
+				if (bOldDraw)
+				{
+					SDL_RenderClear(renderer);
+				}
 				GOD.Update(deltaTime);
 				if (bOldDraw)
 				{

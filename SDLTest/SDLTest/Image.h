@@ -33,7 +33,7 @@ public:
 	SDL_Texture* texture_;//(deprecated)
 
 protected:
-	SDL_Surface* surface_;
+	SDL_Surface* surface_{nullptr};
 	unsigned width_;
 	unsigned height_;
 	AnchorType anchorType_;

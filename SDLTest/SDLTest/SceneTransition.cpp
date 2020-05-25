@@ -33,13 +33,8 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		{
 			GOD.blackBackground_->SetActive(false);
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
-			ShaderImage* bg = dynamic_cast<ShaderImage*>( GOD.sceneManager_.scenes_[nextInx_]->backgroundDrawable_ );
-			//Material* blurMat = new Material;
-			//if (!blurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/blur.fs"))
-			//{
-			//	abort();
-			//}
-			//bg->ChangeMaterial(blurMat);
+			//???
+			//use tech 放到这里
 		};
 		FuncAction* action1 = new FuncAction(func1);
 		FuncAction* action2 = new FuncAction(func2);

@@ -51,6 +51,12 @@ private:
 	float defaultvalue_;
 };
 
+enum TextureUpdateType
+{
+	TextureUpdate_Surface,
+	TextureUpdate_ID,
+};
+
 class Texture2DParam : public MaterialParam
 {
 	MaterialParamClass
@@ -61,6 +67,9 @@ private:
 	void UpdateValue() override;
 	SDL_Surface* nowSurface_;
 	SDL_Surface* toUpdateSurface_{nullptr};
+	TextureUpdateType updateType_{ TextureUpdate_Surface };
+	GLuint toUpdateID_;
+	GLuint textureID_;
 };
 
 struct paramInfo
@@ -121,6 +130,7 @@ public:
 
 	void UpdateParam(const std::string& paramName, float newValue);					//for uniform1f
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
+	void UpdateTextureParam(const std::string& paramName,GLuint textureID);	//for texture2d
 	Material* Clone();
 
 	GLuint programID_ = 0;
@@ -148,7 +158,7 @@ protected:
 
 	std::vector<paramInfo> attributeInfos_;	
 	std::vector<paramInfo> paramInfos_;
-	MaterialBlendType blendType_{ Blend_Alpha };
+	MaterialBlendType blendType_{ Blend_Opaque };
 	GLuint vertexShader_;
 	GLuint fragmentShader_;
 

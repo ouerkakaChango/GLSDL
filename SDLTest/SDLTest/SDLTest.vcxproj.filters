@@ -156,6 +156,15 @@
     <ClCompile Include="TimeCurve.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Pass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -296,12 +305,24 @@
     <ClInclude Include="TimeCurve.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Pass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Utility.inl">
       <Filter>头文件</Filter>
     </None>
     <None Include="TimeCurve.inl">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="Tree.inl">
       <Filter>头文件</Filter>
     </None>
   </ItemGroup>
