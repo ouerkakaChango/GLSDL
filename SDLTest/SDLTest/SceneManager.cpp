@@ -41,6 +41,7 @@ Scene* SceneManager::AddScene(Path bgPath)
 			ShaderImage* bg = new ShaderImage(img);
 			bg->name_ = bgPath;
 			newScene->AddDrawable(bg);
+			newScene->backgroundDrawable_ = bg;
 		}
 	}
 	scenes_.push_back(newScene);

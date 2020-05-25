@@ -398,6 +398,14 @@ int main(int argc, char* argv[]) {
 
 	scene8->AddCustomAction(0.1f, closeOldDraw);
 
+	//???
+	ShaderImage* bg8 = dynamic_cast<ShaderImage*>(scene8->GetBackgroundDrawable());
+	Material* horizenGaussianblurMat = new Material;
+	if (!horizenGaussianblurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/horizenGaussianBlur.fs"))
+	{
+		abort();
+	}
+	bg8->ChangeMaterial(horizenGaussianblurMat);
 	//scene8->SetAutoEnd(7);
 
 	/////////////////////////////////////////////

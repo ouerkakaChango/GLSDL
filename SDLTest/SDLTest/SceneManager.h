@@ -28,5 +28,7 @@ protected:
 	std::vector<Effect*> crossEffects_;
 	std::map<Int<2>,SceneTransition*> transitions_;
 	int sceneInx_{ -1 };
+
+	friend class SceneTransition;
 };
 

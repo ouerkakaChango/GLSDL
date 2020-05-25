@@ -12,8 +12,6 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(
 	if (material_ == nullptr)
 	{
 		material_ = GOD.CloneDefaultMaterial();
-		//???
-		material_->UpdateParam("tex", image_->GetSurface());
 	}
 
 	dc_ = new DrawCall;
@@ -72,4 +70,10 @@ void ShaderImage::SetActive(bool active)
 void ShaderImage::Render()
 {
 	//???
+}
+
+void ShaderImage::ChangeMaterial(Material* material)
+{
+	material_ = material;
+	dc_->SetMaterial(material_);
 }

@@ -16,6 +16,7 @@ public:
 	~ShaderImage();
 	void Render() override;
 	void SetActive(bool active) override;
+	void ChangeMaterial(Material* material);
 protected:
 	Image* image_;
 	Material* material_;

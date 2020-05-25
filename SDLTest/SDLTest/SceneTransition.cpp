@@ -1,9 +1,11 @@
 #include "SceneTransition.h"
 
+#include "Scene.h"
 #include "Image.h"
 #include "God.h"
 #include "ShaderImage.h"
 #include "FuncAction.h"
+#include "Material.h"
 
 #include "Debug.h"
 
@@ -20,15 +22,24 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 {
 	if (effectName_ == "fastBlackWithBlurIn")
 	{
+		//end last scene immediately,drop black
 		Func func1 = [&]()
 		{
 			GOD.sceneManager_.SetSceneActive(frontInx_, false);
 			GOD.blackBackground_->SetActive(true);
 		};
+		//black end,show next scene,but with blur duration effect
 		Func func2 = [&]()
 		{
 			GOD.blackBackground_->SetActive(false);
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
+			ShaderImage* bg = dynamic_cast<ShaderImage*>( GOD.sceneManager_.scenes_[nextInx_]->backgroundDrawable_ );
+			//Material* blurMat = new Material;
+			//if (!blurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/blur.fs"))
+			//{
+			//	abort();
+			//}
+			//bg->ChangeMaterial(blurMat);
 		};
 		FuncAction* action1 = new FuncAction(func1);
 		FuncAction* action2 = new FuncAction(func2);

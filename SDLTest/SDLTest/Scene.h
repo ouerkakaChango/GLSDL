@@ -28,12 +28,17 @@ public:
 	void SetAutoEnd(float time);
 	void AddSound(SoundEffect* sound, float time);
 	void AddCustomAction(float time, Func func);
+
+	Drawable* GetBackgroundDrawable() { return backgroundDrawable_; }
 protected:
 	std::vector<Drawable*> drawables_;
 	std::vector<Effect*> effects_;
 	Timeline* timeline_;
+	Drawable* backgroundDrawable_{ nullptr };
 
 	void AddEffect(Effect* effect);
 	friend class ShowAction;
+	friend class SceneManager;
+	friend class SceneTransition;
 };
 
