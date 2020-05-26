@@ -15,19 +15,6 @@ RenderTexture::RenderTexture()
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	//???
-	//testTexID_ = 0;
-	//glGenTextures(1, &testTexID_);
-	//glBindTexture(GL_TEXTURE_2D, testTexID_);
-	//
-	//int Mode = GL_RGBA;
-	//
-	////???
-	//glTexImage2D(GL_TEXTURE_2D, 0, Mode, 1600, 900, 0, Mode, GL_UNSIGNED_BYTE, NULL);
-	//
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 

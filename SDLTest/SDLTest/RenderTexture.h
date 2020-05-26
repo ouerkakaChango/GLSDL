@@ -21,8 +21,7 @@ public:
 	GLuint renderTextureID_;
 	GLuint frameBufferID_;
 	GLuint colorRenderbuffer_;
-	//???
-	GLuint testTexID_;
+
 private:
 	SDL_Surface* surface_{nullptr};
 	friend class DrawCall;

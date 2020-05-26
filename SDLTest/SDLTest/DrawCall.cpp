@@ -73,16 +73,16 @@ void DrawCall::Do()
 		{
 			//??? 现在画了4个顶点
 			glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-			{
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
-				static bool first = true;
-				if (first)
-				{
-					SaveRTToFile("D:/zSaved.ppm");
-					first = false;
-				}
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-			}
+			//{//debug save frame/texture file
+			//	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
+			//	static bool first = true;
+			//	if (first)
+			//	{
+			//		SaveRTToFile("D:/zSaved.ppm");
+			//		first = false;
+			//	}
+			//	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+			//}
 		}
 		else
 		{

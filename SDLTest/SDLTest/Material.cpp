@@ -101,6 +101,7 @@ void Texture2DParam::UpdateValue()
 {
 	if (updateType_ == TextureUpdate_Surface)
 	{
+		glBindTexture(GL_TEXTURE_2D, textureID_);
 		if (toUpdateSurface_ && toUpdateSurface_ != nowSurface_)
 		{
 			int Mode = GL_RGB;
@@ -108,9 +109,7 @@ void Texture2DParam::UpdateValue()
 			if (toUpdateSurface_->format->BytesPerPixel == 4) {
 				Mode = GL_RGBA;
 			}
-			//??? 目前只用1个texture
 			glTexImage2D(GL_TEXTURE_2D, 0, Mode, toUpdateSurface_->w, toUpdateSurface_->h, 0, Mode, GL_UNSIGNED_BYTE, toUpdateSurface_->pixels);
-			//bNeedUpdate_ = false;
 		}
 	}
 	else if (updateType_ == TextureUpdate_ID)
@@ -118,13 +117,8 @@ void Texture2DParam::UpdateValue()
 		if (textureID_ != toUpdateID_)
 		{
 			textureID_ = toUpdateID_;
-			glBindTexture(GL_TEXTURE_2D, textureID_);
-			//???
-			//int Mode = GL_RGB;
-			//void* pixels =nullptr;
-			//glReadPixels(0, 0, 1600, 900, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-			//glTexImage2D(GL_TEXTURE_2D, 0, Mode, 1600, 900, 0, Mode, GL_UNSIGNED_BYTE, pixels);
 		}
+		glBindTexture(GL_TEXTURE_2D, textureID_);
 	}
 
 	//由于只用一个GL_TEXTURE_2D，不同drawcall间公用GL_TEXTURE_2D，所以每次dc都要更新，保持bNeedUpdate_为true
@@ -356,7 +350,6 @@ void Material::UpdateParam(const std::string& paramName, float newValue)
 	}
 }
 
-//???
 void Material::UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface)
 {
 	for (auto& param : params_)
@@ -438,7 +431,14 @@ Material* Material::Clone()
 	Material* re = new Material;
 	re->programID_ = programID_;
 	re->vsAttributeParams_ = vsAttributeParams_;
-	re->params_ = params_;
-
+	//深拷参数，不然出问题
+	for (auto& info : paramInfos_)
+	{
+		auto param = re->AddParamByInfo(info);
+		if (!param->Check(this))
+		{
+			abort();
+		}
+	}
 	return re;
 }
