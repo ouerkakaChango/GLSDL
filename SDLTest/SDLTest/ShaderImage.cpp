@@ -86,7 +86,7 @@ void ShaderImage::SetActive(bool active)
 			rtMat->UpdateParam("tex", image_->GetSurface());
 			GOD.drawcalls_.push_back(rtDrawCall);
 
-			material_->UpdateTextureParam("tex", rt->renderTextureID_);
+			material_->UpdateTextureParam("tex", rt);
 			GOD.drawcalls_.push_back(dc_);
 		}
 		else

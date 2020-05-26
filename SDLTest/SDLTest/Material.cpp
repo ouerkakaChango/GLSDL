@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 
 #include "File.h"
+#include "RenderTexture.h"
 
 bool MaterialParam::Check(Material* material)
 {
@@ -119,6 +120,14 @@ void Texture2DParam::UpdateValue()
 			textureID_ = toUpdateID_;
 		}
 		glBindTexture(GL_TEXTURE_2D, textureID_);
+	}
+	else if (updateType_ == TextureUpdate_RenderTexture)
+	{
+		if (textureID_ != toUpdateRT_->renderTextureID_)
+		{
+			textureID_ = toUpdateRT_->renderTextureID_;
+		}
+		glBindTexture(GL_TEXTURE_2D, toUpdateRT_->renderTextureID_);
 	}
 
 	//由于只用一个GL_TEXTURE_2D，不同drawcall间公用GL_TEXTURE_2D，所以每次dc都要更新，保持bNeedUpdate_为true
@@ -379,6 +388,24 @@ void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID
 				realParam->bNeedUpdate_ = true;
 				realParam->updateType_ = TextureUpdate_ID;
 				realParam->toUpdateID_ = textureID;
+				break;
+			}
+		}
+	}
+}
+
+void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt)
+{
+	for (auto& param : params_)
+	{
+		if (param->typeName_ == "texture2d" && param->name_ == paramName)
+		{
+			Texture2DParam* realParam = static_cast<Texture2DParam*>(param);
+			if (realParam)
+			{
+				realParam->bNeedUpdate_ = true;
+				realParam->updateType_ = TextureUpdate_RenderTexture;
+				realParam->toUpdateRT_ = rt;
 				break;
 			}
 		}

@@ -5,6 +5,7 @@
 #include "Nameable.h"
 class DrawCall;
 class Material;
+class RenderTexture;
 
 #define MaterialParamClass friend class Material;\
 friend class DrawCall;
@@ -55,6 +56,7 @@ enum TextureUpdateType
 {
 	TextureUpdate_Surface,
 	TextureUpdate_ID,
+	TextureUpdate_RenderTexture,
 };
 
 class Texture2DParam : public MaterialParam
@@ -65,9 +67,11 @@ public:
 	static std::string TypeName();
 private:
 	void UpdateValue() override;
+
+	TextureUpdateType updateType_{ TextureUpdate_Surface };
 	SDL_Surface* nowSurface_;
 	SDL_Surface* toUpdateSurface_{nullptr};
-	TextureUpdateType updateType_{ TextureUpdate_Surface };
+	RenderTexture* toUpdateRT_{ nullptr };
 	GLuint toUpdateID_;
 	GLuint textureID_;
 };
@@ -130,7 +134,8 @@ public:
 
 	void UpdateParam(const std::string& paramName, float newValue);					//for uniform1f
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
-	void UpdateTextureParam(const std::string& paramName,GLuint textureID);	//for texture2d
+	void UpdateTextureParam(const std::string& paramName,GLuint textureID);			//??? for texture2d 
+	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt);		//??? for texture2d
 	Material* Clone();
 
 	GLuint programID_ = 0;

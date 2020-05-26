@@ -414,7 +414,7 @@ int main(int argc, char* argv[]) {
 	//scene8->SetAutoEnd(7);
 
 	/////////////////////////////////////////////
-	sceneMgr.JumpToScene(4);
+	sceneMgr.JumpToScene(7);
 
 
 	bool bLoop = true;
