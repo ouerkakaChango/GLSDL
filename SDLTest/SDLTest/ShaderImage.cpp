@@ -55,7 +55,7 @@ void ShaderImage::SetActive(bool active)
 		if (bUsePass_)
 		{
 			rt_ = new RenderTexture(image_);
-			rt_->UsePassOnlySelf(pass_);
+			rt_->UsePass(pass_);
 
 			material_->UpdateTextureParam("tex", rt_);
 			GOD.drawcalls_.push_back(dc_);

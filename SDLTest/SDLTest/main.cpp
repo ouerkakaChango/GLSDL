@@ -407,9 +407,10 @@ int main(int argc, char* argv[]) {
 	GBlurOncePass->AddChild(GBlur1Pass);
 	GBlurOncePass->AddChild(GBlur2Pass);
 	Pass* blur = new Pass;
-	blur->AddChild(GBlurOncePass,5);
+	//??? 事实上，不必重复添加pass，dc重复调用的时候搞就行了
+	blur->AddChild(GBlurOncePass,10);
 	//???
-	bg8->UsePass(GBlur1Pass);
+	bg8->UsePass(blur);
 
 	//bg8->ChangeMaterial(horizenGaussianblurMat);
 	//scene8->SetAutoEnd(7);

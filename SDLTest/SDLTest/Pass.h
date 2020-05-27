@@ -14,6 +14,7 @@ public:
 	void SetShader(const Path& vsPath, const Path& fsPath);
 	bool SelfEmpty() { return bSelfEmpty_; }
 	Material* GetMaterial();
+	void GetDoablePassVec(std::vector<Pass*>& vec);
 protected:
 	Material* material_{nullptr};
 	bool bSelfEmpty_{ true };

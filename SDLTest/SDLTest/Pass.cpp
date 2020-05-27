@@ -20,3 +20,15 @@ Material* Pass::GetMaterial()
 	}
 	return material_;
 }
+
+void Pass::GetDoablePassVec(std::vector<Pass*>& vec)
+{
+	if (!bSelfEmpty_)
+	{
+		vec.push_back(this);
+	}
+	for (auto& child : children_)
+	{
+		child->GetDoablePassVec(vec);
+	}
+}

@@ -17,7 +17,7 @@ public:
 	RenderTexture(Image* img);
 
 	void UsePass(Pass* pass); 
-	void UsePassOnlySelf(Pass* pass);
+	void UsePassOnlySelf(Pass* pass, bool bStartPass);
 
 	~RenderTexture();
 
@@ -27,7 +27,9 @@ public:
 
 
 private:
+
 	Image* img_{nullptr};
+	bool bFBOInitialized_{false};
 	friend class DrawCall;
 };
 

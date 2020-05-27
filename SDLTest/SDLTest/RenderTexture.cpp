@@ -15,7 +15,7 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
 
 	int Mode = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, img_->GetSurface()->pixels);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -30,14 +30,30 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::UsePass(Pass* pass)
 {
-	//???
+	//UsePassOnlySelf(pass);
+	//for (auto& child : pass->children_)
+	//{
+	//	UsePass(child);
+	//}
+	std::vector<Pass*> passes;
+	pass->GetDoablePassVec(passes);
+	for (unsigned i = 0; i < passes.size(); i++)
+	{
+		if (i == 0)
+		{
+			UsePassOnlySelf(passes[0], true);
+		}
+		else
+		{
+			UsePassOnlySelf(passes[i], false);
+		}
+	}
 }
 
-void RenderTexture::UsePassOnlySelf(Pass* pass)
+void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
 {
 	if (pass->SelfEmpty()) { return; }
 
-	DrawCall* rtDrawCall = new DrawCall;
 	//vb
 	auto rtvb = new VertexBuffer;
 	int w = GOD.gameConfig_.Get<int>("windowWidth");
@@ -54,26 +70,47 @@ void RenderTexture::UsePassOnlySelf(Pass* pass)
 	auto rtib = new IndexBuffer;
 	rtib->InitQuad(rtvb->vao_);
 
+	//dc
+	DrawCall* rtDrawCall = new DrawCall;
 	rtDrawCall->SetVB(rtvb);
 	rtDrawCall->SetIB(rtib);
 
 	//---
-	glGenFramebuffers(1, &frameBufferID_);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
-	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-	sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	if (!bFBOInitialized_)
+	{
+		glGenFramebuffers(1, &frameBufferID_);
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
+		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		bFBOInitialized_ = true;
+	}
 	//___
 
-	Material* passMat = pass->GetMaterial();
+	Material* passMat = nullptr;
+	if (bStartPass)
+	{
+		passMat = pass->GetMaterial()->Clone();
+	}
+	else
+	{
+		passMat = pass->GetMaterial();
+	}
 	sure(passMat != nullptr);
 
 	rtDrawCall->SetMaterial(passMat);
 	rtDrawCall->SetDrawFrame(true);
 	rtDrawCall->rt_ = this;
 	
-	passMat->UpdateParam("tex", img_->GetSurface());
+	if (bStartPass)
+	{
+		passMat->UpdateParam("tex", img_->GetSurface());
+	}
+	else
+	{
+		passMat->UpdateTextureParam("tex", renderTextureID_);
+	}
 	GOD.drawcalls_.push_back(rtDrawCall);
 }
