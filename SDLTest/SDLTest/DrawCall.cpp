@@ -73,7 +73,7 @@ void DrawCall::Do()
 		{
 			//??? 现在画了4个顶点
 			glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-			//{//debug save frame/texture file
+			//{//debug save frame file
 			//	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
 			//	static bool first = true;
 			//	if (first)
@@ -88,7 +88,7 @@ void DrawCall::Do()
 		{
 			//??? 现在画了4个顶点
 			glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-			{
+			{//debug save frame file
 					glBindFramebuffer(GL_READ_FRAMEBUFFER, 1);
 					static bool first = true;
 					if (first)

@@ -1,4 +1,5 @@
 #pragma once
+//https://open.gl/textures
 #include "Utility.h"
 #include "GLUtility.h"
 #include "TypeNameable.h"
@@ -63,7 +64,7 @@ class Texture2DParam : public MaterialParam
 {
 	MaterialParamClass
 public:
-	Texture2DParam(SDL_Surface* textureSurface);
+	Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos);
 	static std::string TypeName();
 private:
 	void UpdateValue() override;
@@ -74,6 +75,7 @@ private:
 	RenderTexture* toUpdateRT_{ nullptr };
 	GLuint toUpdateID_;
 	GLuint textureID_;
+	unsigned texturePos_{ 0 };
 };
 
 struct paramInfo
@@ -135,7 +137,7 @@ public:
 	void UpdateParam(const std::string& paramName, float newValue);					//for uniform1f
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
 	void UpdateTextureParam(const std::string& paramName,GLuint textureID);			//??? for texture2d 
-	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt);		//??? for texture2d
+	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos=0);		//??? for texture2d
 	Material* Clone();
 
 	GLuint programID_ = 0;
@@ -166,5 +168,8 @@ protected:
 	MaterialBlendType blendType_{ Blend_Opaque };
 	GLuint vertexShader_;
 	GLuint fragmentShader_;
+
+	//???
+	unsigned nowTexturePos_{ 0 };
 
 };

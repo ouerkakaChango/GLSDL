@@ -18,9 +18,3 @@ void Log(std::string name1, T1 t1, std::string name2, T2 t2) { std::cout << "###
 
 #define LOG(a) Log(#a,a)
 #define LOG2(a1,a2) Log(#a1,a1,#a2,a2)
-
-//??? ±ä³¤Ä£°å
-template <class T>
-void mlog(T t) { LOG(t); }
-template <class T1, class T2>
-void mlog(T1 t1,T2 t2) { LOG2(t1,t2); }

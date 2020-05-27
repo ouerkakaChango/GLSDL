@@ -57,7 +57,9 @@ void ShaderImage::SetActive(bool active)
 			rt_ = new RenderTexture(image_);
 			rt_->UsePass(pass_);
 
-			material_->UpdateTextureParam("tex", rt_);
+			material_->UpdateParam("tex", image_->GetSurface());
+			//???
+			material_->UpdateTextureParam("bluredTex", rt_, 1);
 			GOD.drawcalls_.push_back(dc_);
 		}
 		else

@@ -75,11 +75,10 @@ std::string Texture2DParam::TypeName()
 	return "texture2d";
 }
 
-Texture2DParam::Texture2DParam(SDL_Surface* textureSurface):nowSurface_(textureSurface)
+Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos):nowSurface_(textureSurface),texturePos_(texturePos)
 {
 	//??? 
-	textureID_ = 0;
-
+	glActiveTexture(GL_TEXTURE0 + texturePos_);
 	glGenTextures(1, &textureID_);
 	glBindTexture(GL_TEXTURE_2D, textureID_);
 
@@ -95,11 +94,12 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface):nowSurface_(textureS
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//???
-	glUniform1i(paramLocation_, 0);
+	glUniform1i(paramLocation_, texturePos_);
 }
 
 void Texture2DParam::UpdateValue()
 {
+	glActiveTexture(GL_TEXTURE0 + texturePos_);
 	if (updateType_ == TextureUpdate_Surface)
 	{
 		glBindTexture(GL_TEXTURE_2D, textureID_);
@@ -129,8 +129,8 @@ void Texture2DParam::UpdateValue()
 		}
 		glBindTexture(GL_TEXTURE_2D, toUpdateRT_->renderTextureID_);
 	}
-
-	//由于只用一个GL_TEXTURE_2D，不同drawcall间公用GL_TEXTURE_2D，所以每次dc都要更新，保持bNeedUpdate_为true
+	glUniform1i(paramLocation_, texturePos_);
+	//保持bNeedUpdate_为true
 }
 
 bool paramInfo::operator==(const std::string& name)
@@ -394,7 +394,7 @@ void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID
 	}
 }
 
-void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt)
+void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos)
 {
 	for (auto& param : params_)
 	{
@@ -406,6 +406,7 @@ void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* r
 				realParam->bNeedUpdate_ = true;
 				realParam->updateType_ = TextureUpdate_RenderTexture;
 				realParam->toUpdateRT_ = rt;
+				realParam->texturePos_ = texturePos;
 				break;
 			}
 		}
@@ -424,10 +425,11 @@ MaterialParam* Material::AddParam(const std::string& paramName, float defaultVal
 //SDL_FreeSurface(infoSurface);
 MaterialParam* Material::AddParam(const std::string& paramName, SDL_Surface* textureSurface)
 {
-	auto* param = new Texture2DParam(textureSurface);
+	auto* param = new Texture2DParam(textureSurface, nowTexturePos_);
 	param->name_ = paramName;
 	param->typeName_ = "texture2d";
 	params_.push_back(param);
+	nowTexturePos_ += 1;
 	return param;
 }
 
