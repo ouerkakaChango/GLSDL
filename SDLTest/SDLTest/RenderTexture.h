@@ -8,22 +8,26 @@
 class Image;
 class Pass;
 class Material;
+class DrawCall;
+
 class RenderTexture :
 	public Nameable
 {
 public:
-	RenderTexture();
+	RenderTexture(Image* img);
 
-	Material* UsePass(Pass* pass);
-	SDL_Surface* GetSurface();
+	void UsePass(Pass* pass); 
+	void UsePassOnlySelf(Pass* pass);
+
 	~RenderTexture();
 
 	GLuint renderTextureID_;
 	GLuint frameBufferID_;
 	GLuint colorRenderbuffer_;
 
+
 private:
-	SDL_Surface* surface_{nullptr};
+	Image* img_{nullptr};
 	friend class DrawCall;
 };
 

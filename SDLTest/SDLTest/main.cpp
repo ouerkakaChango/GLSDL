@@ -400,15 +400,16 @@ int main(int argc, char* argv[]) {
 	ShaderImage* bg8 = dynamic_cast<ShaderImage*>(scene8->GetBackgroundDrawable());
 
 	Pass* GBlur1Pass = new Pass;
-	GBlur1Pass->SetShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
+	GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
 	Pass* GBlur2Pass = new Pass;
-	GBlur2Pass->SetShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
+	GBlur2Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
 	Pass* GBlurOncePass = new Pass;
 	GBlurOncePass->AddChild(GBlur1Pass);
 	GBlurOncePass->AddChild(GBlur2Pass);
 	Pass* blur = new Pass;
 	blur->AddChild(GBlurOncePass,5);
-	bg8->UsePass(blur);
+	//???
+	bg8->UsePass(GBlur1Pass);
 
 	//bg8->ChangeMaterial(horizenGaussianblurMat);
 	//scene8->SetAutoEnd(7);

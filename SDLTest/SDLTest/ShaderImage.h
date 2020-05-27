@@ -9,6 +9,7 @@ class DrawCall;
 class VertexBuffer;
 class IndexBuffer;
 class Pass;
+class RenderTexture;
 
 class ShaderImage : public Drawable
 {
@@ -23,10 +24,12 @@ protected:
 	Image* image_;
 	Material* material_;
 	Pass* pass_;
-	//???
 	DrawCall* dc_;
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
+
+	//???
+	RenderTexture* rt_{nullptr};
 	bool bUsePass_{false};
 };
 
