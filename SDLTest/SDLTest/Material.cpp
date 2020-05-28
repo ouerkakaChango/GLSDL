@@ -75,10 +75,10 @@ std::string Texture2DParam::TypeName()
 	return "texture2d";
 }
 
-Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos):nowSurface_(textureSurface),texturePos_(texturePos)
+Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos):nowSurface_(textureSurface),textureUnit_(texturePos)
 {
 	//??? 
-	glActiveTexture(GL_TEXTURE0 + texturePos_);
+	glActiveTexture(GL_TEXTURE0 + textureUnit_);
 	glGenTextures(1, &textureID_);
 	glBindTexture(GL_TEXTURE_2D, textureID_);
 
@@ -94,12 +94,12 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//???
-	glUniform1i(paramLocation_, texturePos_);
+	glUniform1i(paramLocation_, textureUnit_);
 }
 
 void Texture2DParam::UpdateValue()
 {
-	glActiveTexture(GL_TEXTURE0 + texturePos_);
+	glActiveTexture(GL_TEXTURE0 + textureUnit_);
 	if (updateType_ == TextureUpdate_Surface)
 	{
 		glBindTexture(GL_TEXTURE_2D, textureID_);
@@ -129,7 +129,7 @@ void Texture2DParam::UpdateValue()
 		}
 		glBindTexture(GL_TEXTURE_2D, toUpdateRT_->renderTextureID_);
 	}
-	glUniform1i(paramLocation_, texturePos_);
+	glUniform1i(paramLocation_, textureUnit_);
 	//±£³ÖbNeedUpdate_Îªtrue
 }
 
@@ -394,7 +394,7 @@ void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID
 	}
 }
 
-void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos)
+void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned textureUnit)
 {
 	for (auto& param : params_)
 	{
@@ -406,7 +406,7 @@ void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* r
 				realParam->bNeedUpdate_ = true;
 				realParam->updateType_ = TextureUpdate_RenderTexture;
 				realParam->toUpdateRT_ = rt;
-				realParam->texturePos_ = texturePos;
+				realParam->textureUnit_ = textureUnit;
 				break;
 			}
 		}

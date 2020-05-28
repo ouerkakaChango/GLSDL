@@ -6,6 +6,8 @@
 #include "ShaderImage.h"
 #include "FuncAction.h"
 #include "Material.h"
+#include "Pass.h"
+#include "UsualEffects.h"
 
 #include "Debug.h"
 
@@ -28,6 +30,8 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			GOD.sceneManager_.SetSceneActive(frontInx_, false);
 			GOD.blackBackground_->SetActive(true);
 		};
+		//???
+		static float time2 = params[1];
 		//black end,show next scene,but with blur duration effect
 		Func func2 = [&]()
 		{
@@ -35,11 +39,45 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
 			//???
 			//use tech 放到这里
+			{
+				auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
+				ShaderImage* bg = dynamic_cast<ShaderImage*>(newScene->GetBackgroundDrawable());
+
+				Pass* GBlur1Pass = new Pass;
+				GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
+				Pass* GBlur2Pass = new Pass;
+				GBlur2Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
+				Pass* GBlurOncePass = new Pass;
+				GBlurOncePass->AddChild(GBlur1Pass);
+				GBlurOncePass->AddChild(GBlur2Pass);
+				Pass* blur = new Pass;
+				blur->AddChild(GBlurOncePass, 40);
+				//???
+				auto* quadWithBlurMat = new Material;
+				sure(quadWithBlurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithBlur.fs"));
+				bg->ChangeMaterial(quadWithBlurMat);
+				bg->UsePass(blur);
+
+				EffectShaderParam* paramEffect = new EffectShaderParam;
+				paramEffect->Bind(quadWithBlurMat, "blur");
+				paramEffect->AddPoint(0.0f, 1.0f);
+				paramEffect->AddPoint(time2, 0.0f);
+				timeline_.AddEffect(timeline_.Now(), paramEffect);
+			}
 		};
-		FuncAction* action1 = new FuncAction(func1);
-		FuncAction* action2 = new FuncAction(func2);
-		timeline_.AddAction(0, action1);
+		Func func3 = [&]()
+		{
+			auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
+			ShaderImage* bg = dynamic_cast<ShaderImage*>(newScene->GetBackgroundDrawable());
+			bg->ChangeMaterial(GOD.CloneDefaultMaterial());
+			bg->UsePass(nullptr);
+		};
+		FuncAction* action1 = new FuncAction(func1);	//转黑幕
+		FuncAction* action2 = new FuncAction(func2);	//开高斯模糊渐变
+		FuncAction* action3 = new FuncAction(func3);	//切为正常材质，减少dc
+		timeline_.AddAction(0, action1);			
 		timeline_.AddAction(params[0],action2);
+		timeline_.AddAction(params[0] + params[1], action3);
 	}
 }
 

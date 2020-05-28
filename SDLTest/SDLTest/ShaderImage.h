@@ -18,6 +18,7 @@ public:
 	~ShaderImage();
 	void Render() override;
 	void SetActive(bool active) override;
+	void GetPassiveDrawcall() override;
 	void ChangeMaterial(Material* material);
 	void UsePass(Pass* pass);
 protected:

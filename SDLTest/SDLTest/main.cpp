@@ -54,7 +54,12 @@ void GLRender()
 	}
 
 	auto& god = GOD;
+	GOD.GetPassiveDrawcalls();
 	for (auto& dc : GOD.drawcalls_)
+	{
+		dc->Do();
+	}
+	for (auto& dc : GOD.passiveDrawcalls_)
 	{
 		dc->Do();
 	}
@@ -383,10 +388,8 @@ int main(int argc, char* argv[]) {
 
 	//////////////////////////////////////////////////////////////
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");
-	//???
-	//直接黑屏3s，然后2s缓出,并带后期模糊参数
-	//SceneTransition* transition8 = new TransitionFastBlackWithBlurIn(3.0f,2.0f);
-	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,4.0f));
+	//直接黑屏4s，然后12s带模糊缓出
+	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
 
 	Func closeOldDraw = [&]()
@@ -396,29 +399,8 @@ int main(int argc, char* argv[]) {
 
 	scene8->AddCustomAction(0.1f, closeOldDraw);
 
-	//??? 移到sceneTransition里
-	ShaderImage* bg8 = dynamic_cast<ShaderImage*>(scene8->GetBackgroundDrawable());
-
-	Pass* GBlur1Pass = new Pass;
-	GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
-	Pass* GBlur2Pass = new Pass;
-	GBlur2Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
-	Pass* GBlurOncePass = new Pass;
-	GBlurOncePass->AddChild(GBlur1Pass);
-	GBlurOncePass->AddChild(GBlur2Pass);
-	Pass* blur = new Pass;
-	blur->AddChild(GBlurOncePass,20);
-	//???
-	auto* quadWithBlurMat = new Material;
-	sure(quadWithBlurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithBlur.fs"));
-	bg8->ChangeMaterial(quadWithBlurMat);
-	bg8->UsePass(blur);
-
-	//bg8->ChangeMaterial(horizenGaussianblurMat);
-	//scene8->SetAutoEnd(7);
-
 	/////////////////////////////////////////////
-	sceneMgr.JumpToScene(7);
+	sceneMgr.JumpToScene(6);
 
 
 	bool bLoop = true;

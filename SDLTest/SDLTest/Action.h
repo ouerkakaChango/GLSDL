@@ -8,6 +8,6 @@ public:
 	virtual void DoAction()=0;
 protected:
 	float time_;
-	float errorAccept_{ 0.1f };
+	float errorAccept_{ 0.1f };//(deprecated)
 	bool bDone_{ false };
 };

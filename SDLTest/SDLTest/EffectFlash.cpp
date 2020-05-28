@@ -17,7 +17,7 @@ EffectFlash::~EffectFlash()
 
 void EffectFlash::Start()
 {
-	bActive_ = true;
+	Effect::Start();
 	nowTime_ = 0.0f;
 	nowAlpha_ = 0.0f;
 }

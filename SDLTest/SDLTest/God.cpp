@@ -90,3 +90,12 @@ void God::SetTimer(float delay, Func function)
 
 	timeline_->AddAction(timeline_->Now()+delay, function);
 }
+
+void God::GetPassiveDrawcalls()
+{
+	passiveDrawcalls_.clear();
+	for (auto& drawable : passiveDrawcallDrawables_)
+	{
+		drawable->GetPassiveDrawcall();
+	}
+}

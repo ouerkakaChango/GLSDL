@@ -29,7 +29,7 @@ void EffectShaderParam::AddPoint(float time, float value)
 
 void EffectShaderParam::Start()
 {
-	bActive_ = true;
+	Effect::Start();
 	nowTime_ = 0.0f;
 }
 

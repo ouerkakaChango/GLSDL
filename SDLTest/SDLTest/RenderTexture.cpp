@@ -112,5 +112,6 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
 	{
 		passMat->UpdateTextureParam("tex", renderTextureID_);
 	}
-	GOD.drawcalls_.push_back(rtDrawCall);
+	//???
+	GOD.passiveDrawcalls_.push_back(rtDrawCall);
 }

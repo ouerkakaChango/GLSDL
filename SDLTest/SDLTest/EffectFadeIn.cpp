@@ -12,7 +12,7 @@ EffectFadeIn::EffectFadeIn(Image* image, float fadeInTime):Effect(),image_(image
 
 void EffectFadeIn::Start()
 {
-	bActive_ = true;
+	Effect::Start();
 	nowTime_ = 0.0f;
 	nowAlpha_ = 0.0f;
 }

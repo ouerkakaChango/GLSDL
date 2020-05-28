@@ -39,7 +39,7 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(
 	dc_->SetVB(vb_);
 	dc_->SetIB(ib_);
 
-	
+	GOD.passiveDrawcallDrawables_.push_back(this);
 }
 
 
@@ -48,10 +48,11 @@ ShaderImage::~ShaderImage()
 
 }
 
-void ShaderImage::SetActive(bool active) 
-{ 
-	if (!bActive_ && active)
+void ShaderImage::GetPassiveDrawcall()
+{
+	if (bActive_)
 	{
+		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
 			rt_ = new RenderTexture(image_);
@@ -60,19 +61,41 @@ void ShaderImage::SetActive(bool active)
 			material_->UpdateParam("tex", image_->GetSurface());
 			//???
 			material_->UpdateTextureParam("bluredTex", rt_, 1);
-			GOD.drawcalls_.push_back(dc_);
+			dcVec.push_back(dc_);
 		}
 		else
 		{
 			material_->UpdateParam("tex", image_->GetSurface());
-			GOD.drawcalls_.push_back(dc_);
+			dcVec.push_back(dc_);
 		}
 	}
-	else if(bActive_&& !active)
-	{
-		auto& god = GOD;
-		sure(STL_Remove(GOD.drawcalls_, dc_));
-	}
+}
+
+void ShaderImage::SetActive(bool active) 
+{ 
+	//if (!bActive_ && active)
+	//{
+	//	if (bUsePass_)
+	//	{
+	//		rt_ = new RenderTexture(image_);
+	//		rt_->UsePass(pass_);
+	//
+	//		material_->UpdateParam("tex", image_->GetSurface());
+	//		//???
+	//		material_->UpdateTextureParam("bluredTex", rt_, 1);
+	//		GOD.drawcalls_.push_back(dc_);
+	//	}
+	//	else
+	//	{
+	//		material_->UpdateParam("tex", image_->GetSurface());
+	//		GOD.drawcalls_.push_back(dc_);
+	//	}
+	//}
+	//else if(bActive_&& !active)
+	//{
+	//	auto& god = GOD;
+	//	sure(STL_Remove(GOD.drawcalls_, dc_));
+	//}
 	Drawable::SetActive(active);
 }
 
@@ -89,7 +112,13 @@ void ShaderImage::ChangeMaterial(Material* material)
 
 void ShaderImage::UsePass(Pass* pass)
 {
-	sure(pass != nullptr);
-	bUsePass_ = true;
-	pass_ = pass;
+	if (pass == nullptr)
+	{
+		bUsePass_ = false;
+	}
+	else
+	{
+		bUsePass_ = true;
+		pass_ = pass;
+	}
 }

@@ -75,7 +75,7 @@ private:
 	RenderTexture* toUpdateRT_{ nullptr };
 	GLuint toUpdateID_;
 	GLuint textureID_;
-	unsigned texturePos_{ 0 };
+	unsigned textureUnit_{ 0 };
 };
 
 struct paramInfo
