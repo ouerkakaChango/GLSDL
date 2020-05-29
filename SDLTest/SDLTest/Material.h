@@ -171,6 +171,7 @@ protected:
 	GLuint fragmentShader_;
 
 	//???
+	Path vsPath_, fsPath_;
 	unsigned nowTexturePos_{ 0 };
 
 };

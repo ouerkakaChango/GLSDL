@@ -31,39 +31,31 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	}
 }
 
-RenderTexture::RenderTexture(RenderTexture* src)
+void RenderTexture::SetTexture(RenderTexture* src)
 {
-	sure(src != nullptr);
-
-	img_ = src->img_;
-
-	//???
-	unsigned char   *srcPixels = (unsigned char*)malloc(img_->GetWidth()*img_->GetHeight() * 4);
-	glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPixels);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenTextures(1, &renderTextureID_);
-	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
-
 	//???
 	int Mode = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//if(false)
+	//{//copy from ori,stupid version
+	//	if (!copyInitialized_)
+	//	{
+	//		srcPxiels_ = (unsigned char*)malloc(img_->GetWidth()*img_->GetHeight() * 4);
+	//		copyInitialized_ = true;
+	//	}
+	//	glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
+	//	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPxiels_);
+	//	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
+	//	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPxiels_);
+	//}
 
-	{
-		glGenFramebuffers(1, &frameBufferID_);
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
-		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+	//GL4.3 required
+	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, NULL);
+	glCopyImageSubData(src->renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
+			renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
+			img_->GetWidth(), img_->GetHeight(), 1);
 }
-
 
 RenderTexture::~RenderTexture()
 {
@@ -116,7 +108,12 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 	Material* passMat = nullptr;
 	if (bStartPass)
 	{
-		passMat = pass->GetMaterial()->Clone();
+		if (!bEntryMatInitialized_)
+		{
+			entryMaterial_ = pass->GetMaterial()->Clone();
+			bEntryMatInitialized_ = true;
+		}
+		passMat = entryMaterial_;
 	}
 	else
 	{
@@ -150,10 +147,4 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 	{
 		GOD.passiveDrawcalls_.push_back(rtDrawCall);
 	}
-}
-
-RenderTexture* RenderTexture::Clone()
-{
-	RenderTexture* re = new RenderTexture(this);
-	return re;
 }

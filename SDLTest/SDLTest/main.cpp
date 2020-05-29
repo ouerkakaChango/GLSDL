@@ -96,7 +96,7 @@ bool initGL()
 void InitSDL_OpenGL(SDL_Window *window)
 {
 	// core version
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 #ifdef GL_CORE
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -393,7 +393,7 @@ int main(int argc, char* argv[]) {
 	//////////////////////////////////////////////////////////////
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");
 	//直接黑屏4s，然后12s带模糊缓出
-	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
+	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(20.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
 
 	Func closeOldDraw = [&]()
@@ -409,7 +409,7 @@ int main(int argc, char* argv[]) {
 	ShaderImage* testSImg = new ShaderImage(testImg);
 	testSImg->name_ = "testSImg";
 	testSImg->material_->SetBlendType(Blend_Alpha);
-	scene8->Show(testSImg, 0.01f);
+	scene8->Show(testSImg, 0.0f);
 
 	scene8->AddCustomAction(0.1f, closeOldDraw);
 
@@ -458,6 +458,10 @@ int main(int argc, char* argv[]) {
 		if (now > last)
 		{
 			deltaTime = ((float)(now - last)) / 1000;
+			if (deltaTime > 0.05)
+			{
+				std::cout << "Slow"<<deltaTime<<"\n";
+			}
 			if (deltaTime > 0.017f)//封顶60
 			{
 				//std::cout << deltaTime << std::endl;

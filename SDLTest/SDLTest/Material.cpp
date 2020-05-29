@@ -316,6 +316,8 @@ void Material::OutputLinkError()
 
 bool Material::CompileShader(const Path& vsPath, const Path& fsPath)
 {
+	vsPath_ = vsPath;
+	fsPath_ = fsPath;
 	if (!LoadVS(vsPath))
 	{
 		OutputVSError();

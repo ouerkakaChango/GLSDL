@@ -40,6 +40,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
 			//???
 			//use tech 放到这里
+			//if(false)
 			{
 				auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
 				SceneShaderImage* bg = newScene->GetSceneImg();
@@ -53,7 +54,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 				GBlurOncePass->AddChild(GBlur1Pass);
 				GBlurOncePass->AddChild(GBlur2Pass);
 				Pass* blur = new Pass;
-				blur->AddChild(GBlurOncePass, 40);
+				blur->AddChild(GBlurOncePass, 10);
 				//???
 				auto* quadWithBlurMat = new Material;
 				sure(quadWithBlurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithBlur.fs"));
@@ -69,10 +70,10 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		};
 		Func func3 = [&]()
 		{
-			auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
-			SceneShaderImage* bg = newScene->GetSceneImg();
-			bg->ChangeMaterial(GOD.CloneDefaultMaterial());
-			bg->UsePass(nullptr);
+			//auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
+			//SceneShaderImage* bg = newScene->GetSceneImg();
+			//bg->ChangeMaterial(GOD.CloneDefaultMaterial());
+			//bg->UsePass(nullptr);
 		};
 		FuncAction* action1 = new FuncAction(func1);	//转黑幕
 		FuncAction* action2 = new FuncAction(func2);	//开高斯模糊渐变

@@ -9,6 +9,7 @@ SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	:ShaderImage(img, material)
 {
 	rt_ = new RenderTexture(image_);
+	clonedRT_ = new RenderTexture(image_);
 }
 
 
@@ -23,12 +24,12 @@ void SceneShaderImage::GetDrawcall()
 		auto& dcVec = GOD.postDrawcalls_;
 		if (bUsePass_)
 		{
-			RenderTexture* clonedRT = rt_->Clone();
-			clonedRT->UsePass(pass_,true);
+			clonedRT_->SetTexture(rt_);
+			clonedRT_->UsePass(pass_,true);
 
 			material_->UpdateTextureParam("tex", rt_);
 			//???
-			material_->UpdateTextureParam("bluredTex", clonedRT, 1);
+			material_->UpdateTextureParam("bluredTex", clonedRT_, 1);
 			dcVec.push_back(dc_);
 		}
 		else

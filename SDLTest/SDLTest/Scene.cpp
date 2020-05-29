@@ -77,6 +77,7 @@ void Scene::Show(Drawable* drawable, float time , Effect* effect )
 		drawable->SetSceneRT(sceneColorShaderImg_->GetRT());
 	}
 	auto showAction = new ShowAction(this, drawable);
+	showAction->name_ = drawable->name_+" ShowAction";
 	if (effect!=nullptr)
 	{
 		showAction->SetEffect(effect);

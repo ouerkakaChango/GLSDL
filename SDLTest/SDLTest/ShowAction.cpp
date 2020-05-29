@@ -20,6 +20,10 @@ void ShowAction::SetEffect(Effect* effect)
 
 void ShowAction::DoAction()
 {
+	if (name_ == "testSImg ShowAction")
+	{
+		auto v = 1;
+	}
 	if (effect_!=nullptr)
 	{
 		effect_->Start();

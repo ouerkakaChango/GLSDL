@@ -1,6 +1,7 @@
 #pragma once
+#include "Nameable.h"
 
-class Action
+class Action : public Nameable
 {
 public:
 	void SetTime(float time) { time_ = time; }

@@ -52,6 +52,10 @@ void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
+		if (name_ == "testSImg")
+		{
+			auto v = 1;
+		}
 		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
@@ -70,11 +74,7 @@ void ShaderImage::GetDrawcall()
 				dc_->SetRenderTexture(sceneRT_);
 			}
 			material_->UpdateParam("tex", image_->GetSurface());
-			//???
-			if (name_ == "testSImg")
-			{
-				dc_->name_ = "testSImgDC";
-			}
+
 			dcVec.push_back(dc_);
 		}
 	}
