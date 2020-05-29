@@ -454,7 +454,6 @@ const GLvoid* Material::CalculateOffset(int index)
 	return (const GLvoid*)(offset);
 }
 
-//???
 Material* Material::Clone()
 {
 	Material* re = new Material;
@@ -470,4 +469,10 @@ Material* Material::Clone()
 		}
 	}
 	return re;
+}
+
+void Material::CloneType(Material* ori)
+{
+	sure(ori != nullptr);
+	blendType_ = ori->blendType_;
 }

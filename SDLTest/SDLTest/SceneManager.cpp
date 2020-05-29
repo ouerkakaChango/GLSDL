@@ -6,6 +6,7 @@
 #include "Image.h"
 #include "Effect.h"
 #include "ShaderImage.h"
+#include "SceneShaderImage.h"
 
 Scene* SceneManager::InsertScene(Path bgPath)
 {
@@ -38,10 +39,9 @@ Scene* SceneManager::AddScene(Path bgPath)
 		if (img->ReadFile(bgPath))
 		{
 			img->SetPosition(bgW / 2, bgH / 2);
-			ShaderImage* bg = new ShaderImage(img);
-			bg->name_ = bgPath;
-			newScene->AddDrawable(bg);
-			newScene->sceneColorShaderImg_ = bg;
+			SceneShaderImage* sceneImg = new SceneShaderImage(img);
+			sceneImg->name_ = bgPath;
+			newScene->sceneColorShaderImg_ = sceneImg;
 		}
 	}
 	scenes_.push_back(newScene);

@@ -28,7 +28,7 @@ public:
 	void AddPostDrawable(Drawable* drawable); //(deprecated)
 	void ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable); //(deprecated)
 	Material* CloneDefaultMaterial();
-	void GetPassiveDrawcalls();
+	void GetDrawcalls();
 
 	SceneManager sceneManager_;
 	GameConfig gameConfig_;
@@ -36,8 +36,9 @@ public:
 	std::vector<DrawCall*> drawcalls_;
 
 	//???
-	std::vector<Drawable*> passiveDrawcallDrawables_;
+	std::vector<Drawable*> drawcallDrawables_;
 	std::vector<DrawCall*> passiveDrawcalls_;
+	std::vector<DrawCall*> postDrawcalls_;
 
 private:
 	God();

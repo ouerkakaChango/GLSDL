@@ -8,6 +8,7 @@
 #include "FuncAction.h"
 #include "Effect.h"
 #include "God.h"
+#include "SceneShaderImage.h"
 
 Scene::Scene()
 {
@@ -71,6 +72,10 @@ void Scene::Render()
 
 void Scene::Show(Drawable* drawable, float time , Effect* effect )
 {
+	if (sceneColorShaderImg_ != nullptr)
+	{
+		drawable->SetSceneRT(sceneColorShaderImg_->GetRT());
+	}
 	auto showAction = new ShowAction(this, drawable);
 	if (effect!=nullptr)
 	{
@@ -82,6 +87,10 @@ void Scene::Show(Drawable* drawable, float time , Effect* effect )
 void Scene::SetActive(bool active) 
 { 
 	Activeable::SetActive(active);
+	if (sceneColorShaderImg_ != nullptr)
+	{
+		sceneColorShaderImg_->SetActive(active);
+	}
 	for (auto& drawable : drawables_)
 	{
 		drawable->SetActive(active);

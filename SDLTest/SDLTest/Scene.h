@@ -8,6 +8,7 @@ class Drawable;
 class Timeline;
 class Effect;
 class SoundEffect;
+class SceneShaderImage;
 
 class Scene : public Activeable
 {
@@ -29,12 +30,12 @@ public:
 	void AddSound(SoundEffect* sound, float time);
 	void AddCustomAction(float time, Func func);
 
-	Drawable* GetBackgroundDrawable() { return sceneColorShaderImg_; }
+	SceneShaderImage* GetSceneImg() { return sceneColorShaderImg_; }
 protected:
 	std::vector<Drawable*> drawables_;
 	std::vector<Effect*> effects_;
 	Timeline* timeline_;
-	Drawable* sceneColorShaderImg_{ nullptr };
+	SceneShaderImage* sceneColorShaderImg_{ nullptr };
 
 	void AddEffect(Effect* effect);
 	friend class ShowAction;

@@ -139,6 +139,7 @@ public:
 	void UpdateTextureParam(const std::string& paramName,GLuint textureID);			//??? for texture2d 
 	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos=0);		//??? for texture2d
 	Material* Clone();
+	void CloneType(Material* ori);
 
 	GLuint programID_ = 0;
 	std::vector<VSAttributeParam*> vsAttributeParams_;

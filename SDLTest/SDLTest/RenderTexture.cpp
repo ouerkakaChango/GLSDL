@@ -10,18 +10,16 @@
 
 RenderTexture::RenderTexture(Image* img):img_(img)
 {
-	renderTextureID_ = 0;
 	glGenTextures(1, &renderTextureID_);
 	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
 
+	//???
 	int Mode = GL_RGBA;
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, img_->GetSurface()->pixels);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//---
-	if (!bFBOInitialized_)
 	{
 		glGenFramebuffers(1, &frameBufferID_);
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
@@ -30,9 +28,40 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
 		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		bFBOInitialized_ = true;
 	}
-	//___
+}
+
+RenderTexture::RenderTexture(RenderTexture* src)
+{
+	sure(src != nullptr);
+
+	img_ = src->img_;
+
+	//???
+	unsigned char   *srcPixels = (unsigned char*)malloc(img_->GetWidth()*img_->GetHeight() * 4);
+	glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenTextures(1, &renderTextureID_);
+	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
+
+	//???
+	int Mode = GL_RGBA;
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	{
+		glGenFramebuffers(1, &frameBufferID_);
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
+		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
 }
 
 
@@ -42,7 +71,7 @@ RenderTexture::~RenderTexture()
 
 
 
-void RenderTexture::UsePass(Pass* pass)
+void RenderTexture::UsePass(Pass* pass, bool bPost)
 {
 	std::vector<Pass*> passes;
 	pass->GetDoablePassVec(passes);
@@ -50,16 +79,16 @@ void RenderTexture::UsePass(Pass* pass)
 	{
 		if (i == 0)
 		{
-			UsePassOnlySelf(passes[0], true);
+			UsePassOnlySelf(passes[0], true, bPost);
 		}
 		else
 		{
-			UsePassOnlySelf(passes[i], false);
+			UsePassOnlySelf(passes[i], false, bPost);
 		}
 	}
 }
 
-void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
+void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 {
 	if (pass->SelfEmpty()) { return; }
 
@@ -98,14 +127,33 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
 	rtDrawCall->SetMaterial(passMat);
 	rtDrawCall->SetRenderTexture(this);
 	
-	if (bStartPass)
-	{
-		passMat->UpdateParam("tex", img_->GetSurface());
-	}
-	else
+	if (bPost)
 	{
 		passMat->UpdateTextureParam("tex", renderTextureID_);
 	}
-	//???
-	GOD.passiveDrawcalls_.push_back(rtDrawCall);
+	else
+	{
+		if (bStartPass)
+		{
+			passMat->UpdateParam("tex", img_->GetSurface());
+		}
+		else
+		{
+			passMat->UpdateTextureParam("tex", renderTextureID_);
+		}
+	}
+	if (bPost)
+	{
+		GOD.postDrawcalls_.push_back(rtDrawCall);
+	}
+	else
+	{
+		GOD.passiveDrawcalls_.push_back(rtDrawCall);
+	}
+}
+
+RenderTexture* RenderTexture::Clone()
+{
+	RenderTexture* re = new RenderTexture(this);
+	return re;
 }

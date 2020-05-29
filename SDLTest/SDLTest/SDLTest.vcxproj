@@ -160,6 +160,7 @@
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SceneShaderImage.cpp" />
     <ClCompile Include="SceneTransition.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderImage.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneShaderImage.h" />
     <ClInclude Include="SceneTransition.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderImage.h" />

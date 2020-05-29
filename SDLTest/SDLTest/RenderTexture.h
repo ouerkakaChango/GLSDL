@@ -15,11 +15,12 @@ class RenderTexture :
 {
 public:
 	RenderTexture(Image* img);
-
-	void UsePass(Pass* pass); 
-	void UsePassOnlySelf(Pass* pass, bool bStartPass);
-
+	RenderTexture(RenderTexture* src);
 	~RenderTexture();
+
+	void UsePass(Pass* pass,bool bPost=false); 
+	void UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost = false);
+	RenderTexture* Clone();
 
 	GLuint renderTextureID_;
 	GLuint frameBufferID_;
@@ -29,7 +30,6 @@ public:
 private:
 
 	Image* img_{nullptr};
-	bool bFBOInitialized_{false};
 	friend class DrawCall;
 };
 

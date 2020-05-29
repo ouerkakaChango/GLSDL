@@ -37,6 +37,11 @@ void DrawCall::EndDo()
 
 void DrawCall::Do()
 {
+	//???
+	if (name_ == "testSImgDC")
+	{
+		int v=1;
+	}
 	if (bDrawFrame_)
 	{	
 		glBindFramebuffer(GL_FRAMEBUFFER, rt_->frameBufferID_);

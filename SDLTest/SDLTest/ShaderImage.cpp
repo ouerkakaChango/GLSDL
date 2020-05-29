@@ -39,7 +39,7 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(
 	dc_->SetVB(vb_);
 	dc_->SetIB(ib_);
 
-	GOD.passiveDrawcallDrawables_.push_back(this);
+	GOD.drawcallDrawables_.push_back(this);
 }
 
 
@@ -48,7 +48,7 @@ ShaderImage::~ShaderImage()
 
 }
 
-void ShaderImage::GetPassiveDrawcall()
+void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
@@ -65,7 +65,16 @@ void ShaderImage::GetPassiveDrawcall()
 		}
 		else
 		{
+			if (sceneRT_ != nullptr)
+			{
+				dc_->SetRenderTexture(sceneRT_);
+			}
 			material_->UpdateParam("tex", image_->GetSurface());
+			//???
+			if (name_ == "testSImg")
+			{
+				dc_->name_ = "testSImgDC";
+			}
 			dcVec.push_back(dc_);
 		}
 	}
@@ -83,6 +92,7 @@ void ShaderImage::Render()
 
 void ShaderImage::ChangeMaterial(Material* material)
 {
+	material->CloneType(material_);
 	material_ = material;
 	dc_->SetMaterial(material_);
 }
@@ -98,4 +108,13 @@ void ShaderImage::UsePass(Pass* pass)
 		bUsePass_ = true;
 		pass_ = pass;
 	}
+}
+
+void ShaderImage::SetSceneRT(RenderTexture* sceneRT)
+{
+	Drawable::SetSceneRT(sceneRT);
+	//???
+	Material* rtMaterial = new Material;
+	sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs","D:/HumanTree/code/quadRT.fs"));
+	ChangeMaterial(rtMaterial);
 }

@@ -54,12 +54,16 @@ void GLRender()
 	}
 
 	auto& god = GOD;
-	GOD.GetPassiveDrawcalls();
-	for (auto& dc : GOD.drawcalls_)
+	GOD.GetDrawcalls();
+	for (auto& dc : GOD.drawcalls_) //(deprecated)
 	{
 		dc->Do();
 	}
 	for (auto& dc : GOD.passiveDrawcalls_)
+	{
+		dc->Do();
+	}
+	for (auto& dc : GOD.postDrawcalls_)
 	{
 		dc->Do();
 	}
@@ -403,8 +407,9 @@ int main(int argc, char* argv[]) {
 	testImg->SetPosition(800, 450);
 	testImg->ReadFile("D:/HumanTree/dante.png");
 	ShaderImage* testSImg = new ShaderImage(testImg);
+	testSImg->name_ = "testSImg";
 	testSImg->material_->SetBlendType(Blend_Alpha);
-	scene8->Show(testSImg, 0.2f);
+	scene8->Show(testSImg, 0.01f);
 
 	scene8->AddCustomAction(0.1f, closeOldDraw);
 

@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Pass.h"
 #include "UsualEffects.h"
+#include "SceneShaderImage.h"
 
 #include "Debug.h"
 
@@ -41,7 +42,8 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			//use tech 放到这里
 			{
 				auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
-				ShaderImage* bg = dynamic_cast<ShaderImage*>(newScene->GetBackgroundDrawable());
+				SceneShaderImage* bg = newScene->GetSceneImg();
+				bg->name_ = "target";
 
 				Pass* GBlur1Pass = new Pass;
 				GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
@@ -68,7 +70,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		Func func3 = [&]()
 		{
 			auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
-			ShaderImage* bg = dynamic_cast<ShaderImage*>(newScene->GetBackgroundDrawable());
+			SceneShaderImage* bg = newScene->GetSceneImg();
 			bg->ChangeMaterial(GOD.CloneDefaultMaterial());
 			bg->UsePass(nullptr);
 		};

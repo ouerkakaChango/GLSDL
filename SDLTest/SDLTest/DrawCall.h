@@ -1,11 +1,13 @@
 #pragma once
+#include "Nameable.h"
+
 #include "GLUtility.h"
 class Material;
 class VertexBuffer;
 class IndexBuffer;
 class RenderTexture;
 
-class DrawCall
+class DrawCall : public Nameable
 {
 public:
 	DrawCall();

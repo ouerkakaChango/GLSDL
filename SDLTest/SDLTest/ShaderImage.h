@@ -18,9 +18,10 @@ public:
 	~ShaderImage();
 	void Render() override;
 	void SetActive(bool active) override;
-	void GetPassiveDrawcall() override;
+	void GetDrawcall() override;
 	void ChangeMaterial(Material* material);
 	void UsePass(Pass* pass);
+	virtual void SetSceneRT(RenderTexture* sceneRT) override;
 
 	Material* material_;
 protected:
