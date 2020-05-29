@@ -34,6 +34,8 @@ private:
 	bool copyInitialized_{ false };
 	bool bEntryMatInitialized_{ false };
 	Material* entryMaterial_{ nullptr };
+	DrawCall* dc_;
+	std::vector<Pass*> passes_;
 
 	friend class DrawCall;
 };

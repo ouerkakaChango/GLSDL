@@ -59,6 +59,7 @@ void ShaderImage::GetDrawcall()
 		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
+			//???
 			rt_ = new RenderTexture(image_);
 			rt_->UsePass(pass_);
 

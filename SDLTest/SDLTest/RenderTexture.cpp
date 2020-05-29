@@ -29,6 +29,28 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+
+	//???
+	//vb
+	auto rtvb = new VertexBuffer;
+	int w = GOD.gameConfig_.Get<int>("windowWidth");
+	int h = GOD.gameConfig_.Get<int>("windowHeight");
+	SDL_Rect rect = img_->GetSDLRect();
+	Rect quad;
+	quad.x = rect.x / (float)w * 2.0f - 1;
+	quad.y = rect.y / (float)h * 2.0f - 1;
+	quad.hw = rect.w / (float)w;
+	quad.hh = rect.h / (float)h;
+	rtvb->InitQuad(quad);
+
+	//ib
+	auto rtib = new IndexBuffer;
+	rtib->InitQuad(rtvb->vao_);
+
+	//dc
+	dc_ = new DrawCall;
+	dc_->SetVB(rtvb);
+	dc_->SetIB(rtib);
 }
 
 void RenderTexture::SetTexture(RenderTexture* src)
@@ -65,17 +87,19 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::UsePass(Pass* pass, bool bPost)
 {
-	std::vector<Pass*> passes;
-	pass->GetDoablePassVec(passes);
-	for (unsigned i = 0; i < passes.size(); i++)
+	if (passes_.empty())
+	{
+		pass->GetDoablePassVec(passes_);
+	}
+	for (unsigned i = 0; i < passes_.size(); i++)
 	{
 		if (i == 0)
 		{
-			UsePassOnlySelf(passes[0], true, bPost);
+			UsePassOnlySelf(passes_[0], true, bPost);
 		}
 		else
 		{
-			UsePassOnlySelf(passes[i], false, bPost);
+			UsePassOnlySelf(passes_[i], false, bPost);
 		}
 	}
 }
@@ -84,26 +108,7 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 {
 	if (pass->SelfEmpty()) { return; }
 
-	//vb
-	auto rtvb = new VertexBuffer;
-	int w = GOD.gameConfig_.Get<int>("windowWidth");
-	int h = GOD.gameConfig_.Get<int>("windowHeight");
-	SDL_Rect rect = img_->GetSDLRect();
-	Rect quad;
-	quad.x = rect.x / (float)w * 2.0f - 1;
-	quad.y = rect.y / (float)h * 2.0f - 1;
-	quad.hw = rect.w / (float)w;
-	quad.hh = rect.h / (float)h;
-	rtvb->InitQuad(quad);
-
-	//ib
-	auto rtib = new IndexBuffer;
-	rtib->InitQuad(rtvb->vao_);
-
-	//dc
-	DrawCall* rtDrawCall = new DrawCall;
-	rtDrawCall->SetVB(rtvb);
-	rtDrawCall->SetIB(rtib);
+	//???
 
 	Material* passMat = nullptr;
 	if (bStartPass)
@@ -121,8 +126,8 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 	}
 	sure(passMat != nullptr);
 
-	rtDrawCall->SetMaterial(passMat);
-	rtDrawCall->SetRenderTexture(this);
+	dc_->SetMaterial(passMat);
+	dc_->SetRenderTexture(this);
 	
 	if (bPost)
 	{
@@ -141,10 +146,10 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
 	}
 	if (bPost)
 	{
-		GOD.postDrawcalls_.push_back(rtDrawCall);
+		GOD.postDrawcalls_.push_back(dc_);
 	}
 	else
 	{
-		GOD.passiveDrawcalls_.push_back(rtDrawCall);
+		GOD.passiveDrawcalls_.push_back(dc_);
 	}
 }

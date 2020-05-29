@@ -46,15 +46,24 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 				SceneShaderImage* bg = newScene->GetSceneImg();
 				bg->name_ = "target";
 
-				Pass* GBlur1Pass = new Pass;
-				GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
-				Pass* GBlur2Pass = new Pass;
-				GBlur2Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
-				Pass* GBlurOncePass = new Pass;
-				GBlurOncePass->AddChild(GBlur1Pass);
-				GBlurOncePass->AddChild(GBlur2Pass);
 				Pass* blur = new Pass;
-				blur->AddChild(GBlurOncePass, 10);
+				if(false)
+				{
+					Pass* GBlur1Pass = new Pass;
+					GBlur1Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/horizenGaussianBlur.fs");
+					Pass* GBlur2Pass = new Pass;
+					GBlur2Pass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/verticalGaussianBlur.fs");
+					Pass* GBlurOncePass = new Pass;
+					GBlurOncePass->AddChild(GBlur1Pass);
+					GBlurOncePass->AddChild(GBlur2Pass);
+					blur->AddChild(GBlurOncePass, 40);
+				}
+
+				{
+					Pass* GBlurOncePass = new Pass;
+					GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/GaussianBlur.fs");
+					blur->AddChild(GBlurOncePass, 20);
+				}
 				//???
 				auto* quadWithBlurMat = new Material;
 				sure(quadWithBlurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithBlur.fs"));
