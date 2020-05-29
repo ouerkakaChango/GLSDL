@@ -19,6 +19,20 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	//---
+	if (!bFBOInitialized_)
+	{
+		glGenFramebuffers(1, &frameBufferID_);
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
+		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		bFBOInitialized_ = true;
+	}
+	//___
 }
 
 
@@ -30,11 +44,6 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::UsePass(Pass* pass)
 {
-	//UsePassOnlySelf(pass);
-	//for (auto& child : pass->children_)
-	//{
-	//	UsePass(child);
-	//}
 	std::vector<Pass*> passes;
 	pass->GetDoablePassVec(passes);
 	for (unsigned i = 0; i < passes.size(); i++)
@@ -75,20 +84,6 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
 	rtDrawCall->SetVB(rtvb);
 	rtDrawCall->SetIB(rtib);
 
-	//---
-	if (!bFBOInitialized_)
-	{
-		glGenFramebuffers(1, &frameBufferID_);
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderTextureID_, 0);
-		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-		sure(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		bFBOInitialized_ = true;
-	}
-	//___
-
 	Material* passMat = nullptr;
 	if (bStartPass)
 	{
@@ -101,8 +96,7 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass)
 	sure(passMat != nullptr);
 
 	rtDrawCall->SetMaterial(passMat);
-	rtDrawCall->SetDrawFrame(true);
-	rtDrawCall->rt_ = this;
+	rtDrawCall->SetRenderTexture(this);
 	
 	if (bStartPass)
 	{

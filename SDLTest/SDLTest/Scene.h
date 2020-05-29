@@ -29,12 +29,12 @@ public:
 	void AddSound(SoundEffect* sound, float time);
 	void AddCustomAction(float time, Func func);
 
-	Drawable* GetBackgroundDrawable() { return backgroundDrawable_; }
+	Drawable* GetBackgroundDrawable() { return sceneColorShaderImg_; }
 protected:
 	std::vector<Drawable*> drawables_;
 	std::vector<Effect*> effects_;
 	Timeline* timeline_;
-	Drawable* backgroundDrawable_{ nullptr };
+	Drawable* sceneColorShaderImg_{ nullptr };
 
 	void AddEffect(Effect* effect);
 	friend class ShowAction;

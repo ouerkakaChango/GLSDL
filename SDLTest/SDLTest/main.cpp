@@ -395,7 +395,16 @@ int main(int argc, char* argv[]) {
 	Func closeOldDraw = [&]()
 	{;
 		bOldDraw = false;
+		bgm.PlayChunk("D:/HumanTree/Env_HiTech.wav");
+		bgm.ChangeBGM("D:/HumanTree/Env_Room.wav");
 	};
+
+	Image* testImg = new Image(500, 500);
+	testImg->SetPosition(800, 450);
+	testImg->ReadFile("D:/HumanTree/dante.png");
+	ShaderImage* testSImg = new ShaderImage(testImg);
+	testSImg->material_->SetBlendType(Blend_Alpha);
+	scene8->Show(testSImg, 0.2f);
 
 	scene8->AddCustomAction(0.1f, closeOldDraw);
 

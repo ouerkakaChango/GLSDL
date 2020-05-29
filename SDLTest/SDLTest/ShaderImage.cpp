@@ -73,29 +73,6 @@ void ShaderImage::GetPassiveDrawcall()
 
 void ShaderImage::SetActive(bool active) 
 { 
-	//if (!bActive_ && active)
-	//{
-	//	if (bUsePass_)
-	//	{
-	//		rt_ = new RenderTexture(image_);
-	//		rt_->UsePass(pass_);
-	//
-	//		material_->UpdateParam("tex", image_->GetSurface());
-	//		//???
-	//		material_->UpdateTextureParam("bluredTex", rt_, 1);
-	//		GOD.drawcalls_.push_back(dc_);
-	//	}
-	//	else
-	//	{
-	//		material_->UpdateParam("tex", image_->GetSurface());
-	//		GOD.drawcalls_.push_back(dc_);
-	//	}
-	//}
-	//else if(bActive_&& !active)
-	//{
-	//	auto& god = GOD;
-	//	sure(STL_Remove(GOD.drawcalls_, dc_));
-	//}
 	Drawable::SetActive(active);
 }
 

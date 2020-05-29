@@ -3,7 +3,6 @@
 class Material;
 class VertexBuffer;
 class IndexBuffer;
-//???
 class RenderTexture;
 
 class DrawCall
@@ -15,17 +14,16 @@ public:
 	void SetMaterial(Material* const material);
 	void SetVB(VertexBuffer* vb);
 	void SetIB(IndexBuffer* ib);
-	void SetDrawFrame(bool drawFrame) { bDrawFrame_ = drawFrame; }
+	void SetRenderTexture(RenderTexture* rt);
 	Material* material_;
 
-	//???
-	RenderTexture* rt_;
 protected:
 	void BeginDo();
 	void EndDo();
 
-	VertexBuffer* vb_;
-	IndexBuffer* ib_;
+	VertexBuffer* vb_{nullptr};
+	IndexBuffer* ib_{nullptr};
+	RenderTexture* rt_{ nullptr };
 	bool bDrawFrame_{ false };
 };
 

@@ -21,9 +21,10 @@ public:
 	void GetPassiveDrawcall() override;
 	void ChangeMaterial(Material* material);
 	void UsePass(Pass* pass);
+
+	Material* material_;
 protected:
 	Image* image_;
-	Material* material_;
 	Pass* pass_;
 	DrawCall* dc_;
 	VertexBuffer* vb_;
