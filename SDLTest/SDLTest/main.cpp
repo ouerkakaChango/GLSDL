@@ -63,9 +63,37 @@ void GLRender()
 	{
 		dc->Do();
 	}
-	for (auto& dc : GOD.postDrawcalls_)
+	DrawCall *nextDC;
+	bool bInSimple = false;
+	for (unsigned i=0;i< GOD.postDrawcalls_.size();i++)
 	{
-		dc->Do();
+		DrawCall* dc = GOD.postDrawcalls_[i];
+		if (i < GOD.postDrawcalls_.size() - 1)
+		{
+			nextDC = GOD.postDrawcalls_[i + 1];
+		}
+		else
+		{
+			nextDC = nullptr;
+		}
+		if (dc == nextDC &&!bInSimple)
+		{
+			dc->SimpleDoStart();
+			bInSimple = true;
+		}
+		else if (bInSimple && dc != nextDC)
+		{
+			dc->SimpleDoEnd();
+			bInSimple = false;
+		}
+		else if (bInSimple)
+		{
+			dc->SimpleDo();
+		}
+		else
+		{
+			dc->Do();
+		}
 	}
 }
 

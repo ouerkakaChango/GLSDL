@@ -7,6 +7,7 @@ void Pass::SetShader(const Path& vsPath, const Path& fsPath)
 	bSelfEmpty_ = false;
 	vsPath_ = vsPath;
 	fsPath_ = fsPath;
+	GetMaterial();
 }
 
 Material* Pass::GetMaterial()

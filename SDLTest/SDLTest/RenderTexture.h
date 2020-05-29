@@ -18,7 +18,7 @@ public:
 	~RenderTexture();
 
 	void UsePass(Pass* pass,bool bPost=false); 
-	void UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost = false);
+	void UsePassOnlySelf(Pass* pass, bool bPost = false);
 	void SetTexture(RenderTexture* src);
 
 	GLuint renderTextureID_;

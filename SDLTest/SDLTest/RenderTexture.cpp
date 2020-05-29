@@ -93,57 +93,21 @@ void RenderTexture::UsePass(Pass* pass, bool bPost)
 	}
 	for (unsigned i = 0; i < passes_.size(); i++)
 	{
-		if (i == 0)
-		{
-			UsePassOnlySelf(passes_[0], true, bPost);
-		}
-		else
-		{
-			UsePassOnlySelf(passes_[i], false, bPost);
-		}
+		UsePassOnlySelf(passes_[i], bPost);
 	}
 }
 
-void RenderTexture::UsePassOnlySelf(Pass* pass, bool bStartPass, bool bPost)
+void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 {
 	if (pass->SelfEmpty()) { return; }
 
-	//???
-
-	Material* passMat = nullptr;
-	if (bStartPass)
-	{
-		if (!bEntryMatInitialized_)
-		{
-			entryMaterial_ = pass->GetMaterial()->Clone();
-			bEntryMatInitialized_ = true;
-		}
-		passMat = entryMaterial_;
-	}
-	else
-	{
-		passMat = pass->GetMaterial();
-	}
+	Material* passMat = pass->GetMaterial();
 	sure(passMat != nullptr);
-
+	//??? 现在共用一个drawCall，多次call它
 	dc_->SetMaterial(passMat);
 	dc_->SetRenderTexture(this);
 	
-	if (bPost)
-	{
-		passMat->UpdateTextureParam("tex", renderTextureID_);
-	}
-	else
-	{
-		if (bStartPass)
-		{
-			passMat->UpdateParam("tex", img_->GetSurface());
-		}
-		else
-		{
-			passMat->UpdateTextureParam("tex", renderTextureID_);
-		}
-	}
+	passMat->UpdateTextureParam("tex", renderTextureID_);
 	if (bPost)
 	{
 		GOD.postDrawcalls_.push_back(dc_);

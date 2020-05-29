@@ -13,6 +13,9 @@ public:
 	DrawCall();
 	~DrawCall();
 	void Do();
+	void SimpleDoStart();
+	void SimpleDoEnd();
+	void SimpleDo();
 	void SetMaterial(Material* const material);
 	void SetVB(VertexBuffer* vb);
 	void SetIB(IndexBuffer* ib);
