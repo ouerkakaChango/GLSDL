@@ -32,7 +32,7 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 
 	//???
 	//vb
-	auto rtvb = new VertexBuffer;
+	vb_ = new VertexBuffer;
 	int w = GOD.gameConfig_.Get<int>("windowWidth");
 	int h = GOD.gameConfig_.Get<int>("windowHeight");
 	SDL_Rect rect = img_->GetSDLRect();
@@ -41,16 +41,12 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	quad.y = rect.y / (float)h * 2.0f - 1;
 	quad.hw = rect.w / (float)w;
 	quad.hh = rect.h / (float)h;
-	rtvb->InitQuad(quad);
+	vb_->InitQuad(quad);
 
 	//ib
-	auto rtib = new IndexBuffer;
-	rtib->InitQuad(rtvb->vao_);
+	ib_ = new IndexBuffer;
+	ib_->InitQuad(vb_->vao_);
 
-	//dc
-	dc_ = new DrawCall;
-	dc_->SetVB(rtvb);
-	dc_->SetIB(rtib);
 }
 
 void RenderTexture::SetTexture(RenderTexture* src)
@@ -59,24 +55,25 @@ void RenderTexture::SetTexture(RenderTexture* src)
 	int Mode = GL_RGBA;
 
 	//if(false)
-	//{//copy from ori,stupid version
-	//	if (!copyInitialized_)
-	//	{
-	//		srcPxiels_ = (unsigned char*)malloc(img_->GetWidth()*img_->GetHeight() * 4);
-	//		copyInitialized_ = true;
-	//	}
-	//	glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
-	//	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPxiels_);
-	//	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
-	//	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPxiels_);
-	//}
+	{//copy from ori,stupid version
+		//if (!copyInitialized_)
+		//{
+		//	srcPxiels_ = (unsigned char*)malloc(img_->GetWidth()*img_->GetHeight() * 4);
+		//	copyInitialized_ = true;
+		//}
+		//glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
+		//glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPxiels_);
+		//glBindTexture(GL_TEXTURE_2D, renderTextureID_);
+		//glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPxiels_);
+	}
 
 	//GL4.3 required
-	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, NULL);
-	glCopyImageSubData(src->renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
+	//glBindTexture(GL_TEXTURE_2D, renderTextureID_);
+	//glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, NULL);
+	//???
+	glCopyImageSubDataNV(src->renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
 			renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
-			img_->GetWidth(), img_->GetHeight(), 1);
+			img_->GetWidth(), img_->GetHeight(),1);
 }
 
 RenderTexture::~RenderTexture()
@@ -91,29 +88,77 @@ void RenderTexture::UsePass(Pass* pass, bool bPost)
 	{
 		pass->GetDoablePassVec(passes_);
 	}
+	// initalize dc,mat for swap
+	if (selfDC_ == nullptr)
+	{
+		//???
+		InitSwapables(passes_[0]);
+	}
 	for (unsigned i = 0; i < passes_.size(); i++)
 	{
 		UsePassOnlySelf(passes_[i], bPost);
 	}
 }
 
+void RenderTexture::InitSwapables(Pass* pass)
+{
+	selfDC_ = new DrawCall;
+	swapDC_ = new DrawCall;
+	//draw to swap
+	selfDrawMat_ = pass->GetMaterial()->Clone();
+	selfDrawMat_->UpdateTextureParam("tex", renderTextureID_);
+	//draw to self
+	swapDrawMat_ = selfDrawMat_->Clone();
+	swapDrawMat_->UpdateTextureParam("tex", swapRT_ ->renderTextureID_);
+
+	selfDC_->SetVB(vb_);
+	selfDC_->SetIB(ib_);
+	selfDC_->SetMaterial(selfDrawMat_);
+	selfDC_->SetRenderTexture(swapRT_);
+	swapDC_->SetVB(vb_);
+	swapDC_->SetIB(ib_);
+	swapDC_->SetMaterial(swapDrawMat_);
+	swapDC_->SetRenderTexture(this);
+}
+
 void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 {
-	if (pass->SelfEmpty()) { return; }
-
-	Material* passMat = pass->GetMaterial();
-	sure(passMat != nullptr);
-	//??? 现在共用一个drawCall，多次call它
-	dc_->SetMaterial(passMat);
-	dc_->SetRenderTexture(this);
-	
-	passMat->UpdateTextureParam("tex", renderTextureID_);
-	if (bPost)
+	//self as parameter,draw to swap
+	if (!swapFlag_)
 	{
-		GOD.postDrawcalls_.push_back(dc_);
+		if (pass->SelfEmpty()) { return; }
+		if (bPost)
+		{
+			GOD.postDrawcalls_.push_back(selfDC_);
+		}
+		else
+		{
+			GOD.passiveDrawcalls_.push_back(selfDC_);
+		}
 	}
+	//swap as parameter,draw to self
 	else
 	{
-		GOD.passiveDrawcalls_.push_back(dc_);
+		if (pass->SelfEmpty()) { return; }
+		if (bPost)
+		{
+			GOD.postDrawcalls_.push_back(swapDC_);
+		}
+		else
+		{
+			GOD.passiveDrawcalls_.push_back(swapDC_);
+		}
 	}
+
+	swapFlag_ = !swapFlag_;
+}
+
+void RenderTexture::SetSwapRT(RenderTexture* swapRT)
+{
+	swapRT_ = swapRT;
+}
+
+GLuint RenderTexture::GetFinalTex()
+{
+	return swapFlag_ ? renderTextureID_ : swapRT_->renderTextureID_;
 }

@@ -9,7 +9,9 @@ SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	:ShaderImage(img, material)
 {
 	rt_ = new RenderTexture(image_);
-	clonedRT_ = new RenderTexture(image_);
+	postRT_ = new RenderTexture(image_);
+	auto postSwap = new RenderTexture(image_);
+	postRT_->SetSwapRT(postSwap);
 }
 
 
@@ -25,12 +27,12 @@ void SceneShaderImage::GetDrawcall()
 		if (bUsePass_)
 		{
 			{
-				clonedRT_->SetTexture(rt_);
-				clonedRT_->UsePass(pass_,true);
+				postRT_->SetTexture(rt_);
+				postRT_->UsePass(pass_,true);
 				
 				material_->UpdateTextureParam("tex", rt_);
 				//???
-				material_->UpdateTextureParam("bluredTex", clonedRT_, 1);
+				material_->UpdateTextureParam("bluredTex", postRT_->GetFinalTex());
 			}
 			dcVec.push_back(dc_);
 		}

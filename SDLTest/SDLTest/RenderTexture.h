@@ -8,6 +8,8 @@
 class Image;
 class Pass;
 class Material;
+class VertexBuffer;
+class IndexBuffer;
 class DrawCall;
 
 class RenderTexture :
@@ -21,21 +23,30 @@ public:
 	void UsePassOnlySelf(Pass* pass, bool bPost = false);
 	void SetTexture(RenderTexture* src);
 
+	void SetSwapRT(RenderTexture* swapRT);
+	GLuint GetFinalTex();
+
 	GLuint renderTextureID_;
 	GLuint frameBufferID_;
 	GLuint colorRenderbuffer_;
 
 
 private:
+	void InitSwapables(Pass* pass);
 
 	Image* img_{nullptr};
+	std::vector<Pass*> passes_;
 	//???
 	unsigned char  * srcPxiels_;
 	bool copyInitialized_{ false };
-	bool bEntryMatInitialized_{ false };
-	Material* entryMaterial_{ nullptr };
-	DrawCall* dc_;
-	std::vector<Pass*> passes_;
+	//???
+	bool swapFlag_{false};
+	RenderTexture* swapRT_;
+	VertexBuffer* vb_;
+	IndexBuffer* ib_;
+	DrawCall *selfDC_{nullptr}, *swapDC_;
+	Material *selfDrawMat_, *swapDrawMat_;
+
 
 	friend class DrawCall;
 };

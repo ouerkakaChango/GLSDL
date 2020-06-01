@@ -56,6 +56,13 @@ void DrawCall::SimpleDoStart()
 	}
 	//___vb attributes end
 
+	SimpleDo();
+	
+
+}
+
+void DrawCall::SimpleDo()
+{
 	//---param update thins
 	for (auto& param : material_->params_)
 	{
@@ -66,13 +73,6 @@ void DrawCall::SimpleDoStart()
 	}
 	//___param update things end
 
-	SimpleDo();
-	
-
-}
-
-void DrawCall::SimpleDo()
-{
 	if (bDrawFrame_)
 	{
 		//??? 现在画了4个顶点

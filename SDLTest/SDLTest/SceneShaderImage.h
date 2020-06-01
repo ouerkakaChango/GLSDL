@@ -11,7 +11,7 @@ public:
 
 	RenderTexture* GetRT() { return rt_; }
 protected:
-	RenderTexture* rt_;
-	RenderTexture* clonedRT_{nullptr};
+	RenderTexture* rt_;					//pre postRT
+	RenderTexture* postRT_{nullptr};	//postRT
 };
 

@@ -449,6 +449,10 @@ int main(int argc, char* argv[]) {
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
 
+	//???
+	auto vendor = glGetString(GL_VENDOR);
+	glDepthMask(false);
+	glDisable(GL_DEPTH_TEST);
 
 	bool bLoop = true;
 
@@ -489,7 +493,7 @@ int main(int argc, char* argv[]) {
 		float deltaTime =  gWatch.Lapse();
 
 		auto lastWatch = gWatch.GetWatchList();
-		if (deltaTime > 0.05)
+		if (deltaTime > 0.03 && !bOldDraw)
 		{
 			std::cout << "Slow"<<deltaTime<<"\n";
 			gWatch.Record();
