@@ -4,6 +4,7 @@
 
 class Action;
 class Effect;
+class WatchDog;
 
 class Timeline
 {
@@ -13,6 +14,7 @@ public:
 	void AddEffect(float time, Effect* effect);
 	void Reset();
 	void Update(float deltaTime);
+	void Update(float deltaTime, WatchDog& watchDog);
 	float Now() { return now_; }
 protected:
 	std::vector<Action*> actions_;	//˲ʱ

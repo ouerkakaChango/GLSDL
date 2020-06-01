@@ -24,12 +24,14 @@ void SceneShaderImage::GetDrawcall()
 		auto& dcVec = GOD.postDrawcalls_;
 		if (bUsePass_)
 		{
-			clonedRT_->SetTexture(rt_);
-			clonedRT_->UsePass(pass_,true);
-
-			material_->UpdateTextureParam("tex", rt_);
-			//???
-			material_->UpdateTextureParam("bluredTex", clonedRT_, 1);
+			{
+				clonedRT_->SetTexture(rt_);
+				clonedRT_->UsePass(pass_,true);
+				
+				material_->UpdateTextureParam("tex", rt_);
+				//???
+				material_->UpdateTextureParam("bluredTex", clonedRT_, 1);
+			}
 			dcVec.push_back(dc_);
 		}
 		else

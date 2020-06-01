@@ -29,6 +29,8 @@
 #include "ShaderImage.h"
 #include "Timeline.h"
 #include "Pass.h"
+//???
+#include "WatchDog.h"
 
 #include "GameUtility.h"
 #include "Debug.h"
@@ -42,7 +44,7 @@ void GLRender()
 {
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	auto& gWatchDog = GOD.watchDog_;
 	if (bOldDraw)
 	{
 		//??? 把d3d画的背景作为参数传进来
@@ -52,17 +54,19 @@ void GLRender()
 		gDC.Do();
 		SDL_FreeSurface(Surface);
 	}
-
+	gWatchDog.Watch("OldBackground");
 	auto& god = GOD;
 	GOD.GetDrawcalls();
 	for (auto& dc : GOD.drawcalls_) //(deprecated)
 	{
 		dc->Do();
 	}
+	gWatchDog.Watch("dc");
 	for (auto& dc : GOD.passiveDrawcalls_)
 	{
 		dc->Do();
 	}
+	gWatchDog.Watch("passiveDC");
 	DrawCall *nextDC;
 	bool bInSimple = false;
 	for (unsigned i=0;i< GOD.postDrawcalls_.size();i++)
@@ -95,6 +99,7 @@ void GLRender()
 			dc->Do();
 		}
 	}
+	gWatchDog.Watch("postDC");
 }
 
 bool initGL()
@@ -159,8 +164,7 @@ void InitSDL_OpenGL(SDL_Window *window)
 		//Initialize OpenGL
 		if (!initGL())
 		{
-			printf("Unable to initialize OpenGL!\n");
-			//abort();
+			abort();
 		}
 	}
 }
@@ -195,6 +199,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	//SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr) {
 		SDL_DestroyWindow(window);
 		std::cout << "SDL_CreateRender Error: " << SDL_GetError() << std::endl;
@@ -446,8 +451,6 @@ int main(int argc, char* argv[]) {
 
 
 	bool bLoop = true;
-	long last = 0;
-	float deltaTime = 0.0;
 
 	SDL_Event e;
 	while (bLoop)
@@ -482,33 +485,34 @@ int main(int argc, char* argv[]) {
 				GOD.BroadCast(&Mouse_Move(x, y));
 			}
 		}
-		long now = SDL_GetTicks();
-		if (now > last)
-		{
-			deltaTime = ((float)(now - last)) / 1000;
-			if (deltaTime > 0.05)
-			{
-				std::cout << "Slow"<<deltaTime<<"\n";
-			}
-			if (deltaTime > 0.017f)//封顶60
-			{
-				//std::cout << deltaTime << std::endl;
-				last = now;
+		WatchDog& gWatch = GOD.watchDog_;
+		float deltaTime =  gWatch.Lapse();
 
-				//主循环
-				if (bOldDraw)
-				{
-					SDL_RenderClear(renderer);
-				}
-				GOD.Update(deltaTime);
-				if (bOldDraw)
-				{
-					//??? 把d3d画的保存为图
-					saveScreenshot("D:/22.bmp", window, renderer);
-				}
-				GLRender();
-				SDL_GL_SwapWindow(window);
+		auto lastWatch = gWatch.GetWatchList();
+		if (deltaTime > 0.05)
+		{
+			std::cout << "Slow"<<deltaTime<<"\n";
+			gWatch.Record();
+		}
+		if (deltaTime > 0.017f)//封顶60
+		{
+			//std::cout << deltaTime << std::endl;
+			gWatch.Tick();
+			gWatch.StartWatch();
+			if (bOldDraw)
+			{
+				SDL_RenderClear(renderer);
 			}
+			GOD.Update(deltaTime);
+			if (bOldDraw)
+			{
+				//??? 把d3d画的保存为图
+				saveScreenshot("D:/22.bmp", window, renderer);
+			}
+			GLRender();
+			gWatch.Watch("Render");
+			SDL_GL_SwapWindow(window);
+			gWatch.Watch("Swap");
 		}
 	}
 

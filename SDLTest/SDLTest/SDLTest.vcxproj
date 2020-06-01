@@ -176,6 +176,7 @@
     <ClCompile Include="UsualEffects.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="WatchDog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="UsualEffects.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="WatchDog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TimeCurve.inl" />

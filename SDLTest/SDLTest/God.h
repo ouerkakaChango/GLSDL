@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "SceneManager.h"
+#include "WatchDog.h"
 #include "GameConfig.h"
 
 class Event;
@@ -35,10 +36,11 @@ public:
 	ShaderImage* blackBackground_{ nullptr };
 	std::vector<DrawCall*> drawcalls_;
 
-	//???
 	std::vector<Drawable*> drawcallDrawables_;
 	std::vector<DrawCall*> passiveDrawcalls_;
 	std::vector<DrawCall*> postDrawcalls_;
+
+	WatchDog watchDog_;
 
 private:
 	God();

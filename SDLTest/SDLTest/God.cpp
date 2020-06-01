@@ -72,12 +72,14 @@ void God::ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable)
 
 void God::Update(float deltaTime)
 {
-	timeline_->Update(deltaTime);
+	timeline_->Update(deltaTime, watchDog_);
 	sceneManager_.Update(deltaTime);
+	watchDog_.Watch("sceneManager");
 	for (auto& drawable : postDrawables_)
 	{
 		drawable->Render();
 	}
+	watchDog_.Watch("postDrawables");
 }
 
 Material* God::CloneDefaultMaterial()
