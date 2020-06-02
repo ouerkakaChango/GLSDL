@@ -14,6 +14,8 @@ public:
 	void ChangeBGM(const Path& filePath);
 	void PlayChunk(const Path& filePath);
 	void PlayChunk(const Path& filePath, float fadeStart,float fadeEnd);
+	void PlayChunk(const Path& filePath, float duration);
+	void PlayChunkLoop(const Path& filePath);
 
 protected:
 	Mix_Music* GetMixMusic(const Path& filePath);

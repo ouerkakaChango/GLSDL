@@ -59,3 +59,15 @@ void BGMSystem::PlayChunk(const Path& filePath, float fadeStart, float fadeEnd)
 	SoundEffect temp(filePath);
 	temp.PlayWithFadeOut(fadeStart,fadeEnd);
 }
+
+void BGMSystem::PlayChunk(const Path& filePath, float duration)
+{
+	SoundEffect temp(filePath);
+	temp.Play(duration);
+}
+
+void BGMSystem::PlayChunkLoop(const Path& filePath)
+{
+	SoundEffect temp(filePath);
+	temp.Play(true);
+}

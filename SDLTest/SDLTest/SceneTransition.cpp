@@ -28,7 +28,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		static Pass* GBlurOncePass = new Pass;
 		GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/GaussianBlur.fs");
 		static Pass* blur = new Pass;
-		blur->AddChild(GBlurOncePass, 40);
+		blur->AddChild(GBlurOncePass, 30);
 		static Material* quadWithBlurMat = new Material;
 		sure(quadWithBlurMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithBlur.fs"));
 

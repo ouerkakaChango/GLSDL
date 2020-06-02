@@ -156,10 +156,10 @@ void InitSDL_OpenGL(SDL_Window *window)
 		}
 
 		//Use Vsync
-		if (SDL_GL_SetSwapInterval(1) < 0)
-		{
-			printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-		}
+		//if (SDL_GL_SetSwapInterval(1) < 0)
+		//{
+		//	printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		//}
 
 		//Initialize OpenGL
 		if (!initGL())
@@ -198,8 +198,8 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	//SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	//SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr) {
 		SDL_DestroyWindow(window);
 		std::cout << "SDL_CreateRender Error: " << SDL_GetError() << std::endl;
@@ -436,6 +436,10 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/Env_HiTech.wav");
 		bgm.ChangeBGM("D:/HumanTree/Env_Room.wav");
 	};
+	Func radioEvent = [&]()
+	{
+		bgm.PlayChunkLoop("D:/HumanTree/sound/radioloop.wav");
+	};
 
 	Image* testImg = new Image(500, 500);
 	testImg->SetPosition(800, 450);
@@ -443,9 +447,10 @@ int main(int argc, char* argv[]) {
 	ShaderImage* testSImg = new ShaderImage(testImg);
 	testSImg->name_ = "testSImg";
 	testSImg->material_->SetBlendType(Blend_Alpha);
-	scene8->Show(testSImg, 0.0f);
+	scene8->Show(testSImg, 5.0f);
 
 	scene8->AddCustomAction(0.0f, wakeEvent);
+	scene8->AddCustomAction(5.0f, radioEvent);
 
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
