@@ -397,6 +397,7 @@ int main(int argc, char* argv[]) {
 	{
 		bgm.StopBGM();
 		bgm.PlayChunk("D:/HumanTree/HeaveFall.wav",3,4);
+		bOldDraw = false;
 	};
 
 	//关音效，关红闪特效
@@ -421,6 +422,7 @@ int main(int argc, char* argv[]) {
 	vortexShaderImg->name_ = "vortexShaderImg";
 	scene7->Show(vortexShaderImg, 0.1f, paramEffect);
 	scene7->AddCustomAction(9.f, heavyDropFunc);
+
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
@@ -429,9 +431,8 @@ int main(int argc, char* argv[]) {
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
 
-	Func closeOldDraw = [&]()
-	{;
-		bOldDraw = false;
+	Func wakeEvent = [&]()
+	{
 		bgm.PlayChunk("D:/HumanTree/Env_HiTech.wav");
 		bgm.ChangeBGM("D:/HumanTree/Env_Room.wav");
 	};
@@ -444,7 +445,7 @@ int main(int argc, char* argv[]) {
 	testSImg->material_->SetBlendType(Blend_Alpha);
 	scene8->Show(testSImg, 0.0f);
 
-	scene8->AddCustomAction(0.1f, closeOldDraw);
+	scene8->AddCustomAction(0.0f, wakeEvent);
 
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);

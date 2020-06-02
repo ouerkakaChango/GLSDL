@@ -58,7 +58,7 @@ void Scene::Update(float deltaTime)
 			effect->Update(deltaTime);
 		}
 	}
-	//渲染更新
+	//渲染更新 (deprecated)
 	Render();
 }
 
