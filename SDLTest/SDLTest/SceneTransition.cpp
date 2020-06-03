@@ -64,10 +64,10 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		};
 		Func func3 = [&]()
 		{
-			//auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
-			//SceneShaderImage* bg = newScene->GetSceneImg();
-			//bg->ChangeMaterial(GOD.CloneDefaultMaterial());
-			//bg->UsePass(nullptr);
+			auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
+			SceneShaderImage* bg = newScene->GetSceneImg();
+			bg->ChangeMaterial(GOD.CloneDefaultMaterial());
+			bg->UsePass(nullptr);
 		};
 		FuncAction* action1 = new FuncAction(func1);	//转黑幕
 		FuncAction* action2 = new FuncAction(func2);	//开高斯模糊渐变

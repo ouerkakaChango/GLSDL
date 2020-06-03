@@ -426,7 +426,7 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
-	auto scene8 = sceneMgr.AddScene("D:/HumanTree/test.png");
+	auto scene8 = sceneMgr.AddScene("D:/HumanTree/13.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
@@ -440,17 +440,22 @@ int main(int argc, char* argv[]) {
 	{
 		bgm.PlayChunkLoop("D:/HumanTree/sound/radioloop.wav");
 	};
+	Func textSoundEvent = [&]()
+	{
+		bgm.PlayChunk("D:/HumanTree/sound/HiTech_short.wav");
+	};
 
-	Image* testImg = new Image(500, 500);
+	Image* testImg = new Image(100, 150);
 	testImg->SetPosition(800, 450);
-	testImg->ReadFile("D:/HumanTree/dante.png");
+	testImg->ReadFile("D:/HumanTree/text2.png");
 	ShaderImage* testSImg = new ShaderImage(testImg);
 	testSImg->name_ = "testSImg";
 	testSImg->material_->SetBlendType(Blend_Alpha);
 	scene8->Show(testSImg, 5.0f);
 
 	scene8->AddCustomAction(0.0f, wakeEvent);
-	scene8->AddCustomAction(5.0f, radioEvent);
+	scene8->AddCustomAction(5.0f, textSoundEvent);
+	scene8->AddCustomAction(10.0f, radioEvent);
 
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
