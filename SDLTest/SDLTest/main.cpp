@@ -426,7 +426,7 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
-	auto scene8 = sceneMgr.AddScene("D:/HumanTree/13.png");
+	auto scene8 = sceneMgr.AddScene("D:/HumanTree/15.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
@@ -436,26 +436,36 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/Env_HiTech.wav");
 		bgm.ChangeBGM("D:/HumanTree/Env_Room.wav");
 	};
-	Func radioEvent = [&]()
-	{
-		bgm.PlayChunkLoop("D:/HumanTree/sound/radioloop.wav");
-	};
+
 	Func textSoundEvent = [&]()
 	{
 		bgm.PlayChunk("D:/HumanTree/sound/HiTech_short.wav");
 	};
 
-	Image* testImg = new Image(100, 150);
-	testImg->SetPosition(800, 450);
-	testImg->ReadFile("D:/HumanTree/text2.png");
-	ShaderImage* testSImg = new ShaderImage(testImg);
-	testSImg->name_ = "testSImg";
-	testSImg->material_->SetBlendType(Blend_Alpha);
-	scene8->Show(testSImg, 5.0f);
+	Func music2Event = [&]()
+	{
+		bgm.PlayChunk("D:/HumanTree/sound/music2.wav");
+	};
+
+	//Image* testImg = new Image(100, 150);
+	//testImg->SetPosition(800, 450);
+	//testImg->ReadFile("D:/HumanTree/text2.png");
+	//ShaderImage* testSImg = new ShaderImage(testImg);
+	//testSImg->name_ = "testSImg";
+	//testSImg->material_->SetBlendType(Blend_Alpha);
+	//scene8->Show(testSImg, 5.0f);
+
+	Image* musicImg = new Image(128, 128);
+	musicImg->SetPosition(800, 450);
+	musicImg->ReadFile("D:/HumanTree/17.png");
+	ShaderImage* musicSImg = new ShaderImage(musicImg);
+	musicSImg->material_->SetBlendType(Blend_Alpha);
+	scene8->Show(musicSImg, 2.0f);
+	//??? shaderImg用耀光pass
 
 	scene8->AddCustomAction(0.0f, wakeEvent);
-	scene8->AddCustomAction(5.0f, textSoundEvent);
-	scene8->AddCustomAction(10.0f, radioEvent);
+	scene8->AddCustomAction(2.0f, textSoundEvent);
+	scene8->AddCustomAction(8.0f, music2Event);
 
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
