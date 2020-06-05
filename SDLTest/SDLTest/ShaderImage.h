@@ -21,10 +21,13 @@ public:
 	void GetDrawcall() override;
 	void ChangeMaterial(Material* material);
 	void UsePass(Pass* pass);
+	void UsePass(Pass* pass, Pass* endPass);
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
 
 	Material* material_;
 protected:
+	void ResetRT();
+
 	Image* image_;
 	Pass* pass_;
 	DrawCall* dc_;
@@ -33,6 +36,10 @@ protected:
 
 	//???
 	RenderTexture* rt_{nullptr};
+	RenderTexture* passedRT_{ nullptr };
+	//???
+	RenderTexture* testRT_{ nullptr };
 	bool bUsePass_{false};
+	bool bUseEndPass_{ false };
 };
 

@@ -44,11 +44,6 @@ void VSAttributeParam::SetFormatByType(const std::string& typeName)
 	}
 }
 
-void VSAttributeParam::InitLocation(GLuint programID)
-{
-	paramLocation_ = glGetAttribLocation(programID, name_.c_str());
-}
-
 void Uniform1fParam::UpdateValue()
 {
 	value_ = toUpdateValue_;
@@ -59,15 +54,6 @@ void Uniform1fParam::UpdateValue()
 std::string Uniform1fParam::TypeName()
 {
 	return "uniform1f";
-}
-
-void MaterialParam::InitLocation(GLuint programID)
-{
-	paramLocation_ = glGetUniformLocation(programID, name_.c_str());
-	if (paramLocation_ == -1)
-	{
-		abort();
-	}
 }
 
 std::string Texture2DParam::TypeName()
@@ -378,7 +364,7 @@ void Material::UpdateParam(const std::string& paramName, SDL_Surface* newTexture
 	}
 }
 
-void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID)
+void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID, unsigned textureUnit)
 {
 	for (auto& param : params_)
 	{
@@ -390,6 +376,7 @@ void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID
 				realParam->bNeedUpdate_ = true;
 				realParam->updateType_ = TextureUpdate_ID;
 				realParam->toUpdateID_ = textureID;
+				realParam->textureUnit_ = textureUnit;
 				break;
 			}
 		}
@@ -459,6 +446,10 @@ const GLvoid* Material::CalculateOffset(int index)
 Material* Material::Clone()
 {
 	Material* re = new Material;
+	re->name_ = name_ + "_Clone";
+	re->vsPath_ = vsPath_;
+	re->fsPath_ = fsPath_;
+
 	re->programID_ = programID_;
 	re->vsAttributeParams_ = vsAttributeParams_;
 	//深拷参数，不然出问题
@@ -470,6 +461,10 @@ Material* Material::Clone()
 			abort();
 		}
 	}
+	re->blendType_ = blendType_;
+	re->paramInfos_ = paramInfos_;
+	re->vertexShader_ = vertexShader_;
+	re->fragmentShader_ = fragmentShader_;
 	return re;
 }
 

@@ -52,22 +52,28 @@ void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
-		if (name_ == "testSImg")
+		if (name_ == "musicSImg")
 		{
-			auto v = 1;
+			int a = 1;
 		}
 		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
 			//???
-			abort();
-			//rt_ = new RenderTexture(image_);
-			//rt_->UsePass(pass_);
-			//
-			//material_->UpdateParam("tex", image_->GetSurface());
-			////???
-			//material_->UpdateTextureParam("bluredTex", rt_, 1);
-			//dcVec.push_back(dc_);
+			passedRT_->SetTexture(rt_);
+			passedRT_->UsePass(pass_);
+
+			 material_->UpdateTextureParam("tex", rt_);
+			//???
+			material_->UpdateTextureParam("glowedTex", passedRT_->renderTextureID_,1);
+			//material_->UpdateParam("bluredTex", IMG_Load("D:/HumanTree/Dante.png"));
+
+			if (sceneRT_ != nullptr)
+			{
+				dc_->SetRenderTexture(sceneRT_);
+			}
+
+			dcVec.push_back(dc_);
 		}
 		else
 		{
@@ -89,7 +95,7 @@ void ShaderImage::SetActive(bool active)
 
 void ShaderImage::Render()
 {
-	//???
+	//??? (deprecated)
 }
 
 void ShaderImage::ChangeMaterial(Material* material)
@@ -104,6 +110,7 @@ void ShaderImage::UsePass(Pass* pass)
 	if (pass == nullptr)
 	{
 		bUsePass_ = false;
+		pass_ = nullptr;
 	}
 	else
 	{
@@ -112,11 +119,53 @@ void ShaderImage::UsePass(Pass* pass)
 	}
 }
 
+void ShaderImage::UsePass(Pass* pass, Pass* endPass)
+{
+	if (pass == nullptr)
+	{
+		bUsePass_ = false;
+		pass_ = nullptr;
+	}
+	else
+	{
+		bUsePass_ = true;
+		//???
+		bUseEndPass_ = true;
+		ResetRT();
+		pass_ = pass;
+		ChangeMaterial(endPass->GetMaterial());
+		//???
+		material_->name_ = "passmat";
+	}
+}
+
 void ShaderImage::SetSceneRT(RenderTexture* sceneRT)
 {
 	Drawable::SetSceneRT(sceneRT);
 	//???
-	Material* rtMaterial = new Material;
-	sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs","D:/HumanTree/code/quadRT.fs"));
-	ChangeMaterial(rtMaterial);
+	if (!bUseEndPass_)
+	{
+		Material* rtMaterial = new Material;
+		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRT.fs"));
+		ChangeMaterial(rtMaterial);
+	}
+}
+
+void ShaderImage::ResetRT()
+{
+	if (rt_ == nullptr)
+	{
+		rt_ = new RenderTexture(image_);
+
+		passedRT_ = new RenderTexture(image_);
+		auto swapRT = new RenderTexture(image_);
+		passedRT_->SetSwapRT(swapRT);
+
+		testRT_ = new RenderTexture(GOD.testImg_);
+	}
+	else
+	{
+		//???
+		abort();
+	}
 }

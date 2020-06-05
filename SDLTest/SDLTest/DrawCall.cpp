@@ -73,36 +73,8 @@ void DrawCall::SimpleDo()
 	}
 	//___param update things end
 
-	if (bDrawFrame_)
-	{
-		//??? 现在画了4个顶点
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-		//{//debug save frame file
-		//	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
-		//	static bool first = true;
-		//	if (first)
-		//	{
-		//		SaveRTToFile("D:/zSaved.ppm");
-		//		first = false;
-		//	}
-		//	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-		//}
-	}
-	else
-	{
-		//??? 现在画了4个顶点
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-		{//debug save frame file
-			//glBindFramebuffer(GL_READ_FRAMEBUFFER, 1);
-			//static bool first = true;
-			//if (first)
-			//{
-			//	SaveRTToFile("D:/zBlur.ppm");
-			//	first = false;
-			//}
-			//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-		}
-	}
+	//??? 现在画了4个顶点
+	glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
 }
 
 void DrawCall::SimpleDoEnd()
@@ -161,16 +133,21 @@ void DrawCall::Do()
 	{
 		//??? 现在画了4个顶点
 		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
-		//{//debug save frame file
-		//	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
-		//	static bool first = true;
-		//	if (first)
-		//	{
-		//		SaveRTToFile("D:/zSaved.ppm");
-		//		first = false;
-		//	}
-		//	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-		//}
+		{//debug save frame file
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
+			static bool first = true;
+			static int count = 0;
+			if (name_ == "glowDC")
+			{
+				count += 1;
+			}
+			if (first && count >=10 && name_ == "glowDC")
+			{
+				SaveRTToFile("D:/zSaved.ppm");
+				first = false;
+			}
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		}
 	}
 	else
 	{

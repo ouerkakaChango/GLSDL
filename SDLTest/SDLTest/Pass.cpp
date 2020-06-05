@@ -2,11 +2,12 @@
 
 #include "Material.h"
 
-void Pass::SetShader(const Path& vsPath, const Path& fsPath)
+void Pass::SetShader(const Path& vsPath, const Path& fsPath, MaterialBlendType blendType)
 {
 	bSelfEmpty_ = false;
 	vsPath_ = vsPath;
 	fsPath_ = fsPath;
+	blendType_ = blendType;
 	GetMaterial();
 }
 
@@ -17,7 +18,8 @@ Material* Pass::GetMaterial()
 	if (material_ == nullptr)
 	{
 		material_ = new Material;
-		material_->CompileShader(vsPath_, fsPath_);
+		sure(material_->CompileShader(vsPath_, fsPath_));
+		material_->SetBlendType(blendType_);
 	}
 	return material_;
 }

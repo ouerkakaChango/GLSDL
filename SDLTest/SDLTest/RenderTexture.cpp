@@ -11,6 +11,10 @@
 RenderTexture::RenderTexture(Image* img):img_(img)
 {
 	glGenTextures(1, &renderTextureID_);
+	if (GL_OUT_OF_MEMORY == glGetError())
+	{
+		abort();
+	}
 	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
 
 	//???
@@ -20,6 +24,7 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	{
 		glGenFramebuffers(1, &frameBufferID_);
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID_);
@@ -84,6 +89,7 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::UsePass(Pass* pass, bool bPost)
 {
+	swapFlag_ = false;
 	if (passes_.empty())
 	{
 		pass->GetDoablePassVec(passes_);
@@ -133,6 +139,8 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 		}
 		else
 		{
+			//???
+			selfDC_->name_ = "glowDC";
 			GOD.passiveDrawcalls_.push_back(selfDC_);
 		}
 	}
@@ -146,6 +154,8 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 		}
 		else
 		{
+			//???
+			swapDC_->name_ = "glowDC";
 			GOD.passiveDrawcalls_.push_back(swapDC_);
 		}
 	}
@@ -160,5 +170,5 @@ void RenderTexture::SetSwapRT(RenderTexture* swapRT)
 
 GLuint RenderTexture::GetFinalTex()
 {
-	return swapFlag_ ? renderTextureID_ : swapRT_->renderTextureID_;
+	return static_cast<int>(passes_.size())%2==0 ? renderTextureID_ : swapRT_->renderTextureID_;
 }

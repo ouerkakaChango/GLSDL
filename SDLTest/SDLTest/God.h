@@ -13,6 +13,8 @@ class DrawCall;
 class Material;
 class ShaderImage;
 class Timeline;
+//???
+class Image;
 
 class God
 {
@@ -40,7 +42,9 @@ public:
 	std::vector<DrawCall*> passiveDrawcalls_;
 	std::vector<DrawCall*> postDrawcalls_;
 
+	//???
 	WatchDog watchDog_;
+	Image* testImg_{ nullptr };
 
 private:
 	God();

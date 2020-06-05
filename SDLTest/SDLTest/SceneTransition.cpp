@@ -26,7 +26,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 	if (effectName_ == "fastBlackWithBlurIn")
 	{
 		static Pass* GBlurOncePass = new Pass;
-		GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/GaussianBlur.fs");
+		GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/gaussianBlur.fs");
 		static Pass* blur = new Pass;
 		blur->AddChild(GBlurOncePass, 30);
 		static Material* quadWithBlurMat = new Material;
@@ -45,9 +45,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		{
 			GOD.blackBackground_->SetActive(false);
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
-			//???
-			//use tech 放到这里
-			//if(false)
+
 			{
 				auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
 				SceneShaderImage* bg = newScene->GetSceneImg();

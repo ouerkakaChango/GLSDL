@@ -21,7 +21,6 @@ public:
 protected:
 	bool bNeedUpdate_{ false };
 	virtual void UpdateValue() {};
-	virtual void InitLocation(GLuint programID);
 	bool Check(Material*);
 };
 
@@ -32,7 +31,6 @@ public:
 	void SetFormatByType(const std::string& typeName);
 protected:
 	void SetFormat(GLint num, GLenum type, GLboolean normalized);
-	void InitLocation(GLuint programID) override;
 
 	GLint num_ = -1;
 	GLenum type_;
@@ -100,7 +98,7 @@ enum MaterialBlendType
 };
 
 //导入类（用户材质->dc可用的数据） 面向用户的抽象材质类
-class Material
+class Material : public Nameable
 {
 public:
 	Material();
@@ -136,8 +134,8 @@ public:
 
 	void UpdateParam(const std::string& paramName, float newValue);					//for uniform1f
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
-	void UpdateTextureParam(const std::string& paramName,GLuint textureID);			//??? for texture2d 
-	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos=0);		//??? for texture2d
+	void UpdateTextureParam(const std::string& paramName,GLuint textureID, unsigned texturePos = 0);			//??? for texture2d 
+	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos = 0);		//??? for texture2d
 	Material* Clone();
 	void CloneType(Material* ori);
 

@@ -62,9 +62,17 @@ void GLRender()
 		dc->Do();
 	}
 	gWatchDog.Watch("dc");
-	for (auto& dc : GOD.passiveDrawcalls_)
+	//for (auto& dc : GOD.passiveDrawcalls_)
+	//{
+	//	dc->Do();
+	//}
+	for (unsigned i = 0; i < GOD.passiveDrawcalls_.size(); i++)
 	{
-		dc->Do();
+		if (i == 20)
+		{
+			int a = 1;
+		}
+		GOD.passiveDrawcalls_[i]->Do();
 	}
 	gWatchDog.Watch("passiveDC");
 	DrawCall *nextDC;
@@ -426,6 +434,19 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
+	//??? 图片大小不应手动输入，而且在我的glrender中，它必须不能有缩放
+	//用于FBO的图片大小，必须和frame大小(1600*900)一致
+	Image* musicImg = new Image(1600, 900);
+	musicImg->SetPosition(800, 450);
+	musicImg->ReadFile("D:/HumanTree/18.png");
+	//???
+	Image* testImg = new Image(256, 256);
+	testImg->SetPosition(800, 450);
+	testImg->ReadFile("D:/HumanTree/dante.png");
+	GOD.testImg_ = testImg;
+	//___
+	ShaderImage* musicSImg = new ShaderImage(musicImg);
+	//___
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/15.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
@@ -447,21 +468,19 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/sound/music2.wav");
 	};
 
-	//Image* testImg = new Image(100, 150);
-	//testImg->SetPosition(800, 450);
-	//testImg->ReadFile("D:/HumanTree/text2.png");
-	//ShaderImage* testSImg = new ShaderImage(testImg);
-	//testSImg->name_ = "testSImg";
-	//testSImg->material_->SetBlendType(Blend_Alpha);
-	//scene8->Show(testSImg, 5.0f);
-
-	Image* musicImg = new Image(128, 128);
-	musicImg->SetPosition(800, 450);
-	musicImg->ReadFile("D:/HumanTree/17.png");
-	ShaderImage* musicSImg = new ShaderImage(musicImg);
+	musicSImg->name_ = "musicSImg";
 	musicSImg->material_->SetBlendType(Blend_Alpha);
+	Pass* GBlurOncePass = new Pass;
+	//??? 尽管是用于png的pass，但其画RT的dc的mat的blendtype还得是opaque，不知道为啥，之后查查
+	GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/gaussianBlurForGlow.fs");
+	Pass* blur = new Pass;
+	blur->AddChild(GBlurOncePass, 40);
+	Pass* endPass = new Pass;
+	endPass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadWithGlow.fs",Blend_Alpha);
+	musicSImg->UsePass(blur, endPass);
+	//___
 	scene8->Show(musicSImg, 2.0f);
-	//??? shaderImg用耀光pass
+
 
 	scene8->AddCustomAction(0.0f, wakeEvent);
 	scene8->AddCustomAction(2.0f, textSoundEvent);
