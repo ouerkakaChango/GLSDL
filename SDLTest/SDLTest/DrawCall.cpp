@@ -24,6 +24,11 @@ void DrawCall::BeginDo()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 	}
+	//???
+	if (bDrawFrame_)
+	{
+		glViewport(0, 0, renderWidth_, renderHeight_);
+	}
 }
 
 void DrawCall::EndDo()
@@ -32,6 +37,12 @@ void DrawCall::EndDo()
 	if (blend == Blend_Alpha)
 	{
 		glDisable(GL_BLEND);
+	}
+	//???
+	if (bDrawFrame_)
+	{
+		//???
+		glViewport(0, 0, 1600, 900);
 	}
 }
 
@@ -197,4 +208,6 @@ void DrawCall::SetRenderTexture(RenderTexture* rt)
 	sure(rt != nullptr);
 	rt_ = rt;
 	bDrawFrame_ = true;
+	renderWidth_ = rt->GetWidth();
+	renderHeight_ = rt->GetHeight();
 }

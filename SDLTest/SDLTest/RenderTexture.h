@@ -25,6 +25,8 @@ public:
 
 	void SetSwapRT(RenderTexture* swapRT);
 	GLuint GetFinalTex();
+	float GetWidth();
+	float GetHeight();
 
 	GLuint renderTextureID_;
 	GLuint frameBufferID_;

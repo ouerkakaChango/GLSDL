@@ -42,10 +42,14 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	int h = GOD.gameConfig_.Get<int>("windowHeight");
 	SDL_Rect rect = img_->GetSDLRect();
 	Rect quad;
-	quad.x = rect.x / (float)w * 2.0f - 1;
-	quad.y = rect.y / (float)h * 2.0f - 1;
-	quad.hw = rect.w / (float)w;
-	quad.hh = rect.h / (float)h;
+	quad.x = 0;
+	quad.y = 0;
+	quad.hw = 1;
+	quad.hh = 1;
+	//quad.x = rect.x / (float)w * 2.0f - 1;
+	//quad.y = rect.y / (float)h * 2.0f - 1;
+	//quad.hw = rect.w / (float)w;
+	//quad.hh = rect.h / (float)h;
 	vb_->InitQuad(quad);
 
 	//ib
@@ -121,6 +125,7 @@ void RenderTexture::InitSwapables(Pass* pass)
 	selfDC_->SetIB(ib_);
 	selfDC_->SetMaterial(selfDrawMat_);
 	selfDC_->SetRenderTexture(swapRT_);
+
 	swapDC_->SetVB(vb_);
 	swapDC_->SetIB(ib_);
 	swapDC_->SetMaterial(swapDrawMat_);
@@ -171,4 +176,16 @@ void RenderTexture::SetSwapRT(RenderTexture* swapRT)
 GLuint RenderTexture::GetFinalTex()
 {
 	return static_cast<int>(passes_.size())%2==0 ? renderTextureID_ : swapRT_->renderTextureID_;
+}
+
+float RenderTexture::GetWidth()
+{
+	sure(img_ != nullptr);
+	return img_->GetWidth();
+}
+
+float RenderTexture::GetHeight()
+{
+	sure(img_ != nullptr);
+	return img_->GetHeight();
 }

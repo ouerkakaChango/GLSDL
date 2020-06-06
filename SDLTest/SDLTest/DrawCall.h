@@ -30,5 +30,6 @@ protected:
 	IndexBuffer* ib_{nullptr};
 	RenderTexture* rt_{ nullptr };
 	bool bDrawFrame_{ false };
+	float renderWidth_, renderHeight_;
 };
 
