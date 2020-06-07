@@ -25,6 +25,9 @@ public:
 protected:
 	void BeginDo();
 	void EndDo();
+	void InjectRenderParameterToMaterial();
+	float GetRenderWidth();
+	float GetRenderHeight();
 
 	VertexBuffer* vb_{nullptr};
 	IndexBuffer* ib_{nullptr};

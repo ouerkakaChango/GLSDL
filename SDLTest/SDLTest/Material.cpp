@@ -56,6 +56,12 @@ std::string Uniform1fParam::TypeName()
 	return "uniform1f";
 }
 
+void Uniform1fParam::InjectValue(float newValue)
+{
+	bNeedUpdate_ = true;
+	toUpdateValue_ = newValue;
+}
+
 std::string Texture2DParam::TypeName()
 {
 	return "texture2d";
@@ -339,8 +345,7 @@ void Material::UpdateParam(const std::string& paramName, float newValue)
 			Uniform1fParam* realParam = static_cast<Uniform1fParam*>(param);
 			if (realParam)
 			{
-				realParam->bNeedUpdate_ = true;
-				realParam->toUpdateValue_ = newValue;
+				realParam->InjectValue(newValue);
 				break;
 			}
 		}

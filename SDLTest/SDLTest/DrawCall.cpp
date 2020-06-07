@@ -29,6 +29,10 @@ void DrawCall::BeginDo()
 	{
 		glViewport(0, 0, renderWidth_, renderHeight_);
 	}
+	if (!material_->IsRenderParameterInjected())
+	{
+		InjectRenderParameterToMaterial();
+	}
 }
 
 void DrawCall::EndDo()
@@ -210,4 +214,46 @@ void DrawCall::SetRenderTexture(RenderTexture* rt)
 	bDrawFrame_ = true;
 	renderWidth_ = rt->GetWidth();
 	renderHeight_ = rt->GetHeight();
+}
+
+void DrawCall::InjectRenderParameterToMaterial()
+{
+	for (auto& param : material_->params_)
+	{
+		if (param->name_ == "RenderWidth")
+		{
+			static_cast<Uniform1fParam*>(param)->InjectValue(GetRenderWidth());
+		}
+		else if (param->name_ == "RenderHeight")
+		{
+			static_cast<Uniform1fParam*>(param)->InjectValue(GetRenderHeight());
+		}
+	}
+	material_->bRenderParameterInjected_ = true;
+}
+
+float DrawCall::GetRenderWidth()
+{
+	if (bDrawFrame_)
+	{
+		return rt_->GetWidth();
+	}
+	else
+	{
+		//???
+		return 1600;
+	}
+}
+
+float DrawCall::GetRenderHeight()
+{
+	if (bDrawFrame_)
+	{
+		return rt_->GetHeight();
+	}
+	else
+	{
+		//???
+		return 900;
+	}
 }

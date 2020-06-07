@@ -43,6 +43,7 @@ class Uniform1fParam : public MaterialParam
 public:
 	Uniform1fParam(float defaultValue) :defaultvalue_(defaultValue) {}
 	static std::string TypeName();
+	void InjectValue(float newValue);
 private:
 	void UpdateValue() override;
 
@@ -138,6 +139,7 @@ public:
 	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos = 0);		//??? for texture2d
 	Material* Clone();
 	void CloneType(Material* ori);
+	bool IsRenderParameterInjected() { return bRenderParameterInjected_; }
 
 	GLuint programID_ = 0;
 	std::vector<VSAttributeParam*> vsAttributeParams_;
@@ -168,8 +170,9 @@ protected:
 	GLuint vertexShader_;
 	GLuint fragmentShader_;
 
-	//???
 	Path vsPath_, fsPath_;
 	unsigned nowTexturePos_{ 0 };
+
+	bool bRenderParameterInjected_{ false };
 
 };
