@@ -434,14 +434,13 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
-	//??? 图片大小不应手动输入，而且在我的glrender中，它必须不能有缩放
-	//用于FBO的图片大小，必须和frame大小(1600*900)一致
+	//??? 图片大小不应手动输入
 	//Image* musicImg = new Image(1600, 900);
 	//musicImg->SetPosition(800, 450);
 	//musicImg->ReadFile("D:/HumanTree/18.png");
-	Image* musicImg = new Image(800, 450);
+	Image* musicImg = new Image(150, 150);
 	musicImg->SetPosition(800, 450);
-	musicImg->ReadFile("D:/HumanTree/19.png");
+	musicImg->ReadFile("D:/HumanTree/17.png");
 	//???
 	Image* testImg = new Image(256, 256);
 	testImg->SetPosition(800, 450);
