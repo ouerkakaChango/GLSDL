@@ -6,6 +6,8 @@
 #include "WatchDog.h"
 #include "GameConfig.h"
 
+#define GL_CORE
+
 class Event;
 class Object;
 class Drawable;
@@ -13,6 +15,7 @@ class DrawCall;
 class Material;
 class ShaderImage;
 class Timeline;
+class BGMSystem;
 //???
 class Image;
 
@@ -21,7 +24,7 @@ class God
 public:
 	static God& GetInstance();
 
-	void Init();
+	void TurnOn();
 	void SetRenderer(SDL_Renderer* renderer) { renderer_ = renderer; }; //(deprecated)
 	SDL_Renderer* GetRenderer() { return renderer_; }
 	void BroadCast(Event* event);
@@ -42,16 +45,27 @@ public:
 	std::vector<DrawCall*> passiveDrawcalls_;
 	std::vector<DrawCall*> postDrawcalls_;
 
+	int windowW_;
+	int windowH_;
+	BGMSystem* bgmSystem_{ nullptr };
+
 	//???
 	WatchDog watchDog_;
 	Image* testImg_{ nullptr };
 
+	//???
+	SDL_Window* window_;
+	SDL_Renderer* renderer_;//(deprecated)
+
 private:
 	God();
+	void InitGameData();
+	void InitSDLGLWindow();
+	void InitSDLOpenGL();
+	void InitDefaultAsset();
 
 	MapVector<Object*> eventMapVector_;
 	std::list<Drawable*> postDrawables_;
-	SDL_Renderer* renderer_; //(deprecated)
 	Material* defaultMaterial_{nullptr};
 	Timeline* timeline_{nullptr};
 };

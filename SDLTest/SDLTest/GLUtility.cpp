@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "God.h"
+#include "RenderTexture.h"
 
 GLUtility::GLUtility()
 {
@@ -76,24 +78,27 @@ void printProgramLog(GLuint program)
 	}
 }
 
-void SaveRTToFile(const Path& path)
+void SaveRTToFile(const Path& path, RenderTexture* rt)
 {
 	FILE    *output_image;
 	int     output_width, output_height;
 
 	//???
-	output_width = 1600;
-	output_height = 900;
+	output_width = GOD.windowW_;
+	output_height = GOD.windowH_;
 
 	/// READ THE PIXELS VALUES from FBO AND SAVE TO A .PPM FILE
 	int             i, j, k;
 	unsigned char   *pixels = (unsigned char*)malloc(output_width*output_height * 3);
 
 	/// READ THE CONTENT FROM THE FBO
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt->frameBufferID_);
 	//glReadBuffer(GL_COLOR_ATTACHMENT0);
 	//glReadBuffer(GL_FRAMEBUFFER);
 	glReadPixels(0, 0, output_width, output_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 	//glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
 	output_image = fopen(path.c_str(), "wt");
 	fprintf(output_image, "P3\n");
@@ -113,6 +118,7 @@ void SaveRTToFile(const Path& path)
 		fprintf(output_image, "\n");
 	}
 	free(pixels);
+
 }
 
 void checkgl()

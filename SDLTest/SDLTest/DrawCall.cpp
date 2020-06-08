@@ -4,6 +4,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "RenderTexture.h"
+#include "God.h"
 #include "Debug.h"
 
 
@@ -42,11 +43,10 @@ void DrawCall::EndDo()
 	{
 		glDisable(GL_BLEND);
 	}
-	//???
+
 	if (bDrawFrame_)
 	{
-		//???
-		glViewport(0, 0, 1600, 900);
+		glViewport(0, 0, GOD.windowW_, GOD.windowH_);
 	}
 }
 
@@ -149,7 +149,6 @@ void DrawCall::Do()
 		//??? 现在画了4个顶点
 		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
 		{//debug save frame file
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, rt_->frameBufferID_);
 			static bool first = true;
 			static int count = 0;
 			if (name_ == "glowDC")
@@ -158,10 +157,9 @@ void DrawCall::Do()
 			}
 			if (first && count >=10 && name_ == "glowDC")
 			{
-				SaveRTToFile("D:/zSaved.ppm");
+				SaveRTToFile("D:/zSaved.ppm",rt_);
 				first = false;
 			}
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		}
 	}
 	else
@@ -240,8 +238,7 @@ float DrawCall::GetRenderWidth()
 	}
 	else
 	{
-		//???
-		return 1600;
+		return GOD.windowW_;
 	}
 }
 
@@ -253,7 +250,6 @@ float DrawCall::GetRenderHeight()
 	}
 	else
 	{
-		//???
-		return 900;
+		return GOD.windowH_;
 	}
 }

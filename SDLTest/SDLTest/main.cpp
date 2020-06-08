@@ -110,7 +110,7 @@ void GLRender()
 	gWatchDog.Watch("postDC");
 }
 
-bool initGL()
+bool initOldDraw()
 {
 	auto oldBackgroundMaterial = new Material;
 
@@ -134,101 +134,16 @@ bool initGL()
 	return true;
 }
 
-void InitSDL_OpenGL(SDL_Window *window)
-{
-	// core version
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-#ifdef GL_CORE
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#else
-	//由于代码中还有“过时”，或者不在PROFILE_CORE中的写法，所以使用兼容性版本
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-#endif
-
-	//Create context
-	auto gContext = SDL_GL_CreateContext(window);
-	if (gContext == NULL)
-	{
-		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-		abort();
-	}
-	else
-	{
-		//Initialize GLEW
-		//glewExperimental = GL_TRUE;
-		GLenum glewError = glewInit();
-		if (glewError != GLEW_OK)
-		{
-			printf("Error initializing GLEW! %s\n", glewGetErrorString(glewError));
-		}
-
-		//Use Vsync
-		//if (SDL_GL_SetSwapInterval(1) < 0)
-		//{
-		//	printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
-		//}
-
-		//Initialize OpenGL
-		if (!initGL())
-		{
-			abort();
-		}
-	}
-}
-
 int main(int argc, char* argv[]) {
+	GOD.TurnOn();     
 
-	SDL_Window *window;                    // Declare a pointer
-
-	GameConfig& gameConfig = GOD.gameConfig_;
-	gameConfig.Load();
-
-	int windowW = gameConfig.Get<int>("windowWidth");
-	int windowH = gameConfig.Get<int>("windowHeight");
-
-	SDL_Init(SDL_INIT_EVERYTHING);              // Initialize SDL2
-										   // Create an application window with the following settings:
-	window = SDL_CreateWindow(
-		gameConfig["windowTitle"].c_str(),                  // window title
-		SDL_WINDOWPOS_UNDEFINED,           // initial x position
-		SDL_WINDOWPOS_UNDEFINED,           // initial y position
-		windowW,                               // width, in pixels
-		windowH,                               // height, in pixels
-		SDL_WINDOW_OPENGL                  // flags - see below
-	);
-
-	// Check that the window was successfully created
-	if (window == NULL) {
-		// In the case that the window could not be made...
-		printf("Could not create window: %s\n", SDL_GetError());
-		abort();
-		return 1;
-	}
-
-	//SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr) {
-		SDL_DestroyWindow(window);
-		std::cout << "SDL_CreateRender Error: " << SDL_GetError() << std::endl;
-		SDL_Quit();
-		return 1;
-	}
-	GOD.SetRenderer(renderer);
-
-	//??? 各种初始化的封装
-	//Initialize SDL_mixer
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	if (!initOldDraw())
 	{
 		abort();
 	}
-
-	//???
-	InitSDL_OpenGL(window);
-	GOD.Init(); //必须在SDL Init了GL之后
-	
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	auto windowW = GOD.windowW_;
+	auto windowH = GOD.windowH_;
 
 	auto& sceneMgr = GOD.sceneManager_;
 	SoundEffect* sound1 = new SoundEffect;
@@ -344,7 +259,7 @@ int main(int argc, char* argv[]) {
 	sceneMgr.AddTransition(Int<2>(2, 3), transition4);
 	//////////////////////////////////////////////////
 	//BGM
-	BGMSystem bgm;
+	BGMSystem& bgm=* GOD.bgmSystem_;
 	bgm.SetBGM("D:/HumanTree/1.wav");
 	///////////////////////////////////////////////////////////////////////
 	//scene5
@@ -354,7 +269,7 @@ int main(int argc, char* argv[]) {
 	SoundEffect w2("D:/HumanTree/warning12.wav");
 	SoundEffect w3("D:/HumanTree/warning13.wav");
 
-	Image* red = new Image(1600, 900);
+	Image* red = new Image(GOD.windowW_, GOD.windowH_);
 	if (red->Load("D:/HumanTree/red.png"))
 	{
 		red->SetPosition(windowW / 2, windowH / 2);
@@ -417,7 +332,7 @@ int main(int argc, char* argv[]) {
 		abort();
 	}
 	vortexMat->SetBlendType(Blend_Alpha);
-	Image* vortexImage = new Image(1600, 900);
+	Image* vortexImage = new Image(GOD.windowW_, GOD.windowH_);
 	vortexImage->SetPosition(800, 450);
 	vortexImage->ReadFile("D:/HumanTree/vortex2.png");
 
@@ -435,9 +350,6 @@ int main(int argc, char* argv[]) {
 
 	//////////////////////////////////////////////////////////////
 	//??? 图片大小不应手动输入
-	//Image* musicImg = new Image(1600, 900);
-	//musicImg->SetPosition(800, 450);
-	//musicImg->ReadFile("D:/HumanTree/18.png");
 	Image* musicImg = new Image(150, 150);
 	musicImg->SetPosition(800, 450);
 	musicImg->ReadFile("D:/HumanTree/17.png");
@@ -547,17 +459,17 @@ int main(int argc, char* argv[]) {
 			gWatch.StartWatch();
 			if (bOldDraw)
 			{
-				SDL_RenderClear(renderer);
+				SDL_RenderClear(GOD.renderer_);
 			}
 			GOD.Update(deltaTime);
 			if (bOldDraw)
 			{
 				//??? 把d3d画的保存为图
-				saveScreenshot("D:/22.bmp", window, renderer);
+				saveScreenshot("D:/22.bmp", GOD.window_, GOD.renderer_);
 			}
 			GLRender();
 			gWatch.Watch("Render");
-			SDL_GL_SwapWindow(window);
+			SDL_GL_SwapWindow(GOD.window_);
 			gWatch.Watch("Swap");
 		}
 	}
@@ -565,7 +477,7 @@ int main(int argc, char* argv[]) {
 	//SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
 
 	// Close and destroy the window
-	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(GOD.window_);
 
 	// Clean up
 	SDL_Quit();
