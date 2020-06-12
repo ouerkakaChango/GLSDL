@@ -67,9 +67,8 @@ std::string Texture2DParam::TypeName()
 	return "texture2d";
 }
 
-Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos):nowSurface_(textureSurface),textureUnit_(texturePos)
+Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit):nowSurface_(textureSurface),textureUnit_(textureUnit)
 {
-	//??? 
 	glActiveTexture(GL_TEXTURE0 + textureUnit_);
 	glGenTextures(1, &textureID_);
 	glBindTexture(GL_TEXTURE_2D, textureID_);
@@ -85,8 +84,6 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//???
-	glUniform1i(paramLocation_, textureUnit_);
 }
 
 void Texture2DParam::UpdateValue()
@@ -123,6 +120,13 @@ void Texture2DParam::UpdateValue()
 	}
 	glUniform1i(paramLocation_, textureUnit_);
 	//±£³ÖbNeedUpdate_Îªtrue
+}
+
+void Texture2DParam::InjectValue(RenderTexture* newValue)
+{
+	bNeedUpdate_ = true;
+	updateType_ = TextureUpdate_RenderTexture;
+	toUpdateRT_ = newValue;
 }
 
 bool paramInfo::operator==(const std::string& name)
@@ -369,7 +373,7 @@ void Material::UpdateParam(const std::string& paramName, SDL_Surface* newTexture
 	}
 }
 
-void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID, unsigned textureUnit)
+void Material::UpdateParam(const std::string& paramName, RenderTexture* rt)
 {
 	for (auto& param : params_)
 	{
@@ -378,30 +382,8 @@ void Material::UpdateTextureParam(const std::string& paramName, GLuint textureID
 			Texture2DParam* realParam = static_cast<Texture2DParam*>(param);
 			if (realParam)
 			{
-				realParam->bNeedUpdate_ = true;
-				realParam->updateType_ = TextureUpdate_ID;
-				realParam->toUpdateID_ = textureID;
-				realParam->textureUnit_ = textureUnit;
-				break;
-			}
-		}
-	}
-}
-
-void Material::UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned textureUnit)
-{
-	for (auto& param : params_)
-	{
-		if (param->typeName_ == "texture2d" && param->name_ == paramName)
-		{
-			Texture2DParam* realParam = static_cast<Texture2DParam*>(param);
-			if (realParam)
-			{
-				realParam->bNeedUpdate_ = true;
-				realParam->updateType_ = TextureUpdate_RenderTexture;
-				realParam->toUpdateRT_ = rt;
-				realParam->textureUnit_ = textureUnit;
-				break;
+				realParam->InjectValue(rt);
+				return;
 			}
 		}
 	}

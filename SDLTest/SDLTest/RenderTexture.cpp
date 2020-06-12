@@ -35,7 +35,7 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	//???
+	//由于RT都用于FBO，所以为屏幕大小
 	//vb
 	vb_ = new VertexBuffer;
 	int w = GOD.gameConfig_.Get<int>("windowWidth");
@@ -46,10 +46,6 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	quad.y = 0;
 	quad.hw = 1;
 	quad.hh = 1;
-	//quad.x = rect.x / (float)w * 2.0f - 1;
-	//quad.y = rect.y / (float)h * 2.0f - 1;
-	//quad.hw = rect.w / (float)w;
-	//quad.hh = rect.h / (float)h;
 	vb_->InitQuad(quad);
 
 	//ib
@@ -116,10 +112,10 @@ void RenderTexture::InitSwapables(Pass* pass)
 	swapDC_ = new DrawCall;
 	//draw to swap
 	selfDrawMat_ = pass->GetMaterial()->Clone();
-	selfDrawMat_->UpdateTextureParam("tex", renderTextureID_);
+	selfDrawMat_->UpdateParam("tex", this);
 	//draw to self
 	swapDrawMat_ = selfDrawMat_->Clone();
-	swapDrawMat_->UpdateTextureParam("tex", swapRT_ ->renderTextureID_);
+	swapDrawMat_->UpdateParam("tex", swapRT_);
 
 	selfDC_->SetVB(vb_);
 	selfDC_->SetIB(ib_);

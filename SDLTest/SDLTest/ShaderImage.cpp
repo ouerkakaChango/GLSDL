@@ -52,21 +52,14 @@ void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
-		if (name_ == "musicSImg")
-		{
-			int a = 1;
-		}
 		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
-			//???
 			passedRT_->SetTexture(rt_);
 			passedRT_->UsePass(pass_);
 
-			 material_->UpdateTextureParam("tex", rt_);
-			//???
-			material_->UpdateTextureParam("glowedTex", passedRT_->renderTextureID_,1);
-			//material_->UpdateParam("bluredTex", IMG_Load("D:/HumanTree/Dante.png"));
+			material_->UpdateParam("tex", rt_);
+			material_->UpdateParam("glowedTex", passedRT_);
 
 			if (sceneRT_ != nullptr)
 			{

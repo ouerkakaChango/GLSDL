@@ -30,15 +30,14 @@ void SceneShaderImage::GetDrawcall()
 				postRT_->SetTexture(rt_);
 				postRT_->UsePass(pass_,true);
 				
-				material_->UpdateTextureParam("tex", rt_);
-				//???
-				material_->UpdateTextureParam("bluredTex", postRT_->GetFinalTex(),1);
+				material_->UpdateParam("tex", rt_);
+				material_->UpdateParam("bluredTex", postRT_);
 			}
 			dcVec.push_back(dc_);
 		}
 		else
 		{
-			material_->UpdateTextureParam("tex", rt_);
+			material_->UpdateParam("tex", rt_);
 			dcVec.push_back(dc_);
 		}
 	}

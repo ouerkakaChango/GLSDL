@@ -8,13 +8,18 @@ class DrawCall;
 class Material;
 class RenderTexture;
 
-#define MaterialParamClass friend class Material;\
+#define MaterialParamClass \
+public: \
+static std::string TypeName(); \
+private: \
+friend class Material;\
 friend class DrawCall;
 
 //面向drawcall的材质参数类
 class MaterialParam : public TypeNameable,public Nameable
 {
-	MaterialParamClass
+	friend class Material;
+	friend class DrawCall;
 public:
 
 	GLint paramLocation_ = -1;
@@ -26,7 +31,8 @@ protected:
 
 class VSAttributeParam : public MaterialParam
 {
-	MaterialParamClass
+	friend class Material;
+	friend class DrawCall;
 public:
 	void SetFormatByType(const std::string& typeName);
 protected:
@@ -42,7 +48,6 @@ class Uniform1fParam : public MaterialParam
 	MaterialParamClass
 public:
 	Uniform1fParam(float defaultValue) :defaultvalue_(defaultValue) {}
-	static std::string TypeName();
 	void InjectValue(float newValue);
 private:
 	void UpdateValue() override;
@@ -63,8 +68,8 @@ class Texture2DParam : public MaterialParam
 {
 	MaterialParamClass
 public:
-	Texture2DParam(SDL_Surface* textureSurface, unsigned texturePos);
-	static std::string TypeName();
+	Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit);
+	void InjectValue(RenderTexture* newValue);
 private:
 	void UpdateValue() override;
 
@@ -135,8 +140,8 @@ public:
 
 	void UpdateParam(const std::string& paramName, float newValue);					//for uniform1f
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
-	void UpdateTextureParam(const std::string& paramName,GLuint textureID, unsigned texturePos = 0);			//??? for texture2d 
-	void UpdateTextureParam(const std::string& paramName, RenderTexture* rt, unsigned texturePos = 0);		//??? for texture2d
+	void UpdateParam(const std::string& paramName, RenderTexture* rt);				//for texture2d
+	void UpdateParam(const std::string& paramName, GLuint n)=delete;				//prevent unexpected implicit call
 	Material* Clone();
 	void CloneType(Material* ori);
 	bool IsRenderParameterInjected() { return bRenderParameterInjected_; }

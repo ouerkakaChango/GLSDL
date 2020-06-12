@@ -62,16 +62,9 @@ void GLRender()
 		dc->Do();
 	}
 	gWatchDog.Watch("dc");
-	//for (auto& dc : GOD.passiveDrawcalls_)
-	//{
-	//	dc->Do();
-	//}
+
 	for (unsigned i = 0; i < GOD.passiveDrawcalls_.size(); i++)
 	{
-		if (i == 20)
-		{
-			int a = 1;
-		}
 		GOD.passiveDrawcalls_[i]->Do();
 	}
 	gWatchDog.Watch("passiveDC");

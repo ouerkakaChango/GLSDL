@@ -30,10 +30,6 @@ void Object::HandleEvent(Event* event)
 			}
 		}
 	}
-	else
-	{
-		auto aaa = 1;
-	}
 }
 
 void Object::BindEventHandler(std::string eventName, EventHandler handler)
