@@ -16,7 +16,7 @@ class Material;
 class ShaderImage;
 class Timeline;
 class BGMSystem;
-//???
+//??? debug
 class Image;
 
 class God
@@ -48,14 +48,12 @@ public:
 	int windowW_;
 	int windowH_;
 	BGMSystem* bgmSystem_{ nullptr };
-
-	//???
-	WatchDog watchDog_;
-	Image* testImg_{ nullptr };
-
-	//???
 	SDL_Window* window_;
 	SDL_Renderer* renderer_;//(deprecated)
+
+	//??? debug
+	WatchDog watchDog_;
+	Image* testImg_{ nullptr };
 
 private:
 	God();

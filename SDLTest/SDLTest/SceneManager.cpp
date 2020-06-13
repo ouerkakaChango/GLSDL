@@ -87,41 +87,6 @@ void SceneManager::Update(float deltaTime)
 	}
 }
 
-void SceneManager::Update(float deltaTime, WatchDog& watchdog)
-{
-	for (auto& scene : scenes_)
-	{
-		if (scene->GetActive())
-		{
-			scene->Update(deltaTime);
-		}
-	}
-	watchdog.Watch("scene Update");
-	for (auto& it : transitions_)
-	{
-		auto transition = it.second;
-		if (transition->GetActive())
-		{
-			int frontInx = it.first[0];
-			int nextInx = it.first[1];
-			if (frontInx == sceneInx_)
-			{
-				sceneInx_ = nextInx;
-			}
-			transition->Update(deltaTime);
-		}
-	}
-	watchdog.Watch("transition Update");
-	for (auto& effect : crossEffects_)
-	{
-		if (effect->GetActive())
-		{
-			effect->Update(deltaTime);
-		}
-	}
-	watchdog.Watch("effect Update");
-}
-
 void SceneManager::ToNext()
 {
 	for (auto& it : transitions_)

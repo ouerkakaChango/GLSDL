@@ -36,19 +36,19 @@ public:
 private:
 	void InitSwapables(Pass* pass);
 
-	Image* img_{nullptr};
 	std::vector<Pass*> passes_;
-	//???
-	unsigned char  * srcPxiels_;
-	bool copyInitialized_{ false };
-	//???
-	bool swapFlag_{false};
+	Image* img_{nullptr};
 	RenderTexture* swapRT_;
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
 	DrawCall *selfDC_{nullptr}, *swapDC_;
 	Material *selfDrawMat_, *swapDrawMat_;
+	int texMode_{ GL_RGBA };
+	bool swapFlag_{ false };
 
+	//??? old version
+	//unsigned char  * srcPxiels_;
+	//bool copyInitialized_{ false };
 
 	friend class DrawCall;
 };

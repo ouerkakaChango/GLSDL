@@ -93,10 +93,7 @@ void SaveRTToFile(const Path& path, RenderTexture* rt)
 
 	/// READ THE CONTENT FROM THE FBO
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt->frameBufferID_);
-	//glReadBuffer(GL_COLOR_ATTACHMENT0);
-	//glReadBuffer(GL_FRAMEBUFFER);
 	glReadPixels(0, 0, output_width, output_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-	//glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 

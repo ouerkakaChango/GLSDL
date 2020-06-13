@@ -4,6 +4,7 @@
 //such as performance data...
 //--Chango
 #include "Utility.h"
+#include "Tree.h"
 
 struct WatchRecord
 {
@@ -18,17 +19,32 @@ public:
 	float Lapse();
 	void Tick();
 	void StartWatch();
-	void Watch(const std::string& tag);
 	void Record();
 	std::map<std::string, float> GetWatchList() const{
 		return watchList_
 			;
 	};
 protected:
+	friend class AutoProfiler;
+	void Watch(const std::string& tag);
 	float ToFloat(Uint32 dur);
+
 	Uint32 now_, last_{0};
 	Uint32 watchNow_, watchLast_{0};
-	std::map<std::string, float> watchList_;
-	std::vector<WatchRecord> recordList_;
+	std::map<std::string, float> watchList_; 
+	std::vector<WatchRecord> recordList_; 
 };
 
+class AutoProfiler:public Tree<AutoProfiler>
+{
+public:
+	AutoProfiler(const std::string& tagName);
+	~AutoProfiler();
+protected:
+	WatchDog* watchDog_{nullptr};
+	std::string tagName_;
+	static AutoProfiler treeRoot_;
+	static AutoProfiler* nowFather_;
+};
+
+#define Profile(tagName) AutoProfiler autoProfiler(tagName);

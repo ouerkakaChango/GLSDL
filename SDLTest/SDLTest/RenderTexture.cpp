@@ -8,7 +8,7 @@
 #include "God.h"
 #include "Pass.h"
 
-RenderTexture::RenderTexture(Image* img):img_(img)
+RenderTexture::RenderTexture(Image* img) :img_(img), texMode_{GL_RGBA}
 {
 	glGenTextures(1, &renderTextureID_);
 	if (GL_OUT_OF_MEMORY == glGetError())
@@ -17,9 +17,7 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 	}
 	glBindTexture(GL_TEXTURE_2D, renderTextureID_);
 
-	//???
-	int Mode = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, img_->GetSurface()->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, texMode_, img_->GetWidth(), img_->GetHeight(), 0, texMode_, GL_UNSIGNED_BYTE, img_->GetSurface()->pixels);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -56,10 +54,8 @@ RenderTexture::RenderTexture(Image* img):img_(img)
 
 void RenderTexture::SetTexture(RenderTexture* src)
 {
-	//???
-	int Mode = GL_RGBA;
 
-	//if(false)
+	//??? old version
 	{//copy from ori,stupid version
 		//if (!copyInitialized_)
 		//{
@@ -69,13 +65,10 @@ void RenderTexture::SetTexture(RenderTexture* src)
 		//glBindTexture(GL_TEXTURE_2D, src->renderTextureID_);
 		//glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, srcPxiels_);
 		//glBindTexture(GL_TEXTURE_2D, renderTextureID_);
-		//glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, srcPxiels_);
+		//glTexImage2D(GL_TEXTURE_2D, 0, texMode_, img_->GetWidth(), img_->GetHeight(), 0, texMode_, GL_UNSIGNED_BYTE, srcPxiels_);
 	}
 
 	//GL4.3 required
-	//glBindTexture(GL_TEXTURE_2D, renderTextureID_);
-	//glTexImage2D(GL_TEXTURE_2D, 0, Mode, img_->GetWidth(), img_->GetHeight(), 0, Mode, GL_UNSIGNED_BYTE, NULL);
-	//???
 	glCopyImageSubDataNV(src->renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
 			renderTextureID_, GL_TEXTURE_2D, 0, 0, 0, 0,
 			img_->GetWidth(), img_->GetHeight(),1);

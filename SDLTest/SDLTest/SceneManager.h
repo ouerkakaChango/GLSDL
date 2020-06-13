@@ -15,8 +15,6 @@ public:
 	Scene* AddScene(Path bgPath = "");
 	void AddTransition(const Int<2>& int2, SceneTransition* transition);
 	void Update(float deltaTime);
-	//???
-	void Update(float deltaTime,WatchDog& watchdog);
 
 	void ToNext();
 	void SetSceneActive(int inx,bool active);

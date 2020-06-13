@@ -51,25 +51,3 @@ void Timeline::Update(float deltaTime)
 		}
 	}
 }
-
-void Timeline::Update(float deltaTime, WatchDog& watchDog)
-{
-	now_ += deltaTime;
-	for (auto& action : actions_)
-	{
-		action->Check(now_);
-	}
-	watchDog.Watch("Timeline actions");
-	for (auto& effect : effects_)
-	{
-		if (!effect->bTriggered_ && effect->startInTimeline_ >= now_)
-		{
-			effect->Start();
-		}
-		if (effect->GetActive())
-		{
-			effect->Update(deltaTime);
-		}
-	}
-	watchDog.Watch("Timeline effects");
-}

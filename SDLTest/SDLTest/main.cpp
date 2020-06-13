@@ -40,11 +40,13 @@ VertexBuffer gVB;
 IndexBuffer gIB;
 bool bOldDraw = true;
 
+auto& gWatchDog = GOD.watchDog_;
+
 void GLRender()
 {
+	Profile("PreRender")
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
-	auto& gWatchDog = GOD.watchDog_;
 	if (bOldDraw)
 	{
 		//??? 把d3d画的背景作为参数传进来
@@ -54,20 +56,18 @@ void GLRender()
 		gDC.Do();
 		SDL_FreeSurface(Surface);
 	}
-	gWatchDog.Watch("OldBackground");
 	auto& god = GOD;
 	GOD.GetDrawcalls();
 	for (auto& dc : GOD.drawcalls_) //(deprecated)
 	{
 		dc->Do();
 	}
-	gWatchDog.Watch("dc");
 
 	for (unsigned i = 0; i < GOD.passiveDrawcalls_.size(); i++)
 	{
 		GOD.passiveDrawcalls_[i]->Do();
 	}
-	gWatchDog.Watch("passiveDC");
+
 	DrawCall *nextDC;
 	bool bInSimple = false;
 	for (unsigned i=0;i< GOD.postDrawcalls_.size();i++)
@@ -100,7 +100,6 @@ void GLRender()
 			dc->Do();
 		}
 	}
-	gWatchDog.Watch("postDC");
 }
 
 bool initOldDraw()
@@ -436,34 +435,42 @@ int main(int argc, char* argv[]) {
 				GOD.BroadCast(&Mouse_Move(x, y));
 			}
 		}
-		WatchDog& gWatch = GOD.watchDog_;
-		float deltaTime =  gWatch.Lapse();
 
-		auto lastWatch = gWatch.GetWatchList();
-		if (deltaTime > 0.03 && !bOldDraw)
+		float deltaTime =  gWatchDog.Lapse();
+		//??? debug
+		{
+			auto lastWatch = gWatchDog.GetWatchList();
+		}
+		if (deltaTime > 0.03 && !bOldDraw) //detect too slow frame
 		{
 			std::cout << "Slow"<<deltaTime<<"\n";
-			gWatch.Record();
+			gWatchDog.Record();
 		}
 		if (deltaTime > 0.017f)//封顶60
 		{
 			//std::cout << deltaTime << std::endl;
-			gWatch.Tick();
-			gWatch.StartWatch();
-			if (bOldDraw)
+			gWatchDog.Tick();
+			gWatchDog.StartWatch();
 			{
-				SDL_RenderClear(GOD.renderer_);
-			}
-			GOD.Update(deltaTime);
-			if (bOldDraw)
-			{
-				//??? 把d3d画的保存为图
-				saveScreenshot("D:/22.bmp", GOD.window_, GOD.renderer_);
+				Profile("PreRender")
+				if (bOldDraw)
+				{
+					Profile("OldClear")
+					SDL_RenderClear(GOD.renderer_);
+				}
+				GOD.Update(deltaTime);
+				if (bOldDraw)
+				{
+					Profile("OldSaveScreenShot")
+					//??? 把d3d画的保存为图
+					saveScreenshot("D:/22.bmp", GOD.window_, GOD.renderer_);
+				}
 			}
 			GLRender();
-			gWatch.Watch("Render");
-			SDL_GL_SwapWindow(GOD.window_);
-			gWatch.Watch("Swap");
+			{
+				Profile("Swap")
+				SDL_GL_SwapWindow(GOD.window_);
+			}
 		}
 	}
 
