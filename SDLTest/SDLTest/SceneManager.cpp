@@ -53,6 +53,11 @@ void SceneManager::AddTransition(const Int<2>& int2, SceneTransition* transition
 	transition->frontInx_ = int2[0];
 	transition->nextInx_ = int2[1];
 	transitions_[int2] = transition;
+	//auto active first transition
+	if (int2[0] == -1)
+	{
+		transition->SetActive(true);
+	}
 }
 
 void SceneManager::Update(float deltaTime)

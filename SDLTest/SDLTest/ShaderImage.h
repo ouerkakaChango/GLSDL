@@ -34,11 +34,9 @@ protected:
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
 
-	//???
 	RenderTexture* rt_{nullptr};
 	RenderTexture* passedRT_{ nullptr };
-	//???
-	RenderTexture* testRT_{ nullptr };
+
 	bool bUsePass_{false};
 	bool bUseEndPass_{ false };
 };

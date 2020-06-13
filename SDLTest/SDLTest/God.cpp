@@ -159,6 +159,10 @@ void God::InitSDLGLWindow()
 	//--- init OpenGL for SDL
 	InitSDLOpenGL();
 	//___ init OpenGL for SDL
+
+	//??? 2D GL Init
+	glDepthMask(false);
+	glDisable(GL_DEPTH_TEST);
 }
 
 void God::InitSDLOpenGL()

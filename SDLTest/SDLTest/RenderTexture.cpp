@@ -90,7 +90,6 @@ void RenderTexture::UsePass(Pass* pass, bool bPost)
 	// initalize dc,mat for swap
 	if (selfDC_ == nullptr)
 	{
-		//???
 		InitSwapables(passes_[0]);
 	}
 	for (unsigned i = 0; i < passes_.size(); i++)
@@ -133,7 +132,7 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 		}
 		else
 		{
-			//???
+			//??? debug
 			selfDC_->name_ = "glowDC";
 			GOD.passiveDrawcalls_.push_back(selfDC_);
 		}
@@ -148,7 +147,7 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 		}
 		else
 		{
-			//???
+			//??? debug
 			swapDC_->name_ = "glowDC";
 			GOD.passiveDrawcalls_.push_back(swapDC_);
 		}
@@ -170,11 +169,11 @@ GLuint RenderTexture::GetFinalTex()
 float RenderTexture::GetWidth()
 {
 	sure(img_ != nullptr);
-	return img_->GetWidth();
+	return static_cast<float>(img_->GetWidth());
 }
 
 float RenderTexture::GetHeight()
 {
 	sure(img_ != nullptr);
-	return img_->GetHeight();
+	return static_cast<float>(img_->GetHeight());
 }

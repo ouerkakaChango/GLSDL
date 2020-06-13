@@ -122,12 +122,11 @@ void ShaderImage::UsePass(Pass* pass, Pass* endPass)
 	else
 	{
 		bUsePass_ = true;
-		//???
 		bUseEndPass_ = true;
 		ResetRT();
 		pass_ = pass;
 		ChangeMaterial(endPass->GetMaterial());
-		//???
+		//??? debug
 		material_->name_ = "passmat";
 	}
 }
@@ -135,7 +134,7 @@ void ShaderImage::UsePass(Pass* pass, Pass* endPass)
 void ShaderImage::SetSceneRT(RenderTexture* sceneRT)
 {
 	Drawable::SetSceneRT(sceneRT);
-	//???
+	//if not use end pass,when set a sceneRT,means self should be use as an RT draw to sceneRT
 	if (!bUseEndPass_)
 	{
 		Material* rtMaterial = new Material;
@@ -153,12 +152,10 @@ void ShaderImage::ResetRT()
 		passedRT_ = new RenderTexture(image_);
 		auto swapRT = new RenderTexture(image_);
 		passedRT_->SetSwapRT(swapRT);
-
-		testRT_ = new RenderTexture(GOD.testImg_);
 	}
 	else
 	{
-		//???
+		//??? unconsidered
 		abort();
 	}
 }

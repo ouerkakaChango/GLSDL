@@ -83,7 +83,7 @@ void SaveRTToFile(const Path& path, RenderTexture* rt)
 	FILE    *output_image;
 	int     output_width, output_height;
 
-	//???
+	//??? to think,should be rt's w/h,but that can't run normally
 	output_width = GOD.windowW_;
 	output_height = GOD.windowH_;
 

@@ -38,10 +38,9 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			GOD.sceneManager_.SetSceneActive(frontInx_, false);
 			GOD.blackBackground_->SetActive(true);
 		};
-		//???
-		static float time2 = params[1];
+
 		//black end,show next scene,but with blur duration effect
-		Func func2 = [&]()
+		Func func2 = [&,params]()
 		{
 			GOD.blackBackground_->SetActive(false);
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
@@ -56,7 +55,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 				EffectShaderParam* paramEffect = new EffectShaderParam;
 				paramEffect->Bind(quadWithBlurMat, "blur");
 				paramEffect->AddPoint(0.0f, 1.0f);
-				paramEffect->AddPoint(time2, 0.0f);
+				paramEffect->AddPoint(params[1], 0.0f);
 				timeline_.AddEffect(timeline_.Now(), paramEffect);
 			}
 		};

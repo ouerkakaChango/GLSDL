@@ -25,7 +25,6 @@ void DrawCall::BeginDo()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 	}
-	//???
 	if (bDrawFrame_)
 	{
 		glViewport(0, 0, renderWidth_, renderHeight_);
@@ -109,11 +108,6 @@ void DrawCall::SimpleDoEnd()
 
 void DrawCall::Do()
 {
-	//???
-	if (name_ == "testSImgDC")
-	{
-		int v=1;
-	}
 	if (bDrawFrame_)
 	{	
 		glBindFramebuffer(GL_FRAMEBUFFER, rt_->frameBufferID_);

@@ -21,7 +21,6 @@
 #include "Cursor.h"
 #include "Touchable.h"
 #include "BGMSystem.h"
-//???
 #include "Material.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -29,8 +28,6 @@
 #include "ShaderImage.h"
 #include "Timeline.h"
 #include "Pass.h"
-//???
-#include "WatchDog.h"
 
 #include "GameUtility.h"
 #include "Debug.h"
@@ -170,8 +167,6 @@ int main(int argc, char* argv[]) {
 	scene1->AddDrawable(&button);
 
 	SceneTransition* transition = new SceneTransition("fadeIn", 10);
-	//???
-	transition->SetActive(true);
 	sceneMgr.AddTransition(Int<2>(-1, 0), transition);
 	//////////////////////////////////////////////////////////////////////
 	// scene2
@@ -345,7 +340,7 @@ int main(int argc, char* argv[]) {
 	Image* musicImg = new Image(150, 150);
 	musicImg->SetPosition(800, 450);
 	musicImg->ReadFile("D:/HumanTree/17.png");
-	//???
+	//??? testImg
 	Image* testImg = new Image(256, 256);
 	testImg->SetPosition(800, 450);
 	testImg->ReadFile("D:/HumanTree/dante.png");
@@ -395,10 +390,10 @@ int main(int argc, char* argv[]) {
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
 
-	//???
-	auto vendor = glGetString(GL_VENDOR);
-	glDepthMask(false);
-	glDisable(GL_DEPTH_TEST);
+	//??? debug
+	{
+		auto vendor = glGetString(GL_VENDOR);
+	}
 
 	bool bLoop = true;
 
