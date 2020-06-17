@@ -16,3 +16,10 @@ void Tree<T>::AddChild(T* child, unsigned n)
 		children_.push_back(child);
 	}
 }
+
+template <class T>
+void AutoTree<T>::AddChild(std::shared_ptr<T> child)
+{
+	child->father_ = static_cast<T*>(this);
+	children_.push_back(child);
+}

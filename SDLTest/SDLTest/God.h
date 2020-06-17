@@ -52,7 +52,6 @@ public:
 	SDL_Renderer* renderer_;//(deprecated)
 
 	//??? debug
-	WatchDog watchDog_;
 	Image* testImg_{ nullptr };
 
 private:

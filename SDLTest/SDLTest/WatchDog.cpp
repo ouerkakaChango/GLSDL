@@ -1,78 +1,39 @@
 #include "WatchDog.h"
 
-#include "God.h"
+shared_ptr<ProfilerNode> AutoProfiler::dataRoot_ = make_shared<ProfilerNode>("[root]",0.0f, true);
+ProfilerNode* AutoProfiler::nowFather_{nullptr};
 
-WatchDog::WatchDog()
+ProfilerNode::ProfilerNode(const std::string& name, float duration, bool bRoot)
+	:name_(name),
+	duration_(duration),
+	bRoot_(bRoot) 
 {
+
 }
 
-
-WatchDog::~WatchDog()
+AutoProfiler::AutoProfiler(const std::string& tagName)
+	:tagName_(tagName)
 {
-}
-
-float WatchDog::ToFloat(Uint32 dur)
-{
-	return (float)dur / 1000;
-}
-
-float WatchDog::Lapse()
-{
-	now_ = SDL_GetTicks();
-	return ((float)(now_ - last_)) / 1000;
-}
-
-void WatchDog::Tick()
-{
-	last_ = now_;
-}
-
-void WatchDog::StartWatch()
-{
-	watchList_.clear();
-	watchLast_ = SDL_GetTicks();
-}
-
-void WatchDog::Watch(const std::string& tag)
-{
-	watchNow_ = SDL_GetTicks();
-	watchList_[tag] = ToFloat(watchNow_ - watchLast_);
-	watchLast_ = watchNow_;
-}
-
-void WatchDog::Record()
-{
-	WatchRecord re;
-	re.watchList_ = watchList_;
-	recordList_.push_back(re);
-}
-
-AutoProfiler AutoProfiler::treeRoot_("[root]");
-AutoProfiler* AutoProfiler::nowFather_{nullptr};
-
-AutoProfiler::AutoProfiler(const std::string& tagName):tagName_(tagName)
-{
+	data_ = make_shared<ProfilerNode>(tagName, 0.0f);
 	if (nowFather_ == nullptr)
 	{
-		treeRoot_.AddChild(this);
-		nowFather_ = &treeRoot_;
+		dataRoot_->AddChild(data_);
+		nowFather_ =  data_.get();
 	}
 	else
 	{
-		nowFather_->AddChild(this);
-		nowFather_ = this;
+		nowFather_->AddChild(data_);
+		nowFather_ = data_.get();
 	}
+	startTime_ = SDL_GetTicks();
 }
 
 AutoProfiler::~AutoProfiler()
 {
-	if (this == &treeRoot_)
+	if (nowFather_->father_ != nullptr)
 	{
-		return;
+		nowFather_ = nowFather_->father_;
 	}
-	if (this->father_ != nullptr)
-	{
-		nowFather_ = this->father_;
-	}
-	GOD.watchDog_.Watch(tagName_);
+	endTime_ = SDL_GetTicks();
+	data_->duration_ = (endTime_ - startTime_) / 1000.0f;
 }

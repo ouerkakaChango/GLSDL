@@ -37,11 +37,9 @@ VertexBuffer gVB;
 IndexBuffer gIB;
 bool bOldDraw = true;
 
-auto& gWatchDog = GOD.watchDog_;
-
 void GLRender()
 {
-	Profile("PreRender")
+	Profile("GLRender")
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 	if (bOldDraw)
@@ -396,6 +394,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	bool bLoop = true;
+	//???
+	bool bTicked = false;
+	Uint32 last_, now_;
 
 	SDL_Event e;
 	while (bLoop)
@@ -431,21 +432,33 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		float deltaTime =  gWatchDog.Lapse();
-		//??? debug
+		//???
+		float deltaTime;
+		now_ = SDL_GetTicks();
+		if (!bTicked)
 		{
-			auto lastWatch = gWatchDog.GetWatchList();
+			last_ = now_;
+			deltaTime = 0.0f;
+			bTicked = true;
 		}
+		else
+		{
+			deltaTime = (now_ - last_) / 1000.0f;
+		}
+
+		AutoProfiler::dataRoot_->children_.clear();
+
 		if (deltaTime > 0.03 && !bOldDraw) //detect too slow frame
 		{
 			std::cout << "Slow"<<deltaTime<<"\n";
-			gWatchDog.Record();
+			//???
+			//gWatchDog.Record();
 		}
 		if (deltaTime > 0.017f)//·â¶¥60
 		{
+			//???
+			last_ = now_;
 			//std::cout << deltaTime << std::endl;
-			gWatchDog.Tick();
-			gWatchDog.StartWatch();
 			{
 				Profile("PreRender")
 				if (bOldDraw)

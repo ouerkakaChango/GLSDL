@@ -8,8 +8,12 @@
 #include <array>
 #include <list>
 #include <functional>
+#include <memory>
 
 #include "Numeric.h"
+
+using std::shared_ptr;
+using std::make_shared;
 
 class Utility
 {
