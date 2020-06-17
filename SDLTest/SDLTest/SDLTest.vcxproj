@@ -146,6 +146,7 @@
     <ClCompile Include="GameUtility.cpp" />
     <ClCompile Include="GLUtility.cpp" />
     <ClCompile Include="God.cpp" />
+    <ClCompile Include="GraphicDefs.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Int.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="GameUtility.h" />
     <ClInclude Include="GLUtility.h" />
     <ClInclude Include="God.h" />
+    <ClInclude Include="GraphicDefs.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Int.h" />

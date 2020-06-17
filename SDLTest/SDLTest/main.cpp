@@ -35,14 +35,13 @@
 DrawCall gDC;
 VertexBuffer gVB;
 IndexBuffer gIB;
-bool bOldDraw = true;
 
 void GLRender()
 {
 	Profile("GLRender")
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
-	if (bOldDraw)
+	if (GOD.bOldDraw_)
 	{
 		//??? 把d3d画的背景作为参数传进来
 		SDL_Surface* Surface = IMG_Load("D:/22.bmp");
@@ -53,7 +52,7 @@ void GLRender()
 	}
 	auto& god = GOD;
 	GOD.GetDrawcalls();
-	for (auto& dc : GOD.drawcalls_) //(deprecated)
+	for (auto& dc : GOD.drawcalls_) //(deprecated) oldDraw
 	{
 		dc->Do();
 	}
@@ -95,6 +94,11 @@ void GLRender()
 			dc->Do();
 		}
 	}
+
+	for (unsigned i = 0; i < GOD.afterPostDrawcalls_.size(); i++)
+	{
+		GOD.afterPostDrawcalls_[i]->Do();
+	}
 }
 
 bool initOldDraw()
@@ -133,6 +137,18 @@ int main(int argc, char* argv[]) {
 	auto windowH = GOD.windowH_;
 
 	auto& sceneMgr = GOD.sceneManager_;
+	///////////////////////////////////////////////////////////
+	{
+		//??? testImg
+		Image* testImg = new Image(25, 25);
+		testImg->SetPosition(800, 450);
+		testImg->ReadFile("D:/HumanTree/dante.png");
+		GOD.testImg_ = testImg;
+	}
+	////////////////////////////////////////////////////////////
+	//???
+	Cursor cursor("D:/HumanTree/c7.png", 50, 50);
+	/////////////////////////////////////////////////////////////////
 	SoundEffect* sound1 = new SoundEffect;
 	if (!sound1->Load("D:/HumanTree/bird.wav"))
 	{
@@ -197,9 +213,6 @@ int main(int argc, char* argv[]) {
 	}
 	scene3->AddSound(catSound, 4);
 	scene3->SetAutoEnd(7);
-	/////////////
-	//鼠标
-	Cursor cursor("D:/HumanTree/c7.png", 50, 50);
 	///////////////////////////////////////////////////////////////////////
 	//scene4
 	auto scene4 = sceneMgr.InsertScene("D:/HumanTree/15.bmp");
@@ -305,7 +318,9 @@ int main(int argc, char* argv[]) {
 	{
 		bgm.StopBGM();
 		bgm.PlayChunk("D:/HumanTree/HeaveFall.wav",3,4);
-		bOldDraw = false;
+		GOD.bOldDraw_ = false;
+		//???
+		cursor.sImg_->SetActive(true);
 	};
 
 	//关音效，关红闪特效
@@ -334,18 +349,10 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
-	//??? 图片大小不应手动输入
 	Image* musicImg = new Image(150, 150);
 	musicImg->SetPosition(800, 450);
 	musicImg->ReadFile("D:/HumanTree/17.png");
-	//??? testImg
-	Image* testImg = new Image(256, 256);
-	testImg->SetPosition(800, 450);
-	testImg->ReadFile("D:/HumanTree/dante.png");
-	GOD.testImg_ = testImg;
-	//___
 	ShaderImage* musicSImg = new ShaderImage(musicImg);
-	//___
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/15.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
@@ -448,7 +455,7 @@ int main(int argc, char* argv[]) {
 
 		AutoProfiler::dataRoot_->children_.clear();
 
-		if (deltaTime > 0.03 && !bOldDraw) //detect too slow frame
+		if (deltaTime > 0.03 && !GOD.bOldDraw_) //detect too slow frame
 		{
 			std::cout << "Slow"<<deltaTime<<"\n";
 			//???
@@ -461,13 +468,13 @@ int main(int argc, char* argv[]) {
 			//std::cout << deltaTime << std::endl;
 			{
 				Profile("PreRender")
-				if (bOldDraw)
+				if (GOD.bOldDraw_)
 				{
 					Profile("OldClear")
 					SDL_RenderClear(GOD.renderer_);
 				}
 				GOD.Update(deltaTime);
-				if (bOldDraw)
+				if (GOD.bOldDraw_)
 				{
 					Profile("OldSaveScreenShot")
 					//??? 把d3d画的保存为图

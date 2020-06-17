@@ -4,6 +4,9 @@
 #include "Image.h"
 #include "Mouse_Move.h"
 
+#include "ShaderImage.h"
+#include "Material.h"
+
 #include "Debug.h"
 
 Cursor::Cursor(const Path& imgPath, int sizeX , int sizeY):size_(Int<2>(sizeX, sizeY))
@@ -27,39 +30,56 @@ Cursor::Cursor(const Path& imgPath, int sizeX , int sizeY):size_(Int<2>(sizeX, s
 			GOD.AddPostDrawable(img_);
 		}
 	}
+	//glDraw
+	sImg_ = new ShaderImage(GOD.testImg_);
+	sImg_->material_->SetBlendType(Blend_Alpha);
+	sImg_->SetDrawCallChannel(DrawCall_AfterPost);
+	if (GOD.bOldDraw_)
+	{
+		sImg_->SetActive(false);
+	}
 }
 
 void Cursor::OnMouseMove(int x, int y)
 {
-	img_->SetPosition(x, y);
+	if (GOD.bOldDraw_)
+	{
+		img_->SetPosition(x, y);
+	}
 }
 
 void Cursor::ChangeImage(const Path& imgPath)
 {
-	auto temp = img_;
-	if (!imgPath.empty())
+	if (GOD.bOldDraw_)
 	{
-		Image** result = nullptr;
-		if (cacheImages_.Find(imgPath, result))
+		auto temp = img_;
+		if (!imgPath.empty())
 		{
-			if (result != nullptr)
+			Image** result = nullptr;
+			if (cacheImages_.Find(imgPath, result))
 			{
-				img_ = *result;
+				if (result != nullptr)
+				{
+					img_ = *result;
+				}
 			}
+			else
+			{
+				img_ = new Image(size_[0], size_[1]);
+				img_->Load(imgPath);
+				cacheImages_.map_[imgPath] = img_;
+			}
+			GOD.ChangePostDrawable(temp, img_);
+			bDefault_ = false;
 		}
-		else
-		{
-			img_ = new Image(size_[0], size_[1]);
-			img_->Load(imgPath);
-			cacheImages_.map_[imgPath] = img_;
-		}
-		GOD.ChangePostDrawable(temp,img_);
-		bDefault_ = false;
 	}
 }
 
 void Cursor::SetDefaultImage()
 {
-	ChangeImage(defaultImagePath_);
-	bDefault_ = true;
+	if (GOD.bOldDraw_)
+	{
+		ChangeImage(defaultImagePath_);
+		bDefault_ = true;
+	}
 }

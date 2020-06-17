@@ -52,31 +52,22 @@ void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
-		auto& dcVec = GOD.passiveDrawcalls_;
 		if (bUsePass_)
 		{
 			passedRT_->SetTexture(rt_);
 			passedRT_->UsePass(pass_);
 
 			material_->UpdateParam("tex", rt_);
+			//??? 和SceneShaderImg太像，是否改写合并？
 			material_->UpdateParam("glowedTex", passedRT_);
 
-			if (sceneRT_ != nullptr)
-			{
-				dc_->SetRenderTexture(sceneRT_);
-			}
-
-			dcVec.push_back(dc_);
+			CommitDrawCall();
 		}
 		else
 		{
-			if (sceneRT_ != nullptr)
-			{
-				dc_->SetRenderTexture(sceneRT_);
-			}
 			material_->UpdateParam("tex", image_->GetSurface());
 
-			dcVec.push_back(dc_);
+			CommitDrawCall();
 		}
 	}
 }
@@ -84,11 +75,6 @@ void ShaderImage::GetDrawcall()
 void ShaderImage::SetActive(bool active) 
 { 
 	Drawable::SetActive(active);
-}
-
-void ShaderImage::Render()
-{
-	//??? (deprecated)
 }
 
 void ShaderImage::ChangeMaterial(Material* material)
