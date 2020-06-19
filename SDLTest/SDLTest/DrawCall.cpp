@@ -108,6 +108,11 @@ void DrawCall::SimpleDoEnd()
 
 void DrawCall::Do()
 {
+	//???
+	if (name_ == "cursorDC")
+	{
+		int aa = 1;
+	}
 	if (bDrawFrame_)
 	{	
 		glBindFramebuffer(GL_FRAMEBUFFER, rt_->frameBufferID_);

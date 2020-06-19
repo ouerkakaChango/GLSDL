@@ -2,6 +2,7 @@
 
 #include "SDL_image.h"
 #include "GameConfig.h"
+#include "God.h"
 
 Image::Image(unsigned width, unsigned height):width_(width),height_(height), anchorType_(Anchor_Center)
 {
@@ -24,7 +25,10 @@ bool Image::Load(const Path& path)
 	}
 	else if (IsExtention(path, ".png"))
 	{
+		//old draw
 		texture_ = IMG_LoadTexture(renderer_, path.c_str());
+		//gl draw
+		surface_ = IMG_Load(path.c_str());
 	}
 	return texture_ != nullptr;
 }
@@ -65,6 +69,19 @@ SDL_Rect Image::GetSDLRect(AnchorType type)
 	return re;
 }
 
+Rect Image::GetQuadRect()
+{
+	int w = GOD.gameConfig_.Get<int>("windowWidth");
+	int h = GOD.gameConfig_.Get<int>("windowHeight");
+	SDL_Rect rect = GetSDLRect();
+	Rect quad;
+	quad.x = rect.x / (float)w * 2.0f - 1;
+	quad.y = rect.y / (float)h * 2.0f - 1;
+	quad.hw = rect.w / (float)w ;
+	quad.hh = rect.h / (float)h ;
+	return quad;
+}
+
 void Image::Render()
 {
 	if (texture_)
@@ -78,4 +95,10 @@ void Image::SetPosition(int x, int y)
 {
 	posx_ = x;
 	posy_ = y;
+}
+
+SDL_Surface* Image::GetSurface()
+{ 
+	sure(surface_ !=nullptr);
+	return surface_; 
 }

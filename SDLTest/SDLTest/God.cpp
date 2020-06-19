@@ -96,6 +96,7 @@ void God::GetDrawcalls()
 {
 	passiveDrawcalls_.clear();
 	postDrawcalls_.clear();
+	afterPostDrawcalls_.clear();
 	
 	for (auto& drawable : drawcallDrawables_)
 	{

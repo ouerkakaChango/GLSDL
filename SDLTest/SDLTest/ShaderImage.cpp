@@ -9,7 +9,10 @@
 #include "RenderTexture.h"
 #include "Pass.h"
 
-ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(material)
+ShaderImage::ShaderImage(Image* img, Material* material, VBDrawType drawType)
+	:image_(img), 
+	material_(material),
+	drawType_(drawType)
 {
 	if (material_ == nullptr)
 	{
@@ -22,15 +25,8 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(
 	//vb
 	vb_ = new VertexBuffer;
 
-	int w = GOD.gameConfig_.Get<int>("windowWidth");
-	int h = GOD.gameConfig_.Get<int>("windowHeight");
-	SDL_Rect rect = image_->GetSDLRect();
-	Rect quad;
-	quad.x = rect.x / (float)w * 2.0f - 1;
-	quad.y = rect.y / (float)h * 2.0f - 1;
-	quad.hw = rect.w / (float)w ;
-	quad.hh = rect.h / (float)h ;
-	vb_->InitQuad(quad);
+	Rect quad = image_->GetQuadRect();
+	vb_->InitQuad(quad, drawType_);
 
 	//ib
 	ib_ = new IndexBuffer;
@@ -45,13 +41,26 @@ ShaderImage::ShaderImage(Image* img, Material* material):image_(img), material_(
 
 ShaderImage::~ShaderImage()
 {
+}
 
+void ShaderImage::SetPosition(int x, int y)
+{
+	image_->SetPosition(x, y);
+
+	Rect quad = image_->GetQuadRect();
+	vb_->SetQuad(quad);
 }
 
 void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
+		//???
+		if (name_ == "cursor")
+		{
+			int a = 1;
+			dc_->name_ = "cursorDC";
+		}
 		if (bUsePass_)
 		{
 			passedRT_->SetTexture(rt_);

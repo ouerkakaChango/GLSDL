@@ -31,13 +31,15 @@ Cursor::Cursor(const Path& imgPath, int sizeX , int sizeY):size_(Int<2>(sizeX, s
 		}
 	}
 	//glDraw
-	sImg_ = new ShaderImage(GOD.testImg_);
+	sImg_ = new ShaderImage(img_,nullptr,VB_Dynamic);
 	sImg_->material_->SetBlendType(Blend_Alpha);
 	sImg_->SetDrawCallChannel(DrawCall_AfterPost);
 	if (GOD.bOldDraw_)
 	{
 		sImg_->SetActive(false);
 	}
+	//???
+	sImg_->name_ = "cursor";
 }
 
 void Cursor::OnMouseMove(int x, int y)
@@ -45,6 +47,10 @@ void Cursor::OnMouseMove(int x, int y)
 	if (GOD.bOldDraw_)
 	{
 		img_->SetPosition(x, y);
+	}
+	else
+	{
+		sImg_->SetPosition(x, y);
 	}
 }
 

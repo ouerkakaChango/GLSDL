@@ -7,6 +7,12 @@ enum DrawCallChannel
 	DrawCall_AfterPost,
 };
 
+enum VBDrawType
+{
+	VB_Static,
+	VB_Dynamic,
+};
+
 class GraphicDefs
 {
 public:

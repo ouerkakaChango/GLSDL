@@ -24,10 +24,11 @@ public:
 	unsigned GetHeight() { return height_; }
 	SDL_Rect GetSDLRect();
 	SDL_Rect GetSDLRect(AnchorType type);
+	Rect GetQuadRect();
 
 	//--- 新写法相关
 	bool ReadFile(const Path& path);
-	SDL_Surface* GetSurface() { return surface_; }
+	SDL_Surface* GetSurface();
 	//___
 
 	SDL_Texture* texture_;//(deprecated)

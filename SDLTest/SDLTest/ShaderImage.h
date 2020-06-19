@@ -2,6 +2,7 @@
 #include "Drawable.h"
 
 #include "Utility.h"
+#include "GraphicDefs.h"
 
 class Material;
 class Image;
@@ -14,7 +15,7 @@ class RenderTexture;
 class ShaderImage : public Drawable
 {
 public:
-	ShaderImage(Image* img, Material* material=nullptr);	//material为空时，使用默认材质
+	ShaderImage(Image* img, Material* material=nullptr,VBDrawType drawType = VB_Static);	//material为空时，使用默认材质
 	~ShaderImage();
 	void SetActive(bool active) override;
 	void GetDrawcall() override;
@@ -22,6 +23,8 @@ public:
 	void UsePass(Pass* pass);
 	void UsePass(Pass* pass, Pass* endPass);
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
+
+	void SetPosition(int x, int y);
 
 	Material* material_;
 protected:
@@ -34,6 +37,8 @@ protected:
 
 	RenderTexture* rt_{nullptr};
 	RenderTexture* passedRT_{ nullptr };
+
+	VBDrawType drawType_{VB_Static};
 
 	bool bUsePass_{false};
 	bool bUseEndPass_{ false };
