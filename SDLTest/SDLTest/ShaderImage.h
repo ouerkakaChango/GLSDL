@@ -15,7 +15,7 @@ class RenderTexture;
 class ShaderImage : public Drawable
 {
 public:
-	ShaderImage(Image* img, Material* material=nullptr,VBDrawType drawType = VB_Static);	//material为空时，使用默认材质
+	ShaderImage(Image* img, Material* material=nullptr,VBDrawType drawType = VB_Static, TextureFilterType texFilterType = TextureFilter_Linear);	//material为空时，使用默认材质
 	~ShaderImage();
 	void SetActive(bool active) override;
 	void GetDrawcall() override;
@@ -39,6 +39,7 @@ protected:
 	RenderTexture* passedRT_{ nullptr };
 
 	VBDrawType drawType_{VB_Static};
+	TextureFilterType texFilterType_{ TextureFilter_Linear };
 
 	bool bUsePass_{false};
 	bool bUseEndPass_{ false };

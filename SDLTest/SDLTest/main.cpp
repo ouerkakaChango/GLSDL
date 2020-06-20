@@ -147,7 +147,9 @@ int main(int argc, char* argv[]) {
 	}
 	////////////////////////////////////////////////////////////
 	//???
-	Cursor cursor("D:/HumanTree/c7.png", 50, 50);
+	//Cursor cursor("D:/HumanTree/c7.png", 50, 50);
+	Cursor* cursor = new Cursor("D:/HumanTree/c7.png", 50, 50);
+	GOD.cursor_ = cursor;
 	/////////////////////////////////////////////////////////////////
 	SoundEffect* sound1 = new SoundEffect;
 	if (!sound1->Load("D:/HumanTree/bird.wav"))
@@ -228,9 +230,9 @@ int main(int argc, char* argv[]) {
 	touch.SetImage(cat);
 	EventHandler func2 = [&](Event* event)
 	{
-		if (!cursor.IsDefaultImg())
+		if (!cursor->IsDefaultImg())
 		{
-			cursor.SetDefaultImage();
+			cursor->SetDefaultImage();
 		}
 		catSound->Play();
 		sceneMgr.ToNext();
@@ -239,16 +241,16 @@ int main(int argc, char* argv[]) {
 	touch.BindEventHandler("Mouse_Move");
 	touch.beginOverlapFunc_ = [&]()
 	{
-		if (cursor.IsDefaultImg())
+		if (cursor->IsDefaultImg())
 		{
-			cursor.ChangeImage("D:/HumanTree/c2.png");
+			cursor->ChangeImage("D:/HumanTree/c2.png");
 		}
 	};
 	touch.endOverlapFunc_ = [&]()
 	{
-		if (!cursor.IsDefaultImg())
+		if (!cursor->IsDefaultImg())
 		{
-			cursor.SetDefaultImage();
+			cursor->SetDefaultImage();
 		}
 	};
 	scene4->AddDrawable(&touch);
@@ -320,7 +322,7 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/HeaveFall.wav",3,4);
 		GOD.bOldDraw_ = false;
 		//???
-		cursor.sImg_->SetActive(true);
+		cursor->sImg_->SetActive(true);
 	};
 
 	//关音效，关红闪特效
@@ -353,7 +355,7 @@ int main(int argc, char* argv[]) {
 	musicImg->SetPosition(800, 450);
 	musicImg->ReadFile("D:/HumanTree/17.png");
 	ShaderImage* musicSImg = new ShaderImage(musicImg);
-	auto scene8 = sceneMgr.AddScene("D:/HumanTree/15.png");
+	auto scene8 = sceneMgr.AddScene("D:/HumanTree/21.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);

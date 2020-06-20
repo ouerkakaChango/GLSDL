@@ -2,6 +2,7 @@
 #include <SDL.h>
 
 #include "Utility.h"
+#include "GraphicDefs.h"
 #include "SceneManager.h"
 #include "WatchDog.h"
 #include "GameConfig.h"
@@ -16,6 +17,7 @@ class Material;
 class ShaderImage;
 class Timeline;
 class BGMSystem;
+class Cursor;
 //??? debug
 class Image;
 
@@ -34,6 +36,7 @@ public:
 	void AddPostDrawable(Drawable* drawable); //(deprecated)
 	void ChangePostDrawable(Drawable* oriDrawable, Drawable* newDrawable); //(deprecated)
 	Material* CloneDefaultMaterial();
+	Material* CloneDefaultMaterial(TextureFilterType texFilterType);
 	void GetDrawcalls();
 
 	SceneManager sceneManager_;
@@ -51,6 +54,8 @@ public:
 	BGMSystem* bgmSystem_{ nullptr };
 	SDL_Window* window_;
 	SDL_Renderer* renderer_;//(deprecated)
+
+	Cursor* cursor_{ nullptr };
 
 	//??? debug
 	Image* testImg_{ nullptr };

@@ -86,6 +86,11 @@ Material* God::CloneDefaultMaterial()
 	return defaultMaterial_->Clone();
 }
 
+Material* God::CloneDefaultMaterial(TextureFilterType texFilterType)
+{
+	return defaultMaterial_->Clone(texFilterType);
+}
+
 void God::SetTimer(float delay, Func function)
 {
 

@@ -2,6 +2,7 @@
 //https://open.gl/textures
 #include "Utility.h"
 #include "GLUtility.h"
+#include "GraphicDefs.h"
 #include "TypeNameable.h"
 #include "Nameable.h"
 class DrawCall;
@@ -68,7 +69,7 @@ class Texture2DParam : public MaterialParam
 {
 	MaterialParamClass
 public:
-	Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit);
+	Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit, TextureFilterType texFilterType = TextureFilter_Linear);
 	void InjectValue(RenderTexture* newValue);
 private:
 	void UpdateValue() override;
@@ -79,6 +80,7 @@ private:
 	RenderTexture* toUpdateRT_{ nullptr };
 	GLuint toUpdateID_;
 	GLuint textureID_;
+	TextureFilterType texFilterType_;
 	unsigned textureUnit_{ 0 };
 };
 
@@ -143,6 +145,7 @@ public:
 	void UpdateParam(const std::string& paramName, RenderTexture* rt);				//for texture2d
 	void UpdateParam(const std::string& paramName, GLuint n)=delete;				//prevent unexpected implicit call
 	Material* Clone();
+	Material* Clone(TextureFilterType texFilterType);	//??? clone,but change the "tex" parameter's filter
 	void CloneType(Material* ori);
 	bool IsRenderParameterInjected() { return bRenderParameterInjected_; }
 
@@ -168,6 +171,8 @@ protected:
 	MaterialParam* AddParamByInfo(const paramInfo& info);
 	MaterialParam* AddParam(const std::string& paramName, float defaultValue);
 	MaterialParam* AddParam(const std::string& paramName, SDL_Surface* textureSurface);
+	//???
+	MaterialParam* AddTextureParam(const std::string& paramName, TextureFilterType texFilterType);
 
 	std::vector<paramInfo> attributeInfos_;	
 	std::vector<paramInfo> paramInfos_;

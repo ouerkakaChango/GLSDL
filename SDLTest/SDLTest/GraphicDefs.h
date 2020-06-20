@@ -13,6 +13,12 @@ enum VBDrawType
 	VB_Dynamic,
 };
 
+enum TextureFilterType
+{
+	TextureFilter_Linear,
+	TextureFilter_Nearest,
+};
+
 class GraphicDefs
 {
 public:

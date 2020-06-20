@@ -67,7 +67,10 @@ std::string Texture2DParam::TypeName()
 	return "texture2d";
 }
 
-Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit):nowSurface_(textureSurface),textureUnit_(textureUnit)
+Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit, TextureFilterType texFilterType)
+	:nowSurface_(textureSurface),
+	textureUnit_(textureUnit),
+	texFilterType_(texFilterType)
 {
 	glActiveTexture(GL_TEXTURE0 + textureUnit_);
 	glGenTextures(1, &textureID_);
@@ -81,8 +84,17 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, textureSurface->w, textureSurface->h, 0, Mode, GL_UNSIGNED_BYTE, textureSurface->pixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//???
+	if (texFilterType_ == TextureFilter_Linear)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else if (texFilterType_ == TextureFilter_Nearest)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 
 }
 
@@ -278,6 +290,16 @@ MaterialParam* Material::AddParamByInfo(const paramInfo& info)
 	return nullptr;
 }
 
+MaterialParam* Material::AddTextureParam(const std::string& paramName, TextureFilterType texFilterType)
+{
+	auto* param = new Texture2DParam(IMG_Load("D:/HumanTree/dante.png"), nowTexturePos_, texFilterType);
+	param->name_ = paramName;
+	param->typeName_ = "texture2d";
+	params_.push_back(param);
+	nowTexturePos_ += 1;
+	return param;
+}
+
 bool Material::CheckParams()
 {
 	for (auto& info : paramInfos_)
@@ -398,7 +420,6 @@ MaterialParam* Material::AddParam(const std::string& paramName, float defaultVal
 	return param;
 }
 
-//SDL_FreeSurface(infoSurface);
 MaterialParam* Material::AddParam(const std::string& paramName, SDL_Surface* textureSurface)
 {
 	auto* param = new Texture2DParam(textureSurface, nowTexturePos_);
@@ -443,6 +464,40 @@ Material* Material::Clone()
 	for (auto& info : paramInfos_)
 	{
 		auto param = re->AddParamByInfo(info);
+		if (!param->Check(this))
+		{
+			abort();
+		}
+	}
+	re->blendType_ = blendType_;
+	re->paramInfos_ = paramInfos_;
+	re->vertexShader_ = vertexShader_;
+	re->fragmentShader_ = fragmentShader_;
+	return re;
+}
+
+Material* Material::Clone(TextureFilterType texFilterType)
+{
+	Material* re = new Material;
+	re->name_ = name_ + "_Clone";
+	re->vsPath_ = vsPath_;
+	re->fsPath_ = fsPath_;
+
+	re->programID_ = programID_;
+	re->vsAttributeParams_ = vsAttributeParams_;
+	//深拷参数，不然出问题
+	for (auto& info : paramInfos_)
+	{
+		MaterialParam* param = nullptr;
+		//???
+		if (info.name_ == "tex")
+		{
+			param = re->AddTextureParam("tex",texFilterType);
+		}
+		else
+		{
+			param = re->AddParamByInfo(info);
+		}
 		if (!param->Check(this))
 		{
 			abort();

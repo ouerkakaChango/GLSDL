@@ -31,7 +31,7 @@ Cursor::Cursor(const Path& imgPath, int sizeX , int sizeY):size_(Int<2>(sizeX, s
 		}
 	}
 	//glDraw
-	sImg_ = new ShaderImage(img_,nullptr,VB_Dynamic);
+	sImg_ = new ShaderImage(img_,nullptr,VB_Dynamic,TextureFilter_Nearest);
 	sImg_->material_->SetBlendType(Blend_Alpha);
 	sImg_->SetDrawCallChannel(DrawCall_AfterPost);
 	if (GOD.bOldDraw_)

@@ -9,14 +9,15 @@
 #include "RenderTexture.h"
 #include "Pass.h"
 
-ShaderImage::ShaderImage(Image* img, Material* material, VBDrawType drawType)
+ShaderImage::ShaderImage(Image* img, Material* material, VBDrawType drawType, TextureFilterType texFilterType)
 	:image_(img), 
 	material_(material),
-	drawType_(drawType)
+	drawType_(drawType),
+	texFilterType_(texFilterType)
 {
 	if (material_ == nullptr)
 	{
-		material_ = GOD.CloneDefaultMaterial();
+		material_ = GOD.CloneDefaultMaterial(texFilterType_);
 	}
 
 	dc_ = new DrawCall;
