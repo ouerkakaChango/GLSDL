@@ -25,7 +25,8 @@ public:
 protected:
 	void BeginDo();
 	void EndDo();
-	void InjectRenderParameterToMaterial();
+	void InjectStaticParameterToMaterial();
+	void InjectDynamicParameterToMaterial();
 	float GetRenderWidth();
 	float GetRenderHeight();
 

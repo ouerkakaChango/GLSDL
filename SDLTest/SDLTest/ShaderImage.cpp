@@ -89,7 +89,7 @@ void ShaderImage::SetActive(bool active)
 
 void ShaderImage::ChangeMaterial(Material* material)
 {
-	material->CloneType(material_);
+	material->CloneType(material_,texFilterType_);
 	material_ = material;
 	dc_->SetMaterial(material_);
 }

@@ -371,9 +371,15 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/sound/HiTech_short.wav");
 	};
 
+	Material* getUpMouseMaterial = new Material;
+	sure( getUpMouseMaterial->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithOffset.fs") );
+
 	Func music2Event = [&]()
 	{
 		bgm.PlayChunk("D:/HumanTree/sound/music2.wav");
+		//???
+		//change mouse material here
+		cursor->sImg_->ChangeMaterial(getUpMouseMaterial);
 	};
 
 	musicSImg->name_ = "musicSImg";
@@ -468,6 +474,7 @@ int main(int argc, char* argv[]) {
 			//???
 			last_ = now_;
 			//std::cout << deltaTime << std::endl;
+			GOD.ElapseGlobalK(deltaTime);
 			{
 				Profile("PreRender")
 				if (GOD.bOldDraw_)

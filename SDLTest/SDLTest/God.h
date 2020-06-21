@@ -38,6 +38,8 @@ public:
 	Material* CloneDefaultMaterial();
 	Material* CloneDefaultMaterial(TextureFilterType texFilterType);
 	void GetDrawcalls();
+	void ElapseGlobalK(float deltaTime);
+	float GlobalK() const { return globalK_; }
 
 	SceneManager sceneManager_;
 	GameConfig gameConfig_;
@@ -72,6 +74,8 @@ private:
 	std::list<Drawable*> postDrawables_;
 	Material* defaultMaterial_{nullptr};
 	Timeline* timeline_{nullptr};
+
+	float globalK_;
 };
 
 #define GOD God::GetInstance()

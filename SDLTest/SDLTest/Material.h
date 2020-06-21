@@ -71,6 +71,7 @@ class Texture2DParam : public MaterialParam
 public:
 	Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit, TextureFilterType texFilterType = TextureFilter_Linear);
 	void InjectValue(RenderTexture* newValue);
+	void ChangeFilter(TextureFilterType texFilterType);
 private:
 	void UpdateValue() override;
 
@@ -146,8 +147,8 @@ public:
 	void UpdateParam(const std::string& paramName, GLuint n)=delete;				//prevent unexpected implicit call
 	Material* Clone();
 	Material* Clone(TextureFilterType texFilterType);	//??? clone,but change the "tex" parameter's filter
-	void CloneType(Material* ori);
-	bool IsRenderParameterInjected() { return bRenderParameterInjected_; }
+	void CloneType(Material* ori, TextureFilterType texFilterType=TextureFilter_Linear); //???
+	bool IsStaticParameterInjected() { return bStaticParameterInjected_; }
 
 	GLuint programID_ = 0;
 	std::vector<VSAttributeParam*> vsAttributeParams_;
@@ -183,6 +184,6 @@ protected:
 	Path vsPath_, fsPath_;
 	unsigned nowTexturePos_{ 0 };
 
-	bool bRenderParameterInjected_{ false };
+	bool bStaticParameterInjected_{ false };
 
 };

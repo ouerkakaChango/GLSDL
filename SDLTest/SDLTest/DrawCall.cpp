@@ -29,10 +29,11 @@ void DrawCall::BeginDo()
 	{
 		glViewport(0, 0, renderWidth_, renderHeight_);
 	}
-	if (!material_->IsRenderParameterInjected())
+	if (!material_->IsStaticParameterInjected())
 	{
-		InjectRenderParameterToMaterial();
+		InjectStaticParameterToMaterial();
 	}
+	InjectDynamicParameterToMaterial();
 }
 
 void DrawCall::EndDo()
@@ -213,7 +214,7 @@ void DrawCall::SetRenderTexture(RenderTexture* rt)
 	renderHeight_ = rt->GetHeight();
 }
 
-void DrawCall::InjectRenderParameterToMaterial()
+void DrawCall::InjectStaticParameterToMaterial()
 {
 	for (auto& param : material_->params_)
 	{
@@ -226,7 +227,19 @@ void DrawCall::InjectRenderParameterToMaterial()
 			static_cast<Uniform1fParam*>(param)->InjectValue(GetRenderHeight());
 		}
 	}
-	material_->bRenderParameterInjected_ = true;
+	material_->bStaticParameterInjected_ = true;
+}
+
+//??? 可优化，提前判断Material是否需要dynamic
+void DrawCall::InjectDynamicParameterToMaterial()
+{
+	for (auto& param : material_->params_)
+	{
+		if (param->name_ == "GlobalK")
+		{
+			static_cast<Uniform1fParam*>(param)->InjectValue(GOD.GlobalK());
+		}
+	}
 }
 
 float DrawCall::GetRenderWidth()

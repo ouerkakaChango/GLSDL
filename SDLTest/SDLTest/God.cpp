@@ -202,3 +202,12 @@ void God::InitSDLOpenGL()
 		}
 	}
 }
+
+void God::ElapseGlobalK(float deltaTime)
+{
+	globalK_ += deltaTime;
+	if (globalK_ > 1.0f)
+	{
+		globalK_ -= 1.0f;
+	}
+}

@@ -98,6 +98,25 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit
 
 }
 
+void Texture2DParam::ChangeFilter(TextureFilterType texFilterType)
+{
+	texFilterType_ = texFilterType;
+
+	glActiveTexture(GL_TEXTURE0 + textureUnit_);
+	glBindTexture(GL_TEXTURE_2D, textureID_);
+
+	if (texFilterType_ == TextureFilter_Linear)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else if (texFilterType_ == TextureFilter_Nearest)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+}
+
 void Texture2DParam::UpdateValue()
 {
 	glActiveTexture(GL_TEXTURE0 + textureUnit_);
@@ -510,8 +529,10 @@ Material* Material::Clone(TextureFilterType texFilterType)
 	return re;
 }
 
-void Material::CloneType(Material* ori)
+void Material::CloneType(Material* ori, TextureFilterType texFilterType)
 {
 	sure(ori != nullptr);
 	blendType_ = ori->blendType_;
+	//???
+	GetParam<Texture2DParam>("tex")->ChangeFilter(texFilterType);
 }
