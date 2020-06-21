@@ -89,3 +89,12 @@ void Cursor::SetDefaultImage()
 		bDefault_ = true;
 	}
 }
+
+void Cursor::SetActive(bool active)
+{
+	Drawable::SetActive(active);
+	if (sImg_)
+	{
+		sImg_->SetActive(active);
+	}
+}

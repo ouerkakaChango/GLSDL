@@ -13,6 +13,8 @@ public:
 	//??? 25·Åµ½gameConfig?
 	Cursor(const Path& imgPath="",int sizeX=25,int sizeY=25);
 
+	void SetActive(bool active) override;
+
 	//oldDraw
 	void ChangeImage(const Path& imgPath);
 	Image* GetImage() { return img_; }

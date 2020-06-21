@@ -25,6 +25,7 @@ public:
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
 
 	void SetPosition(int x, int y);
+	void SetImage(Image* img) { image_ = img; }
 
 	Material* material_;
 protected:

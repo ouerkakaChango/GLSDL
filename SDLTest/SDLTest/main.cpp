@@ -321,8 +321,6 @@ int main(int argc, char* argv[]) {
 		bgm.StopBGM();
 		bgm.PlayChunk("D:/HumanTree/HeaveFall.wav",3,4);
 		GOD.bOldDraw_ = false;
-		//???
-		cursor->sImg_->SetActive(true);
 	};
 
 	//关音效，关红闪特效
@@ -371,15 +369,20 @@ int main(int argc, char* argv[]) {
 		bgm.PlayChunk("D:/HumanTree/sound/HiTech_short.wav");
 	};
 
+	//???
 	Material* getUpMouseMaterial = new Material;
 	sure( getUpMouseMaterial->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithOffset.fs") );
+	Image* getUpMouseImg = new Image(50, 50);
+	getUpMouseImg->ReadFile("D:/HumanTree/c8.png");
 
 	Func music2Event = [&]()
 	{
 		bgm.PlayChunk("D:/HumanTree/sound/music2.wav");
 		//???
-		//change mouse material here
+		//use glDraw's mouse,change mouse material here
+		cursor->SetActive(true);
 		cursor->sImg_->ChangeMaterial(getUpMouseMaterial);
+		cursor->sImg_->SetImage(getUpMouseImg);
 	};
 
 	musicSImg->name_ = "musicSImg";
