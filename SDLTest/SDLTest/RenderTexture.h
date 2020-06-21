@@ -19,8 +19,8 @@ public:
 	RenderTexture(Image* img);
 	~RenderTexture();
 
-	void UsePass(Pass* pass,bool bPost=false); 
-	void UsePassOnlySelf(Pass* pass, bool bPost = false);
+	void UsePass(Pass* pass,bool bPreSceneColor=false); 
+	void UsePassOnlySelf(Pass* pass, bool bPreSceneColor = false);
 	void SetTexture(RenderTexture* src);
 
 	void SetSwapRT(RenderTexture* swapRT);

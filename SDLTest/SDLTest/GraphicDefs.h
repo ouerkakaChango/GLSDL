@@ -3,6 +3,7 @@
 enum DrawCallChannel
 {
 	DrawCall_Passive,
+	DrawCall_PreSceneColor,
 	DrawCall_SceneColor,
 	DrawCall_Post,
 	DrawCall_AfterPost,

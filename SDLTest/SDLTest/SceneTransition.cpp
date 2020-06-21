@@ -51,6 +51,7 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 		Func func3 = [&]()
 		{
 			GOD.fadeBlackCurtain_->SetActive(false);
+			SetActive(false);
 		};
 		timeline_.AddAction(0, func1);
 		timeline_.AddAction(transitionTime_ /2.0f, func2);
@@ -105,6 +106,7 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 			SceneShaderImage* bg = newScene->GetSceneImg();
 			bg->ChangeMaterial(GOD.CloneDefaultMaterial());
 			bg->UsePass(nullptr);
+			SetActive(false);
 		};
 		FuncAction* action1 = new FuncAction(func1);	//转黑幕
 		FuncAction* action2 = new FuncAction(func2);	//开高斯模糊渐变

@@ -29,6 +29,10 @@ void Drawable::CommitDrawCall()
 	{
 		GOD.passiveDrawcalls_.push_back(dc_);
 	}
+	else if (dcChannel_ == DrawCall_PreSceneColor)
+	{
+		GOD.preSceneColorDrawcalls_.push_back(dc_);
+	}
 	else if (dcChannel_ == DrawCall_SceneColor)
 	{
 		GOD.sceneColorDrawcalls_.push_back(dc_);

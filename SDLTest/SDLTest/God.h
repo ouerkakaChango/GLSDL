@@ -48,6 +48,7 @@ public:
 	std::vector<Drawable*> drawcallDrawables_;
 
 	std::vector<DrawCall*> passiveDrawcalls_;
+	std::vector<DrawCall*> preSceneColorDrawcalls_;
 	std::vector<DrawCall*> sceneColorDrawcalls_;
 	std::vector<DrawCall*> postDrawcalls_;
 	std::vector<DrawCall*> afterPostDrawcalls_;		//such as Cursor

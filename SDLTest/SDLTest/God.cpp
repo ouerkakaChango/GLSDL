@@ -113,6 +113,7 @@ void God::SetTimer(float delay, Func function)
 void God::GetDrawcalls()
 {
 	passiveDrawcalls_.clear();
+	preSceneColorDrawcalls_.clear();
 	sceneColorDrawcalls_.clear();
 	postDrawcalls_.clear();
 	afterPostDrawcalls_.clear();

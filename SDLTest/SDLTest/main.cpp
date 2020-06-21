@@ -63,6 +63,11 @@ void GLRender()
 		GOD.passiveDrawcalls_[i]->Do();
 	}
 
+	for (unsigned i = 0; i < GOD.preSceneColorDrawcalls_.size(); i++)
+	{
+		GOD.preSceneColorDrawcalls_[i]->Do();
+	}
+
 	for (unsigned i = 0; i < GOD.sceneColorDrawcalls_.size(); i++)
 	{
 		GOD.sceneColorDrawcalls_[i]->Do();
@@ -440,7 +445,7 @@ int main(int argc, char* argv[]) {
 			GOD.bOldDraw_ = false;
 		}
 	};
-	DebugJumpToScene(7);
+	DebugJumpToScene(6);
 
 	//??? debug
 	{

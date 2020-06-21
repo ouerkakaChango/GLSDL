@@ -80,7 +80,7 @@ RenderTexture::~RenderTexture()
 
 
 
-void RenderTexture::UsePass(Pass* pass, bool bPost)
+void RenderTexture::UsePass(Pass* pass, bool bPreSceneColor)
 {
 	swapFlag_ = false;
 	if (passes_.empty())
@@ -94,7 +94,7 @@ void RenderTexture::UsePass(Pass* pass, bool bPost)
 	}
 	for (unsigned i = 0; i < passes_.size(); i++)
 	{
-		UsePassOnlySelf(passes_[i], bPost);
+		UsePassOnlySelf(passes_[i], bPreSceneColor);
 	}
 }
 
@@ -120,15 +120,15 @@ void RenderTexture::InitSwapables(Pass* pass)
 	swapDC_->SetRenderTexture(this);
 }
 
-void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
+void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPreSceneColor)
 {
 	//self as parameter,draw to swap
 	if (!swapFlag_)
 	{
 		if (pass->SelfEmpty()) { return; }
-		if (bPost)
+		if (bPreSceneColor)
 		{
-			GOD.postDrawcalls_.push_back(selfDC_);
+			GOD.preSceneColorDrawcalls_.push_back(selfDC_);
 		}
 		else
 		{
@@ -141,9 +141,9 @@ void RenderTexture::UsePassOnlySelf(Pass* pass, bool bPost)
 	else
 	{
 		if (pass->SelfEmpty()) { return; }
-		if (bPost)
+		if (bPreSceneColor)
 		{
-			GOD.postDrawcalls_.push_back(swapDC_);
+			GOD.preSceneColorDrawcalls_.push_back(swapDC_);
 		}
 		else
 		{
