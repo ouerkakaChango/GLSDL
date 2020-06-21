@@ -19,6 +19,10 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 	{
 		blackImg_ = new Image(GOD.gameConfig_.Get<int>("windowWidth"), GOD.gameConfig_.Get<int>("windowHeight"));
 	}
+	else
+	{
+		abort();
+	}
 }
 
 SceneTransition::SceneTransition(const string& effectName, Params<float> params) :effectName_(effectName)

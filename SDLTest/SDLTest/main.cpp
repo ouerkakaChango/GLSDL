@@ -349,10 +349,12 @@ int main(int argc, char* argv[]) {
 	scene7->SetAutoEnd(9.1f);
 
 	//////////////////////////////////////////////////////////////
+	//--- Scene 8
 	Image* musicImg = new Image(150, 150);
 	musicImg->SetPosition(800, 450);
 	musicImg->ReadFile("D:/HumanTree/17.png");
 	ShaderImage* musicSImg = new ShaderImage(musicImg);
+
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/21.png");
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
@@ -375,6 +377,7 @@ int main(int argc, char* argv[]) {
 	Image* getUpMouseImg = new Image(50, 50);
 	getUpMouseImg->ReadFile("D:/HumanTree/c8.png");
 
+	Button* getUpButton=nullptr;
 	Func music2Event = [&]()
 	{
 		bgm.PlayChunk("D:/HumanTree/sound/music2.wav");
@@ -383,6 +386,16 @@ int main(int argc, char* argv[]) {
 		cursor->SetActive(true);
 		cursor->sImg_->ChangeMaterial(getUpMouseMaterial);
 		cursor->sImg_->SetImage(getUpMouseImg);
+		//???
+		getUpButton = new Button(false);
+		getUpButton->SetImage(GOD.blackBackground_->GetImage());
+		EventHandler func = [&](Event* event)
+		{
+			LOG("next 9!");
+			sceneMgr.ToNext();
+		};
+		getUpButton->BindEventHandler("LMB_Down", func);
+		getUpButton->SetActive(true);
 	};
 
 	musicSImg->name_ = "musicSImg";
@@ -395,14 +408,21 @@ int main(int argc, char* argv[]) {
 	Pass* endPass = new Pass;
 	endPass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadWithGlow.fs",Blend_Alpha);
 	musicSImg->UsePass(blur, endPass);
-	//___
 	scene8->Show(musicSImg, 2.0f);
 
 
 	scene8->AddCustomAction(0.0f, wakeEvent);
 	scene8->AddCustomAction(2.0f, textSoundEvent);
 	scene8->AddCustomAction(8.0f, music2Event);
-
+	//___ Scene 8
+	/////////////////////////////////////////////
+	//--- Scene 9
+	auto scene9 = sceneMgr.AddScene("D:/HumanTree/test.png");
+	//???
+	//要换成gl的黑屏效果
+	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 2);
+	sceneMgr.AddTransition(Int<2>(7, 8), transition9);
+	//___ Scene 9
 	/////////////////////////////////////////////
 	sceneMgr.JumpToScene(6);
 

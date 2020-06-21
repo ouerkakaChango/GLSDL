@@ -26,6 +26,7 @@ public:
 
 	void SetPosition(int x, int y);
 	void SetImage(Image* img) { image_ = img; }
+	Image*  GetImage() const{return image_;}
 
 	Material* material_;
 protected:

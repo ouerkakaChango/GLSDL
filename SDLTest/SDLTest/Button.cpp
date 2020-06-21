@@ -5,7 +5,8 @@
 #include "Event.h"
 #include "LMB_Down.h"
 
-Button::Button()
+Button::Button(bool bRender)
+	:bRender_(bRender)
 {
 	GOD.BindEvent("LMB_Down", this);
 	EventGate gate1 = [&](Event* event)
@@ -30,5 +31,8 @@ Button::~Button()
 
 void Button::Render()
 {
-	image_->Render();
+	if (bRender_)
+	{
+		image_->Render();
+	}
 }
