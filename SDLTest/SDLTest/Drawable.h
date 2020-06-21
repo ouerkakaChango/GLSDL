@@ -18,10 +18,11 @@ public:
 	virtual void SetSceneRT(RenderTexture* sceneRT);
 
 	void SetDrawCallChannel(DrawCallChannel newChannel);
+
+	DrawCall*		dc_{ nullptr };
 protected:
 	void CommitDrawCall();
 
-	DrawCall*		dc_{nullptr};
 	Scene*			scene_{nullptr};
 	RenderTexture*	sceneRT_{ nullptr };
 	DrawCallChannel dcChannel_{ DrawCall_Passive };

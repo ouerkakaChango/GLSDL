@@ -12,7 +12,7 @@ SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	postRT_ = new RenderTexture(image_);
 	auto postSwap = new RenderTexture(image_);
 	postRT_->SetSwapRT(postSwap);
-	SetDrawCallChannel(DrawCall_Post);
+	SetDrawCallChannel(DrawCall_SceneColor);
 }
 
 

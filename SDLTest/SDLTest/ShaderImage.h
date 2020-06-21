@@ -31,6 +31,7 @@ public:
 	Material* material_;
 protected:
 	void ResetRT();
+	void CheckSetRTMaterial(MaterialBlendType blend);
 
 	Image* image_;
 	Pass* pass_;
@@ -45,5 +46,6 @@ protected:
 
 	bool bUsePass_{false};
 	bool bUseEndPass_{ false };
+	bool bHasSetRTMaterial_{ false };
 };
 

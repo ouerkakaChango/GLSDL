@@ -6,7 +6,7 @@
 class Scene;
 class SceneTransition;
 class Effect;
-class WatchDog;
+class RenderTexture;
 
 class SceneManager
 {
@@ -22,7 +22,9 @@ public:
 	const Scene* GetNowScene() { return scenes_[sceneInx_]; }
 	void AddCrossEffect(Effect* effect);			//¿çsceneµÄeffect
 	void ClearScenes();
+	RenderTexture* GetSceneRT(unsigned inx);
 
+	//debug
 	void JumpToScene(int sceneInx);
 protected:
 	std::vector<Scene*> scenes_;

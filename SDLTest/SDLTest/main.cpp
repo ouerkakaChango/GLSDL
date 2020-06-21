@@ -28,6 +28,7 @@
 #include "ShaderImage.h"
 #include "Timeline.h"
 #include "Pass.h"
+#include "SceneShaderImage.h"
 
 #include "GameUtility.h"
 #include "Debug.h"
@@ -60,6 +61,11 @@ void GLRender()
 	for (unsigned i = 0; i < GOD.passiveDrawcalls_.size(); i++)
 	{
 		GOD.passiveDrawcalls_[i]->Do();
+	}
+
+	for (unsigned i = 0; i < GOD.sceneColorDrawcalls_.size(); i++)
+	{
+		GOD.sceneColorDrawcalls_[i]->Do();
 	}
 
 	DrawCall *nextDC;
@@ -356,6 +362,8 @@ int main(int argc, char* argv[]) {
 	ShaderImage* musicSImg = new ShaderImage(musicImg);
 
 	auto scene8 = sceneMgr.AddScene("D:/HumanTree/21.png");
+	//???
+	scene8->GetSceneImg()->name_ = "scene8SceneImg";
 	//直接黑屏4s，然后12s带模糊缓出
 	SceneTransition* transition8 = new SceneTransition("fastBlackWithBlurIn", MakeParam<float>(4.0f,12.0f));
 	sceneMgr.AddTransition(Int<2>(6, 7), transition8);
@@ -388,7 +396,7 @@ int main(int argc, char* argv[]) {
 		cursor->sImg_->SetImage(getUpMouseImg);
 		//???
 		getUpButton = new Button(false);
-		getUpButton->SetImage(GOD.blackBackground_->GetImage());
+		getUpButton->SetImage(GOD.fastBlackCurtain_->GetImage());
 		EventHandler func = [&](Event* event)
 		{
 			LOG("next 9!");
@@ -420,11 +428,19 @@ int main(int argc, char* argv[]) {
 	auto scene9 = sceneMgr.AddScene("D:/HumanTree/test.png");
 	//???
 	//要换成gl的黑屏效果
-	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 2);
+	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 6);
 	sceneMgr.AddTransition(Int<2>(7, 8), transition9);
 	//___ Scene 9
 	/////////////////////////////////////////////
-	sceneMgr.JumpToScene(6);
+	auto DebugJumpToScene = [&](unsigned inx)
+	{
+		sceneMgr.JumpToScene(inx);
+		if (inx == 7)
+		{
+			GOD.bOldDraw_ = false;
+		}
+	};
+	DebugJumpToScene(7);
 
 	//??? debug
 	{

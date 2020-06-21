@@ -46,6 +46,11 @@ void VSAttributeParam::SetFormatByType(const std::string& typeName)
 
 void Uniform1fParam::UpdateValue()
 {
+	//???
+	if (name_ == "alpha")
+	{
+		int a = 1;
+	}
 	value_ = toUpdateValue_;
 	glUniform1f(paramLocation_, value_);
 	bNeedUpdate_ = false;

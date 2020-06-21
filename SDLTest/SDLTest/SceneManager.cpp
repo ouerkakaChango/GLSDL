@@ -145,3 +145,8 @@ void SceneManager::JumpToScene(int sceneInx)
 	sceneInx_ = sceneInx;
 	scenes_[sceneInx_]->SetActive(true);
 }
+
+RenderTexture* SceneManager::GetSceneRT(unsigned inx)
+{
+	return scenes_[inx]->sceneColorShaderImg_->GetRT();
+}

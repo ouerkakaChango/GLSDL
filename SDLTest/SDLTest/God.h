@@ -43,11 +43,12 @@ public:
 
 	SceneManager sceneManager_;
 	GameConfig gameConfig_;
-	ShaderImage* blackBackground_{ nullptr };
 	std::vector<DrawCall*> drawcalls_;
 
 	std::vector<Drawable*> drawcallDrawables_;
+
 	std::vector<DrawCall*> passiveDrawcalls_;
+	std::vector<DrawCall*> sceneColorDrawcalls_;
 	std::vector<DrawCall*> postDrawcalls_;
 	std::vector<DrawCall*> afterPostDrawcalls_;		//such as Cursor
 
@@ -58,6 +59,10 @@ public:
 	SDL_Renderer* renderer_;//(deprecated)
 
 	Cursor* cursor_{ nullptr };
+
+	//default asset
+	ShaderImage* fastBlackCurtain_{ nullptr };
+	ShaderImage* fadeBlackCurtain_{ nullptr };
 
 	//??? debug
 	Image* testImg_{ nullptr };

@@ -1,7 +1,8 @@
 #pragma once
 #include "Activeable.h"
+#include "Nameable.h"
 
-class Effect : public Activeable
+class Effect : public Activeable,public Nameable
 {
 public:
 	Effect();

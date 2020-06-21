@@ -100,12 +100,6 @@ struct paramInfo
 
 bool operator==(const paramInfo& info1, const paramInfo& info2);
 
-enum MaterialBlendType
-{
-	Blend_Opaque,
-	Blend_Alpha,
-};
-
 //导入类（用户材质->dc可用的数据） 面向用户的抽象材质类
 class Material : public Nameable
 {
@@ -115,6 +109,7 @@ public:
 
 	bool CompileShader(const Path& vsPath, const Path& fsPath);
 	void SetBlendType(MaterialBlendType blend) { blendType_ = blend; }
+	MaterialBlendType GetBlendType() const{ return blendType_; }
 
 	template <class T>
 	T* GetParam(const std::string& paramName)

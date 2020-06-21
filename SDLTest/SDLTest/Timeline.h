@@ -4,7 +4,6 @@
 
 class Action;
 class Effect;
-class WatchDog;
 
 class Timeline
 {
@@ -18,5 +17,5 @@ public:
 protected:
 	std::vector<Action*> actions_;	//Ë²Ê±
 	std::vector<Effect*> effects_;	//³ÖÐø
-	float now_;
+	float now_{0.0f};
 };

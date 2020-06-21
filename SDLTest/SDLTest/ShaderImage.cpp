@@ -62,6 +62,10 @@ void ShaderImage::GetDrawcall()
 			int a = 1;
 			dc_->name_ = "cursorDC";
 		}
+		if (name_ == "fadeBlack")
+		{
+			int b = 1;
+		}
 		if (bUsePass_)
 		{
 			passedRT_->SetTexture(rt_);
@@ -129,13 +133,12 @@ void ShaderImage::UsePass(Pass* pass, Pass* endPass)
 
 void ShaderImage::SetSceneRT(RenderTexture* sceneRT)
 {
+	sure(sceneRT != nullptr);
 	Drawable::SetSceneRT(sceneRT);
 	//if not use end pass,when set a sceneRT,means self should be use as an RT draw to sceneRT
 	if (!bUseEndPass_)
 	{
-		Material* rtMaterial = new Material;
-		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRT.fs"));
-		ChangeMaterial(rtMaterial);
+		CheckSetRTMaterial(material_->GetBlendType());
 	}
 }
 
@@ -154,4 +157,27 @@ void ShaderImage::ResetRT()
 		//??? unconsidered
 		abort();
 	}
+}
+
+void ShaderImage::CheckSetRTMaterial(MaterialBlendType blend)
+{
+	if (bHasSetRTMaterial_)
+	{
+		return;
+	}
+	if (blend == Blend_Opaque)
+	{
+		Material* rtMaterial = new Material;
+		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRT.fs"));
+		ChangeMaterial(rtMaterial);
+	}
+	else if (blend == Blend_Alpha)
+	{
+		//??? 这部分代码没测试过，可能能用于解决glow pass现在还是用的opaque的问题
+		abort();
+		Material* rtMaterial = new Material;
+		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRTWithAlpha.fs"));
+		ChangeMaterial(rtMaterial);
+	}
+	bHasSetRTMaterial_ = true;
 }

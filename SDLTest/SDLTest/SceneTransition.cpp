@@ -9,6 +9,7 @@
 #include "Pass.h"
 #include "UsualEffects.h"
 #include "SceneShaderImage.h"
+#include "DrawCall.h"
 
 #include "Debug.h"
 
@@ -18,6 +19,42 @@ SceneTransition::SceneTransition(const string& effectName,float transitionTime):
 	if (effectName_ == "fadeIn"||effectName =="fadeOutIn")
 	{
 		blackImg_ = new Image(GOD.gameConfig_.Get<int>("windowWidth"), GOD.gameConfig_.Get<int>("windowHeight"));
+	}
+	else if(effectName_ == "glFadeOutIn")
+	{
+
+		Func func1 = [&]()
+		{
+
+			auto& black = GOD.fadeBlackCurtain_;
+			black->dc_->name_ = "fadeBlackDC";
+			black->SetActive(true);
+			//black->SetSceneRT(GOD.sceneManager_.GetSceneRT(frontInx_));
+
+			EffectShaderParam* paramEffect = new EffectShaderParam;
+			paramEffect->Bind(black->material_, "alpha");
+
+			paramEffect->AddPoint(0.0f, 0.0f);
+			paramEffect->AddPoint(transitionTime_ / 2.0f, 1.0f);
+			paramEffect->AddPoint(transitionTime_, 0.0f);
+			//???
+			paramEffect->name_ = "fadeEff";
+			timeline_.AddEffect(timeline_.Now(), paramEffect);
+		};
+		//mid time close front scene,activate next scene
+		Func func2 = [&]()
+		{
+			GOD.sceneManager_.SetSceneActive(frontInx_, false);
+			GOD.sceneManager_.SetSceneActive(nextInx_, true);
+		};
+		//end time close curtain
+		Func func3 = [&]()
+		{
+			GOD.fadeBlackCurtain_->SetActive(false);
+		};
+		timeline_.AddAction(0, func1);
+		timeline_.AddAction(transitionTime_ /2.0f, func2);
+		timeline_.AddAction(transitionTime_, func3);
 	}
 	else
 	{
@@ -40,19 +77,18 @@ SceneTransition::SceneTransition(const string& effectName, Params<float> params)
 		Func func1 = [&]()
 		{
 			GOD.sceneManager_.SetSceneActive(frontInx_, false);
-			GOD.blackBackground_->SetActive(true);
+			GOD.fastBlackCurtain_->SetActive(true);
 		};
 
 		//black end,show next scene,but with blur duration effect
 		Func func2 = [&,params]()
 		{
-			GOD.blackBackground_->SetActive(false);
+			GOD.fastBlackCurtain_->SetActive(false);
 			GOD.sceneManager_.SetSceneActive(nextInx_, true);
 
 			{
 				auto* newScene = GOD.sceneManager_.scenes_[nextInx_];
 				SceneShaderImage* bg = newScene->GetSceneImg();
-				bg->name_ = "target";
 				bg->ChangeMaterial(quadWithBlurMat);
 				bg->UsePass(blur);
 
@@ -145,6 +181,10 @@ void SceneTransition::Update(float deltaTime)
 		blackImg_->Render();
 	}
 	else if (effectName_ == "fastBlackWithBlurIn")
+	{
+		timeline_.Update(deltaTime);
+	}
+	else if (effectName_ == "glFadeOutIn")
 	{
 		timeline_.Update(deltaTime);
 	}

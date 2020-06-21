@@ -25,18 +25,24 @@ void Drawable::SetDrawCallChannel(DrawCallChannel newChannel)
 
 void Drawable::CommitDrawCall()
 {
-	switch (dcChannel_)
+	if (dcChannel_ == DrawCall_Passive)
 	{
-	case DrawCall_Passive:
 		GOD.passiveDrawcalls_.push_back(dc_);
-		break;
-	case DrawCall_Post:
+	}
+	else if (dcChannel_ == DrawCall_SceneColor)
+	{
+		GOD.sceneColorDrawcalls_.push_back(dc_);
+	}
+	else if (dcChannel_ == DrawCall_Post)
+	{
 		GOD.postDrawcalls_.push_back(dc_);
-		break;
-	case DrawCall_AfterPost:
+	}
+	else if (dcChannel_ == DrawCall_AfterPost)
+	{
 		GOD.afterPostDrawcalls_.push_back(dc_);
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		abort();
 	}
 }

@@ -32,8 +32,21 @@ void God::InitDefaultAsset()
 	Image* blackBGImg = new Image(windowW_, windowH_);
 	blackBGImg->ReadFile("D:/HumanTree/ResEngine/black.png");
 	blackBGImg->SetPosition(windowW_ / 2, windowH_ / 2);
-	blackBackground_ = new ShaderImage(blackBGImg);
-	blackBackground_->name_ = "blackBackground_";
+	//fast Curtain
+	fastBlackCurtain_ = new ShaderImage(blackBGImg);
+
+	//fade Curtain
+	auto* alphaMat = new Material;
+	alphaMat->SetBlendType(Blend_Alpha);
+	alphaMat->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quadWithAlpha.fs");
+	//Image* blackSmall = new Image(windowW_/2, windowH_/2);
+	//blackSmall->ReadFile("D:/HumanTree/ResEngine/blackSmall.png");
+	//blackSmall->SetPosition(windowW_ / 2+400, windowH_ / 2);
+
+	fadeBlackCurtain_ = new ShaderImage(blackBGImg, alphaMat);
+	fadeBlackCurtain_->SetDrawCallChannel(DrawCall_Post);
+	//???
+	fadeBlackCurtain_->name_ = "fadeBlack";
 }
 
 void God::BroadCast(Event* event)
@@ -100,6 +113,7 @@ void God::SetTimer(float delay, Func function)
 void God::GetDrawcalls()
 {
 	passiveDrawcalls_.clear();
+	sceneColorDrawcalls_.clear();
 	postDrawcalls_.clear();
 	afterPostDrawcalls_.clear();
 	
