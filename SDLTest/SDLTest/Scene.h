@@ -20,8 +20,7 @@ public:
 	void Render();
 	void Update(float deltaTime);
 
-	//向Scene添加drawable,可能是稍后变active的，也可能需要直接设置是否active
-	void AddDrawable(Drawable*);
+	void AddDrawable(Drawable*); //(deprecated) for oldDraw
 	void AddDrawable(Drawable* drawable,bool bActive);
 	//演员上场，可决定出场方式和在Timeline中的位置
 	void Show(Drawable* drawable,float time=0.0f, Effect* effect=nullptr);

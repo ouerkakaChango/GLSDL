@@ -47,6 +47,7 @@ public:
 
 	std::vector<Drawable*> drawcallDrawables_;
 
+	std::vector<DrawCall*> prePassiveDrawcalls_;	//reset sceneRT in FBO
 	std::vector<DrawCall*> passiveDrawcalls_;
 	std::vector<DrawCall*> preSceneColorDrawcalls_;
 	std::vector<DrawCall*> sceneColorDrawcalls_;
@@ -64,6 +65,7 @@ public:
 	//default asset
 	ShaderImage* fastBlackCurtain_{ nullptr };
 	ShaderImage* fadeBlackCurtain_{ nullptr };
+	Material* defaultRTMaterial_{ nullptr };
 
 	//??? debug
 	Image* testImg_{ nullptr };

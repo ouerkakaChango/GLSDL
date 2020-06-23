@@ -4,6 +4,8 @@
 #include "God.h"
 #include "Event.h"
 #include "LMB_Down.h"
+#include "ShaderImage.h"
+#include "Material.h"
 
 Button::Button(bool bRender)
 	:bRender_(bRender)
@@ -24,6 +26,29 @@ Button::Button(bool bRender)
 	BindEventGate("LMB_Down", gate1);
 }
 
+Button::Button(Image* img)
+	:image_(img),
+	bRender_(true)
+{
+	GOD.BindEvent("LMB_Down", this);
+	EventGate gate1 = [&](Event* event)
+	{
+		LMB_Down* e = (LMB_Down*)event;
+		if (InRect(e->x_, e->y_, image_->GetSDLRect()))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
+	BindEventGate("LMB_Down", gate1);
+	sImg_ = new ShaderImage(image_);
+	sImg_->material_->SetBlendType(Blend_Alpha);
+	sImg_->name_ = "RButton";
+}
+
 
 Button::~Button()
 {
@@ -31,8 +56,28 @@ Button::~Button()
 
 void Button::Render()
 {
-	if (bRender_)
+	if (bActive_&&bRender_)
 	{
-		image_->Render();
+		if (GOD.bOldDraw_)
+		{
+			image_->Render();
+		}
+	}
+}
+
+void Button::SetActive(bool active)
+{
+	Drawable::SetActive(active);
+	if (sImg_ != nullptr)
+	{
+		sImg_->SetActive(active);
+	}
+}
+
+void Button::SetSceneRT(RenderTexture* sceneRT)
+{
+	if (sImg_ != nullptr)
+	{
+		sImg_->SetSceneRT(sceneRT);
 	}
 }

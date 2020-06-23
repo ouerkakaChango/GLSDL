@@ -19,10 +19,24 @@ DrawCall::~DrawCall()
 
 void DrawCall::BeginDo()
 {
+	//???
+	if (name_ == "RButtonDC")
+	{
+		int a = 1;
+	}
+
 	auto blend = material_->blendType_;
 	if (blend == Blend_Alpha)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (bDrawFrame_)
+		{
+			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		else
+		{
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 		glEnable(GL_BLEND);
 	}
 	if (bDrawFrame_)

@@ -29,6 +29,9 @@ void God::InitDefaultAsset()
 	defaultMaterial_ = new Material;
 	defaultMaterial_->CompileShader("D:/HumanTree/code/quad.vs", "D:/HumanTree/code/quad.fs");
 
+	defaultRTMaterial_ = new Material;
+	defaultRTMaterial_->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRT.fs");
+
 	Image* blackBGImg = new Image(windowW_, windowH_);
 	blackBGImg->ReadFile("D:/HumanTree/ResEngine/black.png");
 	blackBGImg->SetPosition(windowW_ / 2, windowH_ / 2);
@@ -112,6 +115,7 @@ void God::SetTimer(float delay, Func function)
 
 void God::GetDrawcalls()
 {
+	prePassiveDrawcalls_.clear();
 	passiveDrawcalls_.clear();
 	preSceneColorDrawcalls_.clear();
 	sceneColorDrawcalls_.clear();

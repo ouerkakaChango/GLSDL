@@ -4,6 +4,7 @@
 
 #include "File.h"
 #include "RenderTexture.h"
+#include "God.h"
 
 bool MaterialParam::Check(Material* material)
 {
@@ -86,6 +87,10 @@ Texture2DParam::Texture2DParam(SDL_Surface* textureSurface, unsigned textureUnit
 	if (textureSurface->format->BytesPerPixel == 4) {
 		Mode = GL_RGBA;
 	}
+	else
+	{
+		abort();
+	}
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, textureSurface->w, textureSurface->h, 0, Mode, GL_UNSIGNED_BYTE, textureSurface->pixels);
 
@@ -134,6 +139,14 @@ void Texture2DParam::UpdateValue()
 
 			if (toUpdateSurface_->format->BytesPerPixel == 4) {
 				Mode = GL_RGBA;
+			}
+			else
+			{
+				//???
+				if (!GOD.bOldDraw_)
+				{
+					abort();
+				}
 			}
 			glTexImage2D(GL_TEXTURE_2D, 0, Mode, toUpdateSurface_->w, toUpdateSurface_->h, 0, Mode, GL_UNSIGNED_BYTE, toUpdateSurface_->pixels);
 		}

@@ -22,6 +22,9 @@ public:
 	void SetRenderTexture(RenderTexture* rt);
 	Material* material_;
 
+	//???
+	bool bFinalScene_{ false };
+
 protected:
 	void BeginDo();
 	void EndDo();
@@ -35,5 +38,6 @@ protected:
 	RenderTexture* rt_{ nullptr };
 	bool bDrawFrame_{ false };
 	float renderWidth_, renderHeight_;
+
 };
 

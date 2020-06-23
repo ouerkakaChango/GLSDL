@@ -57,12 +57,12 @@ void ShaderImage::GetDrawcall()
 	if (bActive_)
 	{
 		//???
-		if (name_ == "cursor")
+		if (name_ == "RButton")
 		{
 			int a = 1;
-			dc_->name_ = "cursorDC";
+			dc_->name_ = "RButtonDC";
 		}
-		if (name_ == "fadeBlack")
+		if (name_ == "cursor")
 		{
 			int b = 1;
 		}
@@ -80,7 +80,6 @@ void ShaderImage::GetDrawcall()
 		else
 		{
 			material_->UpdateParam("tex", image_->GetSurface());
-
 			CommitDrawCall();
 		}
 	}
@@ -165,19 +164,7 @@ void ShaderImage::CheckSetRTMaterial(MaterialBlendType blend)
 	{
 		return;
 	}
-	if (blend == Blend_Opaque)
-	{
-		Material* rtMaterial = new Material;
-		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRT.fs"));
-		ChangeMaterial(rtMaterial);
-	}
-	else if (blend == Blend_Alpha)
-	{
-		//??? 这部分代码没测试过，可能能用于解决glow pass现在还是用的opaque的问题
-		abort();
-		Material* rtMaterial = new Material;
-		sure(rtMaterial->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadRTWithAlpha.fs"));
-		ChangeMaterial(rtMaterial);
-	}
+	Material* rtMaterial = GOD.defaultRTMaterial_->Clone();
+	ChangeMaterial(rtMaterial);
 	bHasSetRTMaterial_ = true;
 }

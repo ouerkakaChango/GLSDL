@@ -58,6 +58,11 @@ void GLRender()
 		dc->Do();
 	}
 
+	for (unsigned i = 0; i < GOD.prePassiveDrawcalls_.size(); i++)
+	{
+		GOD.prePassiveDrawcalls_[i]->Do();
+	}
+
 	for (unsigned i = 0; i < GOD.passiveDrawcalls_.size(); i++)
 	{
 		GOD.passiveDrawcalls_[i]->Do();
@@ -342,6 +347,7 @@ int main(int argc, char* argv[]) {
 	{
 		abort();
 	}
+	
 	vortexMat->SetBlendType(Blend_Alpha);
 	Image* vortexImage = new Image(GOD.windowW_, GOD.windowH_);
 	vortexImage->SetPosition(800, 450);
@@ -415,6 +421,8 @@ int main(int argc, char* argv[]) {
 	musicSImg->material_->SetBlendType(Blend_Alpha);
 	Pass* GBlurOncePass = new Pass;
 	//??? 尽管是用于png的pass，但其画RT的dc的mat的blendtype还得是opaque，不知道为啥，之后查查
+	//??? 可能找到原因了，是原来没有prePassive，Reset SceneRT,导致"过曝"（重复画半透texture到FBO）。
+	//??? 由于我自己在shader里作了混合，现在的表现也正常，现在先放着，以后再修正
 	GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/gaussianBlurForGlow.fs");
 	Pass* blur = new Pass;
 	blur->AddChild(GBlurOncePass, 40);
@@ -430,22 +438,36 @@ int main(int argc, char* argv[]) {
 	//___ Scene 8
 	/////////////////////////////////////////////
 	//--- Scene 9
-	auto scene9 = sceneMgr.AddScene("D:/HumanTree/test.png");
-	//???
-	//要换成gl的黑屏效果
+	auto scene9 = sceneMgr.AddScene("D:/HumanTree/PlayDesk.png");
 	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 6);
 	sceneMgr.AddTransition(Int<2>(7, 8), transition9);
+
+	Image* rightButtonImg = new Image(50, 50);
+	rightButtonImg->ReadFile("D:/HumanTree/rightButton.png");
+	rightButtonImg->SetPosition(1300, 800);
+
+	Button* rightButton = new Button(rightButtonImg);
+	EventHandler rightButtonFunc = [&](Event* event)
+	{
+		LOG("right");
+	};
+	button.BindEventHandler("LMB_Down", rightButtonFunc);
+	scene9->Show(rightButton);
 	//___ Scene 9
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
 	{
 		sceneMgr.JumpToScene(inx);
-		if (inx == 7)
+		if (inx >= 7)
 		{
 			GOD.bOldDraw_ = false;
 		}
+		if (inx >= 8)
+		{
+			cursor->SetActive(true);
+		}
 	};
-	DebugJumpToScene(6);
+	DebugJumpToScene(8);
 
 	//??? debug
 	{

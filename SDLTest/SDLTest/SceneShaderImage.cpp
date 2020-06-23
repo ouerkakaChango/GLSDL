@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "Image.h"
 #include "God.h"
+#include "DrawCall.h"
 
 SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	:ShaderImage(img, material)
@@ -13,6 +14,13 @@ SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	auto postSwap = new RenderTexture(image_);
 	postRT_->SetSwapRT(postSwap);
 	SetDrawCallChannel(DrawCall_SceneColor);
+
+	//???
+	preDC_ = new DrawCall;
+	preDC_->SetVB(vb_);
+	preDC_->SetIB(ib_);
+	preDC_->SetMaterial(GOD.defaultRTMaterial_->Clone());
+	preDC_->SetRenderTexture(rt_);
 }
 
 
@@ -24,6 +32,7 @@ void SceneShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
+		CommitPrePassive();
 		if (bUsePass_)
 		{
 			{
@@ -42,4 +51,11 @@ void SceneShaderImage::GetDrawcall()
 			CommitDrawCall();
 		}
 	}
+}
+
+void SceneShaderImage::CommitPrePassive()
+{
+	//???
+	preDC_->material_->UpdateParam("tex", image_->GetSurface());
+	GOD.prePassiveDrawcalls_.push_back(preDC_);
 }
