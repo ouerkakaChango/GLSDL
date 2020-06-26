@@ -442,6 +442,7 @@ int main(int argc, char* argv[]) {
 	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 6);
 	sceneMgr.AddTransition(Int<2>(7, 8), transition9);
 
+	//--- rightButton
 	Image* rightButtonImg = new Image(50, 50);
 	rightButtonImg->ReadFile("D:/HumanTree/rightButton.png");
 	rightButtonImg->SetPosition(1300, 800);
@@ -451,8 +452,34 @@ int main(int argc, char* argv[]) {
 	{
 		LOG("right");
 	};
-	button.BindEventHandler("LMB_Down", rightButtonFunc);
+	rightButton->BindEventHandler("LMB_Down", rightButtonFunc);
 	scene9->Show(rightButton);
+	//___ rightButton
+
+	//--- leftButton
+	Image* leftButtonImg = new Image(50, 50);
+	leftButtonImg->ReadFile("D:/HumanTree/leftButton.png");
+	leftButtonImg->SetPosition(300, 800);
+
+	Button* leftButton = new Button(leftButtonImg);
+	EventHandler leftButtonFunc = [&](Event* event)
+	{
+		LOG("left");
+	};
+	leftButton->BindEventHandler("LMB_Down", leftButtonFunc);
+	scene9->Show(leftButton);
+	//___ leftButton
+
+	//--- cabinet
+	Image* cabinetImg = new Image(530, 190);
+	cabinetImg->ReadFile("D:/HumanTree/cabinet.png");
+	cabinetImg->SetPosition(800, 780);
+
+	ShaderImage* cabnet = new ShaderImage(cabinetImg);
+	cabnet->material_->SetBlendType(Blend_Alpha);
+	scene9->Show(cabnet);
+	//___ cabinet
+
 	//___ Scene 9
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)

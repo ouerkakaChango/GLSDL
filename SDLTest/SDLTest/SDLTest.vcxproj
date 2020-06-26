@@ -153,6 +153,7 @@
     <ClCompile Include="LMB_Down.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MorphGrid.cpp" />
     <ClCompile Include="Mouse_Move.cpp" />
     <ClCompile Include="Nameable.cpp" />
     <ClCompile Include="Numeric.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Int.h" />
     <ClInclude Include="LMB_Down.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MorphGrid.h" />
     <ClInclude Include="Mouse_Move.h" />
     <ClInclude Include="Nameable.h" />
     <ClInclude Include="Numeric.h" />
