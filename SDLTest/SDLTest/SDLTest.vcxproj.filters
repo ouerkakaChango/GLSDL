@@ -177,6 +177,12 @@
     <ClCompile Include="MorphGrid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Math2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderQuadGroup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -336,6 +342,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MorphGrid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Math2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderQuadGroup.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

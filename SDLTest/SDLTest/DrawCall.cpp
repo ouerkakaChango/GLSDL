@@ -20,7 +20,7 @@ DrawCall::~DrawCall()
 void DrawCall::BeginDo()
 {
 	//???
-	if (name_ == "RButtonDC")
+	if (name_ == "quadGroupDC")
 	{
 		int a = 1;
 	}
@@ -124,7 +124,7 @@ void DrawCall::SimpleDoEnd()
 void DrawCall::Do()
 {
 	//???
-	if (name_ == "cursorDC")
+	if (name_ == "quadGroupDC")
 	{
 		int aa = 1;
 	}
@@ -161,19 +161,26 @@ void DrawCall::Do()
 	if (bDrawFrame_)
 	{
 		//??? 现在画了4个顶点
-		glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
+		if (vb_->geomType_ == Geom_Quad)
+		{
+			glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, NULL);
+		}
+		else if (vb_->geomType_ == Geom_QuadGroup)
+		{
+			glDrawElements(GL_TRIANGLES, 6 * vb_->objNum_, GL_UNSIGNED_INT, NULL);
+		}
 		{//debug save frame file
-			static bool first = true;
-			static int count = 0;
-			if (name_ == "glowDC")
-			{
-				count += 1;
-			}
-			if (first && count >=10 && name_ == "glowDC")
-			{
-				SaveRTToFile("D:/zSaved.ppm",rt_);
-				first = false;
-			}
+			//static bool first = true;
+			//static int count = 0;
+			//if (name_ == "glowDC")
+			//{
+			//	count += 1;
+			//}
+			//if (first && count >=10 && name_ == "glowDC")
+			//{
+			//	SaveRTToFile("D:/zSaved.ppm",rt_);
+			//	first = false;
+			//}
 		}
 	}
 	else

@@ -29,8 +29,8 @@
 #include "Timeline.h"
 #include "Pass.h"
 #include "SceneShaderImage.h"
-
 #include "GameUtility.h"
+#include "ShaderQuadGroup.h"
 #include "Debug.h"
 
 DrawCall gDC;
@@ -480,6 +480,18 @@ int main(int argc, char* argv[]) {
 	scene9->Show(cabnet);
 	//___ cabinet
 
+	//--- playGrid
+	Image* gridLineImg = new Image(50, 50);
+	gridLineImg->ReadFile("D:/HumanTree/grey.png");
+
+	Vec2 p1(0, 600);
+	Vec2 p2(1600, 600);
+	Vec2 p3(1300, 470);
+	Vec2 p4(300, 470);
+	MorphGrid grid(p1,p2,p3,p4,10,4);
+	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10);
+	scene9->Show(shaderQuads);
+	//__ playGrid
 	//___ Scene 9
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)

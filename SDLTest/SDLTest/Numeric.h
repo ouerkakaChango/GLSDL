@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include "Math2D.h"
 
 class Numeric
 {

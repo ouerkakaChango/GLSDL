@@ -15,6 +15,13 @@ enum VBDrawType
 	VB_Dynamic,
 };
 
+enum GeometryType
+{
+	Geom_Normal,
+	Geom_Quad,
+	Geom_QuadGroup,
+};
+
 enum TextureFilterType
 {
 	TextureFilter_Linear,
