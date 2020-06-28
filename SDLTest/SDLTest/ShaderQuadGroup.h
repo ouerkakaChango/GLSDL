@@ -12,7 +12,7 @@ class IndexBuffer;
 class QuadGroup
 {
 public:
-	void InitByMorphGrid(const MorphGrid& grid, float width);
+	void InitByMorphGrid(const MorphGrid& grid, float width, float xScale, float yScale, bool bNeedEdgeQuad);
 	std::vector<Quad> quads_;
 protected:
 };
@@ -20,7 +20,9 @@ protected:
 class ShaderQuadGroup : public Drawable
 {
 public:
-	ShaderQuadGroup(Image* img, const MorphGrid& grid, float width, Material* material=nullptr, VBDrawType vbDrawType = VB_Static, TextureFilterType texFilterType= TextureFilter_Linear);
+	ShaderQuadGroup(Image* img, const MorphGrid& grid, float baseWidth,
+		float xScale=1.0f, float yScale=1.0f, bool bNeedEdgeQuad = true, 
+		Material* material=nullptr, VBDrawType vbDrawType = VB_Static, TextureFilterType texFilterType= TextureFilter_Linear);
 	~ShaderQuadGroup();
 
 	void GetDrawcall() override;
@@ -42,6 +44,7 @@ protected:
 	VBDrawType vbDrawType_;
 	bool bUseEndPass_{ false };
 	bool bHasSetRTMaterial_{ false };
+	bool bNeedEdgeQuad_{ true };
 
 };
 

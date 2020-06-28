@@ -49,27 +49,27 @@ Vec2 Vec2::GetNormal()
 	return *this / Length();
 }
 
-float Vec2::Length()
+float Vec2::Length() const
 {
 	return sqrtf(x_*x_ + y_ * y_);
 }
 
-void Quad::VerticleLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float width)
+void Quad::VerticleLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float w1, float w2)
 {
-	v4_ = p1 - dir * width / 2;
-	v3_ = v4_ + dir * width;
+	v4_ = p1 - dir * w1 / 2;
+	v3_ = v4_ + dir * w1;
 
-	v1_ = p2 - dir2 * width / 2;
-	v2_ = v1_ + dir2 * width;
+	v1_ = p2 - dir2 * w2 / 2;
+	v2_ = v1_ + dir2 * w2;
 }
 
-void Quad::HoriLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float width)
+void Quad::HoriLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float w1, float w2)
 {
-	v4_ = p1 - dir * width / 2;
-	v1_ = v4_ + dir * width;
+	v4_ = p1 - dir * w1 / 2;
+	v1_ = v4_ + dir * w1;
 
-	v3_ = p2 - dir2 * width / 2;
-	v2_ = v3_ + dir2 * width;
+	v3_ = p2 - dir2 * w2 / 2;
+	v2_ = v3_ + dir2 * w2;
 }
 
 Quad Quad::GetRenderQuad() const

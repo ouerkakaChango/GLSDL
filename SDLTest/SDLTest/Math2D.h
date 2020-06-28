@@ -17,7 +17,7 @@ public:
 	Vec2 operator/(float n) const;
 	Vec2 operator*(float n) const;
 	Vec2 GetNormal();
-	float Length();
+	float Length() const;
 	float x_, y_;
 };
 
@@ -27,8 +27,8 @@ class Quad
 {
 public:
 	Quad() = default;
-	void VerticleLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float width);
-	void HoriLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float width);
+	void VerticleLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float w1, float w2);
+	void HoriLineQuad(Vec2 p1, Vec2 p2, Vec2 dir, Vec2 dir2, float w1, float w2);
 	Quad GetRenderQuad() const;
 
 	Vec2 v1_, v2_, v3_, v4_;

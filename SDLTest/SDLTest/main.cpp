@@ -482,14 +482,16 @@ int main(int argc, char* argv[]) {
 
 	//--- playGrid
 	Image* gridLineImg = new Image(50, 50);
-	gridLineImg->ReadFile("D:/HumanTree/grey.png");
+	gridLineImg->ReadFile("D:/HumanTree/gridLine.png");
 
 	Vec2 p1(0, 600);
 	Vec2 p2(1600, 600);
-	Vec2 p3(1300, 470);
-	Vec2 p4(300, 470);
+	Vec2 p3(1300, 473);
+	Vec2 p4(300, 473);
 	MorphGrid grid(p1,p2,p3,p4,10,4);
-	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10);
+	//grid细节:首先不需要边缘线，其次宽度根据grid边长调整（假透视）
+	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10,1.0f,2.0f,false);
+	shaderQuads->material_->SetBlendType(Blend_Alpha);
 	scene9->Show(shaderQuads);
 	//__ playGrid
 	//___ Scene 9

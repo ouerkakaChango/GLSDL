@@ -17,6 +17,11 @@ public:
 	Vec2 GetX2Dir() const;
 	Vec2 GetY1Dir() const;
 	Vec2 GetY2Dir() const;
+
+	float GetX1Length() const;
+	float GetX2Length() const;
+	float GetY1Length() const;
+	float GetY2Length() const;
 protected:
 	Vec2 v1_, v2_, v3_, v4_;
 	unsigned xCell_{ 0 };

@@ -45,3 +45,23 @@ Vec2 MorphGrid::GetY2Dir() const
 {
 	return (v2_ - v3_).GetNormal();
 }
+
+float MorphGrid::GetX1Length() const
+{
+	return (v3_ - v4_).Length();
+}
+
+float MorphGrid::GetX2Length() const
+{
+	return (v2_ - v1_).Length();
+}
+
+float MorphGrid::GetY1Length() const
+{
+	return (v1_ - v4_).Length();
+}
+
+float MorphGrid::GetY2Length() const
+{
+	return (v2_ - v3_).Length();
+}

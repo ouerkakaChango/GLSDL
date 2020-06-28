@@ -7,42 +7,54 @@
 #include "Image.h"
 #include "Material.h"
 
-void QuadGroup::InitByMorphGrid(const MorphGrid& grid, float width)
+void QuadGroup::InitByMorphGrid(const MorphGrid& grid, float width, float xScale, float yScale, bool bNeedEdgeQuad)
 {
 	//first verticle line quads
 	Vec2 x1Dir = grid.GetX1Dir();
 	Vec2 x2Dir = grid.GetX2Dir();
+	float scaledW1 = grid.GetX1Length() / GOD.windowW_ *width * xScale;
+	float scaledW2 = grid.GetX2Length() / GOD.windowW_ *width * xScale;
 	for (unsigned i = 0; i <= grid.xCell_; i++)
 	{
+		if (!bNeedEdgeQuad && (i == 0 || i == grid.xCell_))
+		{
+			continue;
+		}
 		Vec2 p1 = grid.GetPoint(i, 0);
 		Vec2 p2 = grid.GetPoint(i, grid.yCell_);
 		Quad verticleQuad;
-		verticleQuad.VerticleLineQuad(p1, p2, x1Dir, x2Dir, width);
+		verticleQuad.VerticleLineQuad(p1, p2, x1Dir, x2Dir, scaledW1, scaledW2);
 		quads_.push_back(verticleQuad);
 	}
 
 	Vec2 y1Dir = grid.GetY1Dir();
 	Vec2 y2Dir = grid.GetY2Dir();
-
+	float scaledH1 = grid.GetY1Length() / GOD.windowH_ *width * yScale;
+	float scaledH2 = grid.GetY2Length() / GOD.windowH_ *width * yScale;
 	for (unsigned j = 0; j <= grid.yCell_; j++)
 	{
+		if (!bNeedEdgeQuad && (j == 0 || j == grid.yCell_))
+		{
+			continue;
+		}
 		Vec2 p1 = grid.GetPoint(0, j);
 		Vec2 p2 = grid.GetPoint(grid.xCell_, j);
 		Quad horiQuad;
-		horiQuad.HoriLineQuad(p1, p2, y1Dir, y2Dir, width);
+		horiQuad.HoriLineQuad(p1, p2, y1Dir, y2Dir, scaledH1, scaledH2);
 		quads_.push_back(horiQuad);
 	}
-	//???
-	int i = 1;
 }
 
-ShaderQuadGroup::ShaderQuadGroup(Image* img, const MorphGrid& grid, float width, Material* material, VBDrawType vbDrawType, TextureFilterType texFilterType)
+ShaderQuadGroup::ShaderQuadGroup(Image* img, const MorphGrid& grid, float baseWidth, 
+	float xScale,float yScale, bool bNeedEdgeQuad, 
+	Material* material, VBDrawType vbDrawType, TextureFilterType texFilterType)
 	:image_(img),
+	bNeedEdgeQuad_(bNeedEdgeQuad),
 	material_(material),
 	vbDrawType_(vbDrawType),
 	texFilterType_(texFilterType)
 {
-	quadGroup_.InitByMorphGrid(grid, width);
+	quadGroup_.InitByMorphGrid(grid, baseWidth, xScale, yScale, bNeedEdgeQuad);
 	if (material_ == nullptr)
 	{
 		material_ = GOD.CloneDefaultMaterial();
