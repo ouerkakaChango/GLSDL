@@ -31,6 +31,7 @@
 #include "SceneShaderImage.h"
 #include "GameUtility.h"
 #include "ShaderQuadGroup.h"
+#include "ShaderPPT.h"
 #include "Debug.h"
 
 DrawCall gDC;
@@ -493,7 +494,32 @@ int main(int argc, char* argv[]) {
 	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10,1.0f,2.0f,false);
 	shaderQuads->material_->SetBlendType(Blend_Alpha);
 	scene9->Show(shaderQuads);
-	//__ playGrid
+	//___ playGrid
+
+	//--- wordPPT
+	Image* ppt1 = new Image(1000, 250);
+	ppt1->ReadFile("D:/HumanTree/PPT1.png");
+	ppt1->SetPosition(800, 175);
+	ShaderPPT* ppt = new ShaderPPT(ppt1);
+	ppt->InsertPPT("D:/HumanTree/PPT2.png");
+	ppt->material_->SetBlendType(Blend_Alpha);
+	scene9->Show(ppt);
+	//___ wordPPT
+
+	//--- PPT button
+	Image* pptButtonImg = new Image(25, 25);
+	pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
+	pptButtonImg->SetPosition(1250, 250);
+
+	Button* pptButton = new Button(pptButtonImg);
+	EventHandler pptButtonFunc = [&](Event* event)
+	{
+		LOG("pptButton");
+		ppt->Flip();
+	};
+	pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
+	scene9->Show(pptButton);
+	//___ PPT button
 	//___ Scene 9
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)

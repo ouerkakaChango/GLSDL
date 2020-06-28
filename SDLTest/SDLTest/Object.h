@@ -19,6 +19,7 @@ public:
 	void BindEventHandler(std::string eventName);
 	void BindEventHandler(std::string eventName,EventHandler handler);
 	void BindEventGate(std::string eventName, EventGate gate);
+
 protected:
 	SDL_Renderer* renderer_;
 	StringMap<EventHandler> eventHandlerMap_;

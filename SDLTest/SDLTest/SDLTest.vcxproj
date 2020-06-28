@@ -167,6 +167,7 @@
     <ClCompile Include="SceneTransition.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderImage.cpp" />
+    <ClCompile Include="ShaderPPT.cpp" />
     <ClCompile Include="ShaderQuadGroup.cpp" />
     <ClCompile Include="ShowAction.cpp" />
     <ClCompile Include="SoundAction.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="SceneTransition.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderImage.h" />
+    <ClInclude Include="ShaderPPT.h" />
     <ClInclude Include="ShaderQuadGroup.h" />
     <ClInclude Include="ShowAction.h" />
     <ClInclude Include="SoundAction.h" />
