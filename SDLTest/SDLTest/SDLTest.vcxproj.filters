@@ -57,9 +57,6 @@
     <ClCompile Include="Event.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LMB_Down.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Events.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse_Move.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Touchable.cpp">
@@ -186,6 +180,9 @@
     <ClCompile Include="ShaderPPT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderDragImage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -225,9 +222,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="LMB_Down.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Events.h">
@@ -273,9 +267,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Cursor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse_Move.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Touchable.h">
@@ -354,6 +345,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ShaderPPT.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderDragImage.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

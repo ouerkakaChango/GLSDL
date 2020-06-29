@@ -150,12 +150,10 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Int.cpp" />
-    <ClCompile Include="LMB_Down.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Math2D.cpp" />
     <ClCompile Include="MorphGrid.cpp" />
-    <ClCompile Include="Mouse_Move.cpp" />
     <ClCompile Include="Nameable.cpp" />
     <ClCompile Include="Numeric.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -166,6 +164,7 @@
     <ClCompile Include="SceneShaderImage.cpp" />
     <ClCompile Include="SceneTransition.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderDragImage.cpp" />
     <ClCompile Include="ShaderImage.cpp" />
     <ClCompile Include="ShaderPPT.cpp" />
     <ClCompile Include="ShaderQuadGroup.cpp" />
@@ -209,11 +208,9 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Int.h" />
-    <ClInclude Include="LMB_Down.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Math2D.h" />
     <ClInclude Include="MorphGrid.h" />
-    <ClInclude Include="Mouse_Move.h" />
     <ClInclude Include="Nameable.h" />
     <ClInclude Include="Numeric.h" />
     <ClInclude Include="Object.h" />
@@ -224,6 +221,7 @@
     <ClInclude Include="SceneShaderImage.h" />
     <ClInclude Include="SceneTransition.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderDragImage.h" />
     <ClInclude Include="ShaderImage.h" />
     <ClInclude Include="ShaderPPT.h" />
     <ClInclude Include="ShaderQuadGroup.h" />

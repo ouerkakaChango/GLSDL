@@ -22,6 +22,9 @@ public:
 	float GetX2Length() const;
 	float GetY1Length() const;
 	float GetY2Length() const;
+
+	unsigned GetxCell() const { return xCell_; }
+	unsigned GetyCell() const { return yCell_; }
 protected:
 	Vec2 v1_, v2_, v3_, v4_;
 	unsigned xCell_{ 0 };

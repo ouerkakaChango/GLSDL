@@ -32,6 +32,7 @@
 #include "GameUtility.h"
 #include "ShaderQuadGroup.h"
 #include "ShaderPPT.h"
+#include "ShaderDragImage.h"
 #include "Debug.h"
 
 DrawCall gDC;
@@ -520,6 +521,15 @@ int main(int argc, char* argv[]) {
 	pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
 	scene9->Show(pptButton);
 	//___ PPT button
+	//---
+	Image* drag1Img = new Image(50, 50);
+	drag1Img->ReadFile("D:/HumanTree/dante.png");
+	drag1Img->SetPosition(800, 780);
+
+	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img);
+	drag1->AddDragTarget(grid);
+	scene9->Show(drag1);
+	//___
 	//___ Scene 9
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
@@ -570,6 +580,15 @@ int main(int argc, char* argv[]) {
 					int x = e.button.x;
 					int y = e.button.y;
 					GOD.BroadCast(&LMB_Down(x,y));
+				}
+			}
+			else if (e.type == SDL_MOUSEBUTTONUP)
+			{
+				if (e.button.button == SDL_BUTTON_LEFT)
+				{
+					int x = e.button.x;
+					int y = e.button.y;
+					GOD.BroadCast(&LMB_Up(x, y));
 				}
 			}
 			else if (e.type == SDL_MOUSEMOTION)
