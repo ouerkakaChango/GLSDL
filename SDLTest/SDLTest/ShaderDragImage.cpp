@@ -66,13 +66,13 @@ ShaderDragImage::~ShaderDragImage()
 
 void ShaderDragImage::OnDragClick(LMB_Down* event)
 {
-	LOG("DragClick");
+	//LOG("DragClick");
 	bDraging_ = true;
 }
 
 void ShaderDragImage::OnDragRelease(LMB_Up* event)
 {
-	LOG("DragRelease");
+	//LOG("DragRelease");
 	bDraging_ = false;
 	//set to nearest point
 	//???
@@ -104,6 +104,6 @@ void ShaderDragImage::AddDragTarget(const MorphGrid& grid)
 
 void ShaderDragImage::OnDraging(Mouse_Move* event)
 {
-	LOG("Draging");
+	//LOG("Draging");
 	SetPosition(event->x_, event->y_);
 }
