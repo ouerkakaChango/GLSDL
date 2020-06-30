@@ -52,20 +52,15 @@ void ShaderImage::SetPosition(int x, int y)
 	vb_->SetQuad(quad);
 }
 
+void ShaderImage::SetPosition(Vec2 pos)
+{
+	SetPosition((int)pos.x_, (int)pos.y_);
+}
+
 void ShaderImage::GetDrawcall()
 {
 	if (bActive_)
 	{
-		//???
-		if (name_ == "RButton")
-		{
-			int a = 1;
-			dc_->name_ = "RButtonDC";
-		}
-		if (name_ == "cursor")
-		{
-			int b = 1;
-		}
 		if (bUsePass_)
 		{
 			passedRT_->SetTexture(rt_);

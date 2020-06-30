@@ -16,10 +16,10 @@ public:
 
 	void OnDragClick(LMB_Down* event);
 	void OnDragRelease(LMB_Up* event);
+	void OnDraging(Mouse_Move* event);
 	void AddDragTarget(const MorphGrid& grid);	//no edge points
 private:
 	std::vector<Vec2> targetPoints_;
-	Vec2 dragStart_{ 0 };
 	bool bDraging_{ false };
 };
 

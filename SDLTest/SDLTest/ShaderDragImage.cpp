@@ -11,6 +11,7 @@ ShaderDragImage::ShaderDragImage(Image* img,
 {
 	GOD.BindEvent("LMB_Down", this);
 	GOD.BindEvent("LMB_Up", this);
+	GOD.BindEvent("Mouse_Move", this);
 
 	EventGate gate1 = [&](Event* event)
 	{
@@ -46,8 +47,16 @@ ShaderDragImage::ShaderDragImage(Image* img,
 	};
 	BindEventHandler("LMB_Up", func2);
 
+	EventHandler func3 = [&](Event* e)
+	{
+		Mouse_Move* event = static_cast<Mouse_Move*>(e);
+		OnDraging(event);
+		
+	};
+	BindEventGate("Mouse_Move", gate2);
+	BindEventHandler("Mouse_Move", func3);
+
 	targetPoints_.push_back(image_->GetPosition());
-	dragStart_ = targetPoints_[0];
 }
 
 
@@ -65,6 +74,21 @@ void ShaderDragImage::OnDragRelease(LMB_Up* event)
 {
 	LOG("DragRelease");
 	bDraging_ = false;
+	//set to nearest point
+	//???
+	float minDis = 10000;
+	auto& nowPos = image_->GetPosition();
+	Vec2 targetPos;
+	for (auto& p : targetPoints_)
+	{
+		float tDis = (nowPos - p).Length();
+		if (tDis < minDis)
+		{
+			minDis = tDis;
+			targetPos = p;
+		}
+	}
+	SetPosition(targetPos);
 }
 
 void ShaderDragImage::AddDragTarget(const MorphGrid& grid)
@@ -76,4 +100,10 @@ void ShaderDragImage::AddDragTarget(const MorphGrid& grid)
 			targetPoints_.push_back(grid.GetPoint(i, j));
 		}
 	}
+}
+
+void ShaderDragImage::OnDraging(Mouse_Move* event)
+{
+	LOG("Draging");
+	SetPosition(event->x_, event->y_);
 }

@@ -25,6 +25,7 @@ public:
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
 
 	void SetPosition(int x, int y);
+	void SetPosition(Vec2 pos);
 	void SetImage(Image* img) { image_ = img; }
 	Image*  GetImage() const{return image_;}
 
