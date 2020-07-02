@@ -23,6 +23,7 @@ public:
 	void AddCrossEffect(Effect* effect);			//¿çsceneµÄeffect
 	void ClearScenes();
 	RenderTexture* GetSceneRT(unsigned inx);
+	void TransToScene(unsigned inx);
 
 	//debug
 	void JumpToScene(int sceneInx);

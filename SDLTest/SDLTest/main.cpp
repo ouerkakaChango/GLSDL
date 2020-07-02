@@ -444,7 +444,7 @@ int main(int argc, char* argv[]) {
 	SceneTransition* transition9 = new SceneTransition("glFadeOutIn", 6);
 	sceneMgr.AddTransition(Int<2>(7, 8), transition9);
 
-	//--- rightButton
+	//--- cabinet rightButton
 	Image* rightButtonImg = new Image(50, 50);
 	rightButtonImg->ReadFile("D:/HumanTree/rightButton.png");
 	rightButtonImg->SetPosition(1300, 800);
@@ -456,9 +456,9 @@ int main(int argc, char* argv[]) {
 	};
 	rightButton->BindEventHandler("LMB_Down", rightButtonFunc);
 	scene9->Show(rightButton);
-	//___ rightButton
+	//___ cabinet rightButton
 
-	//--- leftButton
+	//--- cabinet leftButton
 	Image* leftButtonImg = new Image(50, 50);
 	leftButtonImg->ReadFile("D:/HumanTree/leftButton.png");
 	leftButtonImg->SetPosition(300, 800);
@@ -470,7 +470,34 @@ int main(int argc, char* argv[]) {
 	};
 	leftButton->BindEventHandler("LMB_Down", leftButtonFunc);
 	scene9->Show(leftButton);
-	//___ leftButton
+	//___ cabinet leftButton
+
+	//--- scene change button
+	Image* sceneRBImg = new Image(25, 25);
+	sceneRBImg->ReadFile("D:/HumanTree/sceneRB.png");
+	sceneRBImg->SetPosition(1580, 480);
+
+	Button* sceneRB = new Button(sceneRBImg);
+	EventHandler sceneRBFunc = [&](Event* event)
+	{
+		LOG("right scene");
+		sceneMgr.TransToScene(9);
+	};
+	sceneRB->BindEventHandler("LMB_Down", sceneRBFunc);
+	scene9->Show(sceneRB);
+
+	//Image* sceneLBImg = new Image(25, 25);
+	//sceneLBImg->ReadFile("D:/HumanTree/sceneLB.png");
+	//sceneLBImg->SetPosition(20, 480);
+	//
+	//Button* sceneLB = new Button(sceneLBImg);
+	//EventHandler sceneLBFunc = [&](Event* event)
+	//{
+	//	LOG("left scene");
+	//};
+	//sceneLB->BindEventHandler("LMB_Down", sceneLBFunc);
+	//scene9->Show(sceneLB);
+	//___ scene change button
 
 	//--- cabinet
 	Image* cabinetImg = new Image(530, 190);
@@ -549,6 +576,22 @@ int main(int argc, char* argv[]) {
 	scene9->Show(drag2);
 	//___drags
 	//___ Scene 9
+	/////////////////////////////////////////////
+	//Scene 10 (cat scene)
+	auto scene10 = sceneMgr.AddScene("D:/HumanTree/catScene.png");
+
+	Image* sceneLBImg10 = new Image(25, 25);
+	sceneLBImg10->ReadFile("D:/HumanTree/sceneLB.png");
+	sceneLBImg10->SetPosition(20, 480);
+	
+	Button* sceneLB10 = new Button(sceneLBImg10);
+	EventHandler sceneLBFunc10 = [&](Event* event)
+	{
+		LOG("left scene");
+		sceneMgr.TransToScene(8);
+	};
+	sceneLB10->BindEventHandler("LMB_Down", sceneLBFunc10);
+	scene10->Show(sceneLB10);
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
 	{

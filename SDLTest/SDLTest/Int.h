@@ -38,7 +38,13 @@ public:
 
 	bool operator<(const Int<2>& int2) const
 	{
+		bool re = x_ < int2.x_  && y_ < int2.y_;
 		return x_ < int2.x_  && y_ < int2.y_;
+	}
+
+	bool operator==(const Int<2>& int2) const
+	{
+		return x_ == int2.x_  && y_ == int2.y_;
 	}
 private:
 	int x_;

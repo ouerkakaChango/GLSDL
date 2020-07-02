@@ -57,3 +57,13 @@ bool STL_Remove(std::vector<T>& vec, const T& elem)
 	}
 	return false;
 }
+
+template <class Key, class val>
+val* STLMapGet(std::map<Key, val*> map, const Key& key)
+{
+	auto iter = map.find(key);
+	bool found = iter != map.end();
+	val* re = nullptr;
+	if (found && iter->first == key) { re = iter->second; }
+	return re;
+}

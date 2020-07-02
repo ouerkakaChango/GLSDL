@@ -9,6 +9,7 @@
 #include <list>
 #include <functional>
 #include <memory>
+#include <set>
 
 #include "Numeric.h"
 
@@ -105,6 +106,9 @@ Params<T1> MakeParam(Params<T1> re)
 
 template <class T>
 bool STL_Remove(std::vector<T>& vec,const T& elem);
+
+template <class Key,class val>
+val* STLMapGet(std::map<Key, val*> map, const Key& key);
 
 //////////////////////////////////////////////////////////////
 //math

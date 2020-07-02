@@ -150,3 +150,23 @@ RenderTexture* SceneManager::GetSceneRT(unsigned inx)
 {
 	return scenes_[inx]->sceneColorShaderImg_->GetRT();
 }
+
+void SceneManager::TransToScene(unsigned inx)
+{
+	if (sceneInx_ == inx)
+	{
+		return;
+	}
+	//由于STL map 使用 !(a<b)&&!(b<a) 判断相等，在此情况不能正确判断相等的key，所以我用自定义MapGet确保拿到准确key的值。
+	SceneTransition* trans = STLMapGet(transitions_ , Int<2>(sceneInx_, inx));
+	if (trans == nullptr )
+	{
+		scenes_[sceneInx_]->SetActive(false);
+		scenes_[inx]->SetActive(true);
+	}
+	else
+	{
+		trans->SetActive(true);
+	}
+	sceneInx_ = inx;
+}
