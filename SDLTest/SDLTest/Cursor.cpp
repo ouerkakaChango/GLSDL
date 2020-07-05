@@ -32,6 +32,7 @@ Cursor::Cursor(const Path& imgPath, int sizeX , int sizeY):size_(Int<2>(sizeX, s
 	}
 	//glDraw
 	sImg_ = new ShaderImage(img_,nullptr,VB_Dynamic,TextureFilter_Nearest);
+	defaultMat_ = sImg_->material_;
 	sImg_->material_->SetBlendType(Blend_Alpha);
 	sImg_->SetDrawCallChannel(DrawCall_AfterPost);
 	if (GOD.bOldDraw_)
@@ -87,6 +88,11 @@ void Cursor::SetDefaultImage()
 	{
 		ChangeImage(defaultImagePath_);
 		bDefault_ = true;
+	}
+	else
+	{
+		sImg_->ChangeMaterial(defaultMat_);
+		sImg_->SetImage(cacheImages_.map_[defaultImagePath_]);
 	}
 }
 

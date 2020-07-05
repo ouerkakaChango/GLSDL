@@ -575,6 +575,11 @@ int main(int argc, char* argv[]) {
 	drag2->AddDragTarget(grid);
 	scene9->Show(drag2);
 	//___drags
+	Func func9_1 = [&]()
+	{
+		cursor->SetDefaultImage();
+	};
+	scene9->AddCustomAction(0.0f, func9_1);
 	//___ Scene 9
 	/////////////////////////////////////////////
 	//Scene 10 (cat scene)
@@ -598,7 +603,8 @@ int main(int argc, char* argv[]) {
 	//--- wordBox
 	Image* wordBoxImg = new Image(300, 150);
 	wordBoxImg->ReadFile("D:/HumanTree/wordBox1.png");
-	wordBoxImg->SetPosition(1030, 250);
+	wordBoxImg->SetPosition(900, 350);
+	wordBoxImg->SetAchorType(Anchor_LeftDown);
 
 	ShaderImage* wordBox = new ShaderImage(wordBoxImg);
 	wordBox->material_->SetBlendType(Blend_Alpha);
@@ -621,7 +627,7 @@ int main(int argc, char* argv[]) {
 			cursor->SetActive(true);
 		}
 	};
-	DebugJumpToScene(8);
+	DebugJumpToScene(7);
 
 	//??? debug
 	{

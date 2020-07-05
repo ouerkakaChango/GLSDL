@@ -9,6 +9,7 @@ enum AnchorType
 {
 	Anchor_Center,
 	Anchor_LeftDown,
+	Anchor_RightDown,
 };
 
 class Image :public Drawable
@@ -32,6 +33,8 @@ public:
 	bool ReadFile(const Path& path);
 	SDL_Surface* GetSurface();
 	void SetSize(Vec2 size);
+	void SetAchorType(AnchorType anchorType);
+	AnchorType GetAnchorType() const { return anchorType_; }
 	//___
 
 	SDL_Texture* texture_;//(deprecated)

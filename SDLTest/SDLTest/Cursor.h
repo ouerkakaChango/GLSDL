@@ -6,6 +6,7 @@
 
 class Image;
 class ShaderImage;
+class Material;
 
 class Cursor : public Drawable
 {
@@ -28,6 +29,7 @@ protected:
 	//oldDraw
 	Int<2> size_;
 	Image* img_;
+	Material* defaultMat_{nullptr};
 	bool bDefault_{ true };
 	Path defaultImagePath_;
 	StringMap<Image*> cacheImages_;

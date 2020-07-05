@@ -39,6 +39,7 @@ bool Image::ReadFile(const Path& path)
 	return true;
 }
 
+//for new GLDraw version
 SDL_Rect Image::GetSDLRect()
 {
 	SDL_Rect re{0,0,0,0};
@@ -48,14 +49,21 @@ SDL_Rect Image::GetSDLRect()
 	}
 	else if(anchorType_ == Anchor_LeftDown)
 	{
+		re = { posx_ + static_cast<int>(width_ / 2),posy_ - static_cast<int>(height_ / 2),static_cast<int>(width_),static_cast<int>(height_) };
+		return re;
+	}
+	else if (anchorType_ == Anchor_RightDown)
+	{
 		re = { posx_ - static_cast<int>(width_ / 2),posy_ - static_cast<int>(height_ / 2),static_cast<int>(width_),static_cast<int>(height_) };
 		return re;
 	}
 	return re;
 }
 
+//!!! (deprecated) for old draw
 SDL_Rect Image::GetSDLRect(AnchorType type)
 {
+	//!!! (deprecated) for old draw
 	SDL_Rect re{ 0,0,0,0 };
 	if (type == Anchor_Center)
 	{
@@ -107,4 +115,9 @@ void Image::SetSize(Vec2 size)
 {
 	width_ = size.x_;
 	height_ = size.y_;
+}
+
+void Image::SetAchorType(AnchorType anchorType)
+{
+	anchorType_ = anchorType;
 }
