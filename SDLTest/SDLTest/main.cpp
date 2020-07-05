@@ -580,6 +580,7 @@ int main(int argc, char* argv[]) {
 	//Scene 10 (cat scene)
 	auto scene10 = sceneMgr.AddScene("D:/HumanTree/catScene.png");
 
+	//--- sceneLB
 	Image* sceneLBImg10 = new Image(25, 25);
 	sceneLBImg10->ReadFile("D:/HumanTree/sceneLB.png");
 	sceneLBImg10->SetPosition(20, 480);
@@ -592,6 +593,21 @@ int main(int argc, char* argv[]) {
 	};
 	sceneLB10->BindEventHandler("LMB_Down", sceneLBFunc10);
 	scene10->Show(sceneLB10);
+	//___ sceneLB
+
+	//--- wordBox
+	Image* wordBoxImg = new Image(300, 150);
+	wordBoxImg->ReadFile("D:/HumanTree/wordBox1.png");
+	wordBoxImg->SetPosition(1030, 250);
+
+	ShaderImage* wordBox = new ShaderImage(wordBoxImg);
+	wordBox->material_->SetBlendType(Blend_Alpha);
+	EffectChangeSize* sizeEff = new EffectChangeSize;
+	sizeEff->Bind(wordBox);
+	sizeEff->curve_.Push(0.0, Vec2(3, 1.5));
+	sizeEff->curve_.Push(0.5, Vec2(300, 150));
+	scene10->Show(wordBox,0.0f, sizeEff);
+	//___ wordBox
 	/////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
 	{

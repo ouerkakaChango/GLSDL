@@ -71,8 +71,8 @@ SDL_Rect Image::GetSDLRect(AnchorType type)
 
 Rect Image::GetQuadRect()
 {
-	int w = GOD.gameConfig_.Get<int>("windowWidth");
-	int h = GOD.gameConfig_.Get<int>("windowHeight");
+	int w = GOD.windowW_;
+	int h = GOD.windowH_;
 	SDL_Rect rect = GetSDLRect();
 	Rect quad;
 	quad.x = rect.x / (float)w * 2.0f - 1;
@@ -101,4 +101,10 @@ SDL_Surface* Image::GetSurface()
 { 
 	sure(surface_ !=nullptr);
 	return surface_; 
+}
+
+void Image::SetSize(Vec2 size)
+{
+	width_ = size.x_;
+	height_ = size.y_;
 }

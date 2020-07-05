@@ -134,6 +134,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DrawCall.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EffectChangeSize.cpp" />
     <ClCompile Include="EffectFadeIn.cpp" />
     <ClCompile Include="EffectFlash.cpp" />
     <ClCompile Include="EffectShaderParam.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawCall.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectChangeSize.h" />
     <ClInclude Include="EffectFadeIn.h" />
     <ClInclude Include="EffectFlash.h" />
     <ClInclude Include="EffectShaderParam.h" />

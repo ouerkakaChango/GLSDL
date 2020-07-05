@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "RenderTexture.h"
 #include "Pass.h"
+#include "Debug.h"
 
 ShaderImage::ShaderImage(Image* img, Material* material, VBDrawType drawType, TextureFilterType texFilterType)
 	:image_(img), 
@@ -162,4 +163,13 @@ void ShaderImage::CheckSetRTMaterial(MaterialBlendType blend)
 	Material* rtMaterial = GOD.defaultRTMaterial_->Clone();
 	ChangeMaterial(rtMaterial);
 	bHasSetRTMaterial_ = true;
+}
+
+void ShaderImage::ChangeSize(Vec2 size)
+{
+	//LOG2(size.x_,size.y_);
+
+	image_->SetSize(size);
+	Rect quad = image_->GetQuadRect();
+	vb_->SetQuad(quad);
 }

@@ -183,6 +183,9 @@
     <ClCompile Include="ShaderDragImage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="EffectChangeSize.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -348,6 +351,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ShaderDragImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectChangeSize.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

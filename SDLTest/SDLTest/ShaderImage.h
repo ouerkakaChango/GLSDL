@@ -14,6 +14,7 @@ class RenderTexture;
 
 class ShaderImage : public Drawable
 {
+	XClass(ShaderImage)
 public:
 	ShaderImage(Image* img, Material* material=nullptr,VBDrawType drawType = VB_Static, TextureFilterType texFilterType = TextureFilter_Linear);	//material为空时，使用默认材质
 	~ShaderImage();
@@ -23,6 +24,7 @@ public:
 	void UsePass(Pass* pass);
 	void UsePass(Pass* pass, Pass* endPass);
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
+	virtual void ChangeSize(Vec2 size) override;
 
 	void SetPosition(int x, int y);
 	void SetPosition(Vec2 pos);

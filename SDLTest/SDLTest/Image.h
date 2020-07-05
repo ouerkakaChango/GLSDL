@@ -31,6 +31,7 @@ public:
 	//--- 新写法相关
 	bool ReadFile(const Path& path);
 	SDL_Surface* GetSurface();
+	void SetSize(Vec2 size);
 	//___
 
 	SDL_Texture* texture_;//(deprecated)
