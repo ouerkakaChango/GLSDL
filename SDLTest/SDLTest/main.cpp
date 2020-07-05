@@ -422,15 +422,16 @@ int main(int argc, char* argv[]) {
 	musicSImg->name_ = "musicSImg";
 	musicSImg->material_->SetBlendType(Blend_Alpha);
 	Pass* GBlurOncePass = new Pass;
-	//??? 尽管是用于png的pass，但其画RT的dc的mat的blendtype还得是opaque，不知道为啥，之后查查
-	//??? 可能找到原因了，是原来没有prePassive，Reset SceneRT,导致"过曝"（重复画半透texture到FBO）。
-	//??? 由于我自己在shader里作了混合，现在的表现也正常，现在先放着，以后再修正
-	GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/gaussianBlurForGlow.fs");
+	GBlurOncePass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/gaussianBlurForGlow.fs"s);
 	Pass* blur = new Pass;
-	blur->AddChild(GBlurOncePass, 40);
-	Pass* endPass = new Pass;
-	endPass->SetShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadWithGlow.fs",Blend_Alpha);
-	musicSImg->UsePass(blur, endPass);
+	blur->AddChild(GBlurOncePass, 30);
+	musicSImg->UsePass(blur);
+
+	Material* drawMat = new Material;
+	drawMat->CompileShader("D:/HumanTree/code/quadRT.vs", "D:/HumanTree/code/quadWithGlow.fs");
+	drawMat->SetBlendType(Blend_Alpha);
+	musicSImg->SetCustomDrawMaterial(drawMat,"glowedTex");
+
 	scene8->Show(musicSImg, 2.0f);
 
 
@@ -527,34 +528,32 @@ int main(int argc, char* argv[]) {
 	ShaderPPT* ppt = nullptr;
 
 	//--- wordPPT
-	if(false)
-	{
-		Image* ppt1 = new Image(1000, 250);
-		ppt1->ReadFile("D:/HumanTree/PPT1.png");
-		ppt1->SetPosition(800, 175);
-		ppt = new ShaderPPT(ppt1);
-		ppt->InsertPPT("D:/HumanTree/PPT2.png");
-		ppt->material_->SetBlendType(Blend_Alpha);
-		scene9->Show(ppt);
-	}
+	//{
+	//	Image* ppt1 = new Image(1000, 250);
+	//	ppt1->ReadFile("D:/HumanTree/PPT1.png");
+	//	ppt1->SetPosition(800, 175);
+	//	ppt = new ShaderPPT(ppt1);
+	//	ppt->InsertPPT("D:/HumanTree/PPT2.png");
+	//	ppt->material_->SetBlendType(Blend_Alpha);
+	//	scene9->Show(ppt);
+	//}
 	//___ wordPPT
 
 	//--- PPT button
-	if(false)
-	{
-		Image* pptButtonImg = new Image(25, 25);
-		pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
-		pptButtonImg->SetPosition(1250, 250);
-
-		Button* pptButton = new Button(pptButtonImg);
-		EventHandler pptButtonFunc = [&](Event* event)
-		{
-			LOG("pptButton");
-			ppt->Flip();
-		};
-		pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
-		scene9->Show(pptButton);
-	}
+	//{
+	//	Image* pptButtonImg = new Image(25, 25);
+	//	pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
+	//	pptButtonImg->SetPosition(1250, 250);
+	//
+	//	Button* pptButton = new Button(pptButtonImg);
+	//	EventHandler pptButtonFunc = [&](Event* event)
+	//	{
+	//		LOG("pptButton");
+	//		ppt->Flip();
+	//	};
+	//	pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
+	//	scene9->Show(pptButton);
+	//}
 	//___ PPT button
 	//--- drags
 	Image* drag1Img = new Image(100, 100);
@@ -575,6 +574,7 @@ int main(int argc, char* argv[]) {
 	drag2->AddDragTarget(grid);
 	scene9->Show(drag2);
 	//___drags
+	//event: reset mouse
 	Func func9_1 = [&]()
 	{
 		cursor->SetDefaultImage();

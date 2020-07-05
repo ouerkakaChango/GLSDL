@@ -38,6 +38,7 @@ ShaderImage::ShaderImage(Image* img, Material* material, VBDrawType drawType, Te
 	dc_->SetIB(ib_);
 
 	GOD.drawcallDrawables_.push_back(this);
+
 }
 
 
@@ -60,6 +61,11 @@ void ShaderImage::SetPosition(Vec2 pos)
 
 void ShaderImage::GetDrawcall()
 {
+	//???
+	if (name_ == "musicSImg")
+	{
+		int a = 1;
+	}
 	if (bActive_)
 	{
 		if (bUsePass_)
@@ -67,17 +73,31 @@ void ShaderImage::GetDrawcall()
 			passedRT_->SetTexture(rt_);
 			passedRT_->UsePass(pass_);
 
-			material_->UpdateParam("tex", rt_);
-			//??? 和SceneShaderImg太像，是否改写合并？
-			material_->UpdateParam("glowedTex", passedRT_);
+			if (name_ == "musicSImg")
+			{
+				rt_->name_ = "glowMusicRT";
+			}
 
-			CommitDrawCall();
+			if (!bUseCustomDrawMat_)
+			{
+				material_->UpdateTextureParam("tex", passedRT_->GetFinalTex());
+			}
+			else
+			{
+				material_->UpdateParam("tex", rt_);
+				material_->UpdateTextureParam(passedTexName_, passedRT_->GetFinalTex());
+				//???
+				if (name_ == "musicSImg")
+				{
+					dc_->name_ = "musicDC";
+				}
+			}
 		}
 		else
 		{
 			material_->UpdateParam("tex", image_->GetSurface());
-			CommitDrawCall();
 		}
+		CommitDrawCall();
 	}
 }
 
@@ -88,6 +108,10 @@ void ShaderImage::SetActive(bool active)
 
 void ShaderImage::ChangeMaterial(Material* material)
 {
+	if (name_ == "musicSImg")
+	{
+		int i = 1;
+	}
 	material->CloneType(material_,texFilterType_);
 	material_ = material;
 	dc_->SetMaterial(material_);
@@ -104,23 +128,7 @@ void ShaderImage::UsePass(Pass* pass)
 	{
 		bUsePass_ = true;
 		pass_ = pass;
-	}
-}
-
-void ShaderImage::UsePass(Pass* pass, Pass* endPass)
-{
-	if (pass == nullptr)
-	{
-		bUsePass_ = false;
-		pass_ = nullptr;
-	}
-	else
-	{
-		bUsePass_ = true;
-		bUseEndPass_ = true;
-		ResetRT();
-		pass_ = pass;
-		ChangeMaterial(endPass->GetMaterial());
+		PrepareRTForPass();
 		//??? debug
 		material_->name_ = "passmat";
 	}
@@ -130,14 +138,13 @@ void ShaderImage::SetSceneRT(RenderTexture* sceneRT)
 {
 	sure(sceneRT != nullptr);
 	Drawable::SetSceneRT(sceneRT);
-	//if not use end pass,when set a sceneRT,means self should be use as an RT draw to sceneRT
-	if (!bUseEndPass_)
+	if (!bUseCustomDrawMat_)
 	{
 		CheckSetRTMaterial(material_->GetBlendType());
 	}
 }
 
-void ShaderImage::ResetRT()
+void ShaderImage::PrepareRTForPass()
 {
 	if (rt_ == nullptr)
 	{
@@ -172,4 +179,13 @@ void ShaderImage::ChangeSize(Vec2 size)
 	image_->SetSize(size);
 	Rect quad = image_->GetQuadRect();
 	vb_->SetQuad(quad);
+}
+
+void ShaderImage::SetCustomDrawMaterial(Material* mat, const std::string& passedTexName)
+{
+	bUseCustomDrawMat_ = true;
+	passedTexName_ = passedTexName;
+	sure(mat != nullptr);
+	material_ = mat;
+	dc_->SetMaterial(material_);
 }

@@ -140,6 +140,8 @@ public:
 	void UpdateParam(const std::string& paramName, SDL_Surface* newTextureSurface);	//for texture2d
 	void UpdateParam(const std::string& paramName, RenderTexture* rt);				//for texture2d
 	void UpdateParam(const std::string& paramName, GLuint n)=delete;				//prevent unexpected implicit call
+	//???
+	void UpdateTextureParam(const std::string& paramName, GLuint n);
 	Material* Clone();
 	Material* Clone(TextureFilterType texFilterType);	//??? clone,but change the "tex" parameter's filter
 	void CloneType(Material* ori, TextureFilterType texFilterType=TextureFilter_Linear); //???

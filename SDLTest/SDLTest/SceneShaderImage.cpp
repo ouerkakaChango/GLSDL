@@ -15,7 +15,6 @@ SceneShaderImage::SceneShaderImage(Image* img, Material* material)
 	postRT_->SetSwapRT(postSwap);
 	SetDrawCallChannel(DrawCall_SceneColor);
 
-	//???
 	preDC_ = new DrawCall;
 	preDC_->SetVB(vb_);
 	preDC_->SetIB(ib_);
@@ -55,7 +54,6 @@ void SceneShaderImage::GetDrawcall()
 
 void SceneShaderImage::CommitPrePassive()
 {
-	//???
 	preDC_->material_->UpdateParam("tex", image_->GetSurface());
 	GOD.prePassiveDrawcalls_.push_back(preDC_);
 }

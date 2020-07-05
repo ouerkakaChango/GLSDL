@@ -448,6 +448,25 @@ void Material::UpdateParam(const std::string& paramName, RenderTexture* rt)
 	}
 }
 
+//???
+void Material::UpdateTextureParam(const std::string& paramName, GLuint n)
+{
+	for (auto& param : params_)
+	{
+		if (param->typeName_ == "texture2d" && param->name_ == paramName)
+		{
+			Texture2DParam* realParam = static_cast<Texture2DParam*>(param);
+			if (realParam)
+			{
+				realParam->toUpdateID_ = n;
+				realParam->bNeedUpdate_ = true;
+				realParam->updateType_ = TextureUpdate_ID;
+				return;
+			}
+		}
+	}
+}
+
 MaterialParam* Material::AddParam(const std::string& paramName, float defaultValue)
 {
 	auto* param = new Uniform1fParam(defaultValue);

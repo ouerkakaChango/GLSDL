@@ -22,7 +22,6 @@ public:
 	void GetDrawcall() override;
 	void ChangeMaterial(Material* material);
 	void UsePass(Pass* pass);
-	void UsePass(Pass* pass, Pass* endPass);
 	virtual void SetSceneRT(RenderTexture* sceneRT) override;
 	virtual void ChangeSize(Vec2 size) override;
 
@@ -30,10 +29,11 @@ public:
 	void SetPosition(Vec2 pos);
 	void SetImage(Image* img) { image_ = img; }
 	Image*  GetImage() const{return image_;}
+	void SetCustomDrawMaterial(Material* mat,const std::string& passedTexName);
 
 	Material* material_;
 protected:
-	void ResetRT();
+	void PrepareRTForPass();
 	void CheckSetRTMaterial(MaterialBlendType blend);
 
 	Image* image_;
@@ -48,7 +48,9 @@ protected:
 	TextureFilterType texFilterType_{ TextureFilter_Linear };
 
 	bool bUsePass_{false};
-	bool bUseEndPass_{ false };
 	bool bHasSetRTMaterial_{ false };
+
+	bool bUseCustomDrawMat_{ false };
+	std::string passedTexName_;
 };
 

@@ -124,7 +124,7 @@ void DrawCall::SimpleDoEnd()
 void DrawCall::Do()
 {
 	//???
-	if (name_ == "quadGroupDC")
+	if (name_ == "musicDC")
 	{
 		int aa = 1;
 	}
@@ -170,17 +170,17 @@ void DrawCall::Do()
 			glDrawElements(GL_TRIANGLES, 6 * vb_->objNum_, GL_UNSIGNED_INT, NULL);
 		}
 		{//debug save frame file
-			//static bool first = true;
-			//static int count = 0;
-			//if (name_ == "glowDC")
-			//{
-			//	count += 1;
-			//}
-			//if (first && count >=10 && name_ == "glowDC")
-			//{
-			//	SaveRTToFile("D:/zSaved.ppm",rt_);
-			//	first = false;
-			//}
+			static bool first = true;
+			static int count = 0;
+			if (name_ == "glowDC")
+			{
+				count += 1;
+			}
+			if (first && count >=10 && name_ == "glowDC")
+			{
+				SaveRTToFile("D:/zSaved.ppm",rt_);
+				first = false;
+			}
 		}
 	}
 	else
