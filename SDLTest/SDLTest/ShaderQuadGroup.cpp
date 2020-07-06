@@ -6,6 +6,7 @@
 #include "IndexBuffer.h"
 #include "Image.h"
 #include "Material.h"
+#include "RenderTexture.h"
 
 void QuadGroup::InitByMorphGrid(const MorphGrid& grid, float width, float xScale, float yScale, bool bNeedEdgeQuad)
 {
@@ -86,7 +87,25 @@ void ShaderQuadGroup::GetDrawcall()
 	if (bActive_)
 	{
 		{
-			material_->UpdateParam("tex", image_->GetSurface());
+			if (bUsePass_)
+			{
+				passedRT_->SetTexture(rt_);
+				passedRT_->UsePass(pass_);
+
+				if (!bUseCustomDrawMat_)
+				{
+					material_->UpdateTextureParam("tex", passedRT_->GetFinalTex());
+				}
+				else
+				{
+					material_->UpdateParam("tex", rt_);
+					material_->UpdateTextureParam(passedTexName_, passedRT_->GetFinalTex());
+				}
+			}
+			else
+			{
+				material_->UpdateParam("tex", image_->GetSurface());
+			}
 			CommitDrawCall();
 		}
 	}
@@ -97,7 +116,7 @@ void ShaderQuadGroup::SetSceneRT(RenderTexture* sceneRT)
 	sure(sceneRT != nullptr);
 	Drawable::SetSceneRT(sceneRT);
 	//if not use end pass,when set a sceneRT,means self should be use as an RT draw to sceneRT
-	if (!bUseEndPass_)
+	if (!bUseCustomDrawMat_)
 	{
 		CheckSetRTMaterial(material_->GetBlendType());
 	}
@@ -118,5 +137,46 @@ void ShaderQuadGroup::ChangeMaterial(Material* material)
 {
 	material->CloneType(material_, texFilterType_);
 	material_ = material;
+	dc_->SetMaterial(material_);
+}
+
+void ShaderQuadGroup::UsePass(Pass* pass)
+{
+	if (pass == nullptr)
+	{
+		bUsePass_ = false;
+		pass_ = nullptr;
+	}
+	else
+	{
+		bUsePass_ = true;
+		pass_ = pass;
+		PrepareRTForPass();
+	}
+}
+
+void ShaderQuadGroup::PrepareRTForPass()
+{
+	if (rt_ == nullptr)
+	{
+		rt_ = new RenderTexture(image_);
+
+		passedRT_ = new RenderTexture(image_);
+		auto swapRT = new RenderTexture(image_);
+		passedRT_->SetSwapRT(swapRT);
+	}
+	else
+	{
+		//??? unconsidered
+		abort();
+	}
+}
+
+void ShaderQuadGroup::SetCustomDrawMaterial(Material* mat, const std::string& passedTexName)
+{
+	bUseCustomDrawMat_ = true;
+	passedTexName_ = passedTexName;
+	sure(mat != nullptr);
+	material_ = mat;
 	dc_->SetMaterial(material_);
 }

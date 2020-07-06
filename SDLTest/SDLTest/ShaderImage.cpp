@@ -73,10 +73,11 @@ void ShaderImage::GetDrawcall()
 			passedRT_->SetTexture(rt_);
 			passedRT_->UsePass(pass_);
 
-			if (name_ == "musicSImg")
-			{
-				rt_->name_ = "glowMusicRT";
-			}
+			//??? debug
+			//if (name_ == "musicSImg")
+			//{
+			//	rt_->name_ = "glowMusicRT";
+			//}
 
 			if (!bUseCustomDrawMat_)
 			{
@@ -86,11 +87,11 @@ void ShaderImage::GetDrawcall()
 			{
 				material_->UpdateParam("tex", rt_);
 				material_->UpdateTextureParam(passedTexName_, passedRT_->GetFinalTex());
-				//???
-				if (name_ == "musicSImg")
-				{
-					dc_->name_ = "musicDC";
-				}
+				//??? debug
+				//if (name_ == "musicSImg")
+				//{
+				//	dc_->name_ = "musicDC";
+				//}
 			}
 		}
 		else

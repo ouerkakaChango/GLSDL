@@ -522,10 +522,6 @@ int main(int argc, char* argv[]) {
 	//grid细节:首先不需要边缘线，其次宽度根据grid边长调整（假透视）
 	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10,1.0f,2.0f,false);
 	shaderQuads->material_->SetBlendType(Blend_Alpha);
-	//??? 
-	//grid支持pass
-	//shaderQuads->UsePass(blur);
-	//shaderQuads->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(shaderQuads);
 	//___ playGrid
 

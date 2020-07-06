@@ -36,8 +36,8 @@ protected:
 	void PrepareRTForPass();
 	void CheckSetRTMaterial(MaterialBlendType blend);
 
-	Image* image_;
-	Pass* pass_;
+	Image* image_{nullptr};
+	Pass* pass_{nullptr};
 	VertexBuffer* vb_;
 	IndexBuffer* ib_;
 
