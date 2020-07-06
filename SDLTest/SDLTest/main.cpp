@@ -522,6 +522,10 @@ int main(int argc, char* argv[]) {
 	//grid细节:首先不需要边缘线，其次宽度根据grid边长调整（假透视）
 	ShaderQuadGroup* shaderQuads = new ShaderQuadGroup(gridLineImg, grid, 10,1.0f,2.0f,false);
 	shaderQuads->material_->SetBlendType(Blend_Alpha);
+	//??? 
+	//grid支持pass
+	//shaderQuads->UsePass(blur);
+	//shaderQuads->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(shaderQuads);
 	//___ playGrid
 
@@ -563,6 +567,8 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
 	drag1->material_->SetBlendType(Blend_Alpha);
 	drag1->AddDragTarget(grid);
+	drag1->UsePass(blur);
+	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(drag1);
 
 	Image* drag2Img = new Image(100, 100);
@@ -572,6 +578,8 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag2 = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag2->material_->SetBlendType(Blend_Alpha);
 	drag2->AddDragTarget(grid);
+	drag2->UsePass(blur);
+	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(drag2);
 	//___drags
 	//event: reset mouse
@@ -627,7 +635,7 @@ int main(int argc, char* argv[]) {
 			cursor->SetActive(true);
 		}
 	};
-	DebugJumpToScene(7);
+	DebugJumpToScene(8);
 
 	//??? debug
 	{
