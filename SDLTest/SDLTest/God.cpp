@@ -230,3 +230,8 @@ void God::ElapseGlobalK(float deltaTime)
 		globalK_ -= 1.0f;
 	}
 }
+
+void God::TaskNotify(ParamPack param, const std::string& eventName)
+{
+	taskManager_.Check(param, eventName);
+}

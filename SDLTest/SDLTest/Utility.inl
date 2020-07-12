@@ -29,6 +29,12 @@ bool MapVector<T>::Find(std::string key, std::vector<T>*& results)
 	}
 }
 
+template <class T>
+bool MapVector<T>::HasKey(const std::string name)
+{
+	return map_.find(name) != map_.end();
+}
+
 template<class T>
 bool StringMap<T>::Find(std::string key, T*& result)
 {
@@ -56,6 +62,12 @@ bool STL_Remove(std::vector<T>& vec, const T& elem)
 		}
 	}
 	return false;
+}
+
+template <class T>
+bool STL_RemoveAll(std::vector<T>& vec, const T& elem)
+{
+	vec.erase(std::remove(vec.begin(), vec.end(), elem), vec.end());
 }
 
 template <class Key, class val>

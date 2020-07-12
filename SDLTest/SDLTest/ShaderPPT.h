@@ -11,11 +11,14 @@ public:
 	void GetDrawcall() override;
 
 	void InsertPPT(const Path& texPath);
+	void InsertPPT(const std::string& groupName, const Path& texPath);
 	void Flip();
+	void ChangeGroup(const std::string& groupName);
 
 protected:
-	std::vector<SDL_Surface*> texSurfaces_;
-	unsigned nowInx_{ 0 };
+	MapVector<SDL_Surface*> texSurfaces_;
 	SDL_Surface* nowSurface_{ nullptr };
+	std::string nowGroup_{ "default" };
+	unsigned nowInx_{ 0 };
 };
 

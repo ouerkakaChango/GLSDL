@@ -78,6 +78,7 @@ void ShaderDragImage::OnDragRelease(LMB_Up* event)
 	DragResult result = dragTarget_->TryDragRelease(nowPos);
 	if (result.bCanDrag_)
 	{
+		GOD.TaskNotify(MakePack(this,result.position_), "DragRelease");
 		SetPosition(result.position_);
 	}
 }
@@ -85,7 +86,7 @@ void ShaderDragImage::OnDragRelease(LMB_Up* event)
 void ShaderDragImage::AddDragTarget(DragTarget* target)
 {
 	sure(target != nullptr);
-	target->OnAddDragTarget();
+	target->OnAddDragTarget(oriDragPos_);
 	dragTarget_ = target;
 }
 

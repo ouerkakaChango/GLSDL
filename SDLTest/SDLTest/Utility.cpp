@@ -56,3 +56,24 @@ float FlashFunc(float k)
 		return (1 - k) / 0.5f;
 	}
 }
+
+bool ParamPack::operator==(const ParamPack& p) const
+{
+	return objPtr_ == p.objPtr_ &&
+		vec2_ == p.vec2_;
+}
+
+bool ParamPack::operator!=(const ParamPack& p) const
+{
+	return !((*this) == p);
+}
+
+void InsertPackParam(ParamPack& re, Object* ptr)
+{
+	re.objPtr_ = ptr;
+}
+
+void InsertPackParam(ParamPack& re, Vec2 v2)
+{
+	re.vec2_ = v2;
+}

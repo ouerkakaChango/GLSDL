@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "WatchDog.h"
 #include "GameConfig.h"
+#include "TaskManager.h"
 
 #define GL_CORE
 
@@ -40,8 +41,12 @@ public:
 	void GetDrawcalls();
 	void ElapseGlobalK(float deltaTime);
 	float GlobalK() const { return globalK_; }
+	//--- Task related
+	void TaskNotify(ParamPack param, const std::string& eventName);
+	//___ Task related
 
 	SceneManager sceneManager_;
+	TaskManager taskManager_;
 	GameConfig gameConfig_;
 	std::vector<DrawCall*> drawcalls_;
 

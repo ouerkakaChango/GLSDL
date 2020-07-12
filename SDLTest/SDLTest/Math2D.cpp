@@ -44,6 +44,11 @@ Vec2 Vec2::operator*(float n) const
 	return Vec2(x_ * n, y_ * n);
 }
 
+bool Vec2::operator==(const Vec2& v) const
+{
+	return x_ == v.x_ && y_ == v.y_;
+}
+
 Vec2 Vec2::GetNormal()
 {
 	return *this / Length();

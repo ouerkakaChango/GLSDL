@@ -12,6 +12,7 @@
 #include <set>
 
 #include "Numeric.h"
+#include "Math2D.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -65,6 +66,7 @@ class MapVector
 public:
 	std::map<std::string, std::vector<T>> map_;
 	inline bool Find(std::string key, std::vector<T>*& results);
+	bool HasKey(const std::string name);
 };
 
 template <class T>
@@ -75,6 +77,7 @@ public:
 	inline bool Find(std::string key, T*& result);
 };
 
+//--- Params
 template <class T>
 class Params
 {
@@ -103,9 +106,49 @@ Params<T1> MakeParam(Params<T1> re)
 {
 	return re;
 }
+//___ Params
 
+//--- Packs
+class Object;
+struct ParamPack
+{
+	Object* objPtr_{nullptr};
+	Vec2 vec2_;
+	bool operator==(const ParamPack& p) const;
+	bool operator!=(const ParamPack& p) const;
+};
+
+void InsertPackParam(ParamPack& re, Object* ptr);
+void InsertPackParam(ParamPack& re, Vec2 v2);
+
+template<class T,class... Args>
+ParamPack MakePack(T t,Args... args)
+{
+	ParamPack re;
+	InsertPackParam(re, t);
+	return MakePack(re, args...);
+}
+
+template<class T, class... Args>
+ParamPack MakePack(ParamPack& re,T t, Args... args)
+{
+	InsertPackParam(re, t);
+	return MakePack(re, args...);
+}
+
+template<class ParamPack>
+ParamPack MakePack(ParamPack& re)
+{
+	return re;
+}
+//___ Packs
+
+//erase first elem from vec
 template <class T>
 bool STL_Remove(std::vector<T>& vec,const T& elem);
+
+template <class T>
+void STL_RemoveAll(std::vector<T>& vec, const T& elem);
 
 template <class Key,class val>
 val* STLMapGet(std::map<Key, val*> map, const Key& key);

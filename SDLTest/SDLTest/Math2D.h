@@ -16,6 +16,7 @@ public:
 	Vec2 operator-() const;
 	Vec2 operator/(float n) const;
 	Vec2 operator*(float n) const;
+	bool operator==(const Vec2& v) const;
 	Vec2 GetNormal();
 	float Length() const;
 	float x_, y_;

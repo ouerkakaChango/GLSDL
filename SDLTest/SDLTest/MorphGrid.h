@@ -13,7 +13,7 @@ public:
 	MorphGrid(Vec2 v1,Vec2 v2, Vec2 v3, Vec2 v4, int xCell, int yCell);
 	~MorphGrid();
 
-	virtual void OnAddDragTarget() override;
+	virtual void OnAddDragTarget(Vec2 oriDragPos) override;
 	virtual DragResult TryDragRelease(const Vec2& nowPos) override;
 
 	Vec2 GetPoint(unsigned i, unsigned j) const;

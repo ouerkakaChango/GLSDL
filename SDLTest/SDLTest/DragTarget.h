@@ -21,7 +21,7 @@ public:
 	~DragTarget();
 
 	virtual DragResult TryDragRelease(const Vec2& p)=0;
-	virtual void OnAddDragTarget() {};
+	virtual void OnAddDragTarget(Vec2 oriDragPos) {};
 
 	std::vector<Vec2> targetPoints_;
 };

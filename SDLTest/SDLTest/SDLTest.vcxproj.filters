@@ -189,6 +189,9 @@
     <ClCompile Include="DragTarget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -360,6 +363,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Drawable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

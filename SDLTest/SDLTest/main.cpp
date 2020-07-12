@@ -532,9 +532,12 @@ int main(int argc, char* argv[]) {
 		Image* ppt1 = new Image(1000, 250);
 		ppt1->ReadFile("D:/HumanTree/PPT1.png");
 		ppt1->SetPosition(800, 175);
+
 		ppt = new ShaderPPT(ppt1);
-		ppt->InsertPPT("D:/HumanTree/PPT2.png");
 		ppt->material_->SetBlendType(Blend_Alpha);
+
+		ppt->InsertPPT("D:/HumanTree/PPT2.png");
+		ppt->InsertPPT("askPosition","D:/HumanTree/PPTQ1.png");
 		scene9->Show(ppt);
 	}
 	//___ wordPPT
@@ -619,6 +622,18 @@ int main(int argc, char* argv[]) {
 	scene10->Show(wordBox,0.0f, sizeEff);
 	//___ wordBox
 	/////////////////////////////////////////////
+	//--- task
+	TaskManager& taskMgr = GOD.taskManager_;
+	Task t1("askPosition");
+	t1.AddCondition(MakePack(drag1, Vec2(800, 536.5)), "DragRelease");
+	t1.AddCondition(MakePack(drag2, Vec2(930, 536.5)), "DragRelease");
+	t1.taskCompleteFunc_ = [&]()
+	{
+		ppt->ChangeGroup("askPosition");
+	};
+	taskMgr.tasks_.push_back(t1);
+	//___ task
+	////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
 	{
 		sceneMgr.JumpToScene(inx);

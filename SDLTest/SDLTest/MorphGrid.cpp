@@ -18,7 +18,7 @@ MorphGrid::~MorphGrid()
 {
 }
 
-void MorphGrid::OnAddDragTarget()
+void MorphGrid::OnAddDragTarget(Vec2 oriDragPos)
 {
 	for (unsigned i = 1; i < xCell_; i++)
 	{
@@ -27,6 +27,7 @@ void MorphGrid::OnAddDragTarget()
 			targetPoints_.push_back(GetPoint(i, j));
 		}
 	}
+	targetPoints_.push_back(oriDragPos);
 }
 
 DragResult MorphGrid::TryDragRelease(const Vec2& nowPos)
