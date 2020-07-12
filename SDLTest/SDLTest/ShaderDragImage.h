@@ -6,6 +6,7 @@
 #include "Utility.h"
 
 class MorphGrid;
+class DragTarget;
 
 class ShaderDragImage : public ShaderImage
 {
@@ -17,9 +18,10 @@ public:
 	void OnDragClick(LMB_Down* event);
 	void OnDragRelease(LMB_Up* event);
 	void OnDraging(Mouse_Move* event);
-	void AddDragTarget(const MorphGrid& grid);	//no edge points
-private:
-	std::vector<Vec2> targetPoints_;
+	void AddDragTarget(DragTarget* target);
+protected:
+	DragTarget* dragTarget_{nullptr};
+	Vec2 oriDragPos_;
 	bool bDraging_{ false };
 };
 

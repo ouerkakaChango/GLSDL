@@ -528,32 +528,32 @@ int main(int argc, char* argv[]) {
 	ShaderPPT* ppt = nullptr;
 
 	//--- wordPPT
-	//{
-	//	Image* ppt1 = new Image(1000, 250);
-	//	ppt1->ReadFile("D:/HumanTree/PPT1.png");
-	//	ppt1->SetPosition(800, 175);
-	//	ppt = new ShaderPPT(ppt1);
-	//	ppt->InsertPPT("D:/HumanTree/PPT2.png");
-	//	ppt->material_->SetBlendType(Blend_Alpha);
-	//	scene9->Show(ppt);
-	//}
+	{
+		Image* ppt1 = new Image(1000, 250);
+		ppt1->ReadFile("D:/HumanTree/PPT1.png");
+		ppt1->SetPosition(800, 175);
+		ppt = new ShaderPPT(ppt1);
+		ppt->InsertPPT("D:/HumanTree/PPT2.png");
+		ppt->material_->SetBlendType(Blend_Alpha);
+		scene9->Show(ppt);
+	}
 	//___ wordPPT
 
 	//--- PPT button
-	//{
-	//	Image* pptButtonImg = new Image(25, 25);
-	//	pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
-	//	pptButtonImg->SetPosition(1250, 250);
-	//
-	//	Button* pptButton = new Button(pptButtonImg);
-	//	EventHandler pptButtonFunc = [&](Event* event)
-	//	{
-	//		LOG("pptButton");
-	//		ppt->Flip();
-	//	};
-	//	pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
-	//	scene9->Show(pptButton);
-	//}
+	{
+		Image* pptButtonImg = new Image(25, 25);
+		pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
+		pptButtonImg->SetPosition(1250, 250);
+	
+		Button* pptButton = new Button(pptButtonImg);
+		EventHandler pptButtonFunc = [&](Event* event)
+		{
+			LOG("pptButton");
+			ppt->Flip();
+		};
+		pptButton->BindEventHandler("LMB_Down", pptButtonFunc);
+		scene9->Show(pptButton);
+	}
 	//___ PPT button
 	//--- drags
 	Image* drag1Img = new Image(100, 100);
@@ -562,7 +562,7 @@ int main(int argc, char* argv[]) {
 
 	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
 	drag1->material_->SetBlendType(Blend_Alpha);
-	drag1->AddDragTarget(grid);
+	drag1->AddDragTarget(&grid);
 	drag1->UsePass(blur);
 	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(drag1);
@@ -573,7 +573,7 @@ int main(int argc, char* argv[]) {
 
 	ShaderDragImage* drag2 = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag2->material_->SetBlendType(Blend_Alpha);
-	drag2->AddDragTarget(grid);
+	drag2->AddDragTarget(&grid);
 	drag2->UsePass(blur);
 	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(drag2);

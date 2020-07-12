@@ -20,3 +20,4 @@ struct Rect
 };
 
 #define PI 3.1415926f
+#define FAR 10000

@@ -131,6 +131,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DragTarget.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DrawCall.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DragTarget.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawCall.h" />
     <ClInclude Include="Effect.h" />

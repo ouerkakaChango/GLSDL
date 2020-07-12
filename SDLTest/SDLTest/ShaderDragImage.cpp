@@ -2,7 +2,7 @@
 
 #include "God.h"
 #include "Image.h"
-#include "MorphGrid.h"
+#include "DragTarget.h"
 #include "Debug.h"
 
 ShaderDragImage::ShaderDragImage(Image* img,
@@ -56,7 +56,7 @@ ShaderDragImage::ShaderDragImage(Image* img,
 	BindEventGate("Mouse_Move", gate2);
 	BindEventHandler("Mouse_Move", func3);
 
-	targetPoints_.push_back(image_->GetPosition());
+	oriDragPos_ = image_->GetPosition();
 }
 
 
@@ -74,32 +74,19 @@ void ShaderDragImage::OnDragRelease(LMB_Up* event)
 {
 	//LOG("DragRelease");
 	bDraging_ = false;
-	//set to nearest point
-	//???
-	float minDis = 10000;
-	auto& nowPos = image_->GetPosition();
-	Vec2 targetPos;
-	for (auto& p : targetPoints_)
+	Vec2 nowPos = image_->GetPosition();
+	DragResult result = dragTarget_->TryDragRelease(nowPos);
+	if (result.bCanDrag_)
 	{
-		float tDis = (nowPos - p).Length();
-		if (tDis < minDis)
-		{
-			minDis = tDis;
-			targetPos = p;
-		}
+		SetPosition(result.position_);
 	}
-	SetPosition(targetPos);
 }
 
-void ShaderDragImage::AddDragTarget(const MorphGrid& grid)
+void ShaderDragImage::AddDragTarget(DragTarget* target)
 {
-	for (unsigned i = 1; i < grid.GetxCell(); i++)
-	{
-		for (unsigned j = 1; j < grid.GetyCell(); j++)
-		{
-			targetPoints_.push_back(grid.GetPoint(i, j));
-		}
-	}
+	sure(target != nullptr);
+	target->OnAddDragTarget();
+	dragTarget_ = target;
 }
 
 void ShaderDragImage::OnDraging(Mouse_Move* event)

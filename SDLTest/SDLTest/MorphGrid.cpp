@@ -18,6 +18,42 @@ MorphGrid::~MorphGrid()
 {
 }
 
+void MorphGrid::OnAddDragTarget()
+{
+	for (unsigned i = 1; i < xCell_; i++)
+	{
+		for (unsigned j = 1; j < yCell_; j++)
+		{
+			targetPoints_.push_back(GetPoint(i, j));
+		}
+	}
+}
+
+DragResult MorphGrid::TryDragRelease(const Vec2& nowPos)
+{
+	float minDis = FAR;
+	Vec2 targetPos;
+	for (auto& p : targetPoints_)
+	{
+		float tDis = (nowPos - p).Length();
+		if (tDis < minDis)
+		{
+			minDis = tDis;
+			targetPos = p;
+		}
+	}
+
+	//???
+	if (minDis != FAR)
+	{
+		return DragResult(true, targetPos);
+	}
+	else
+	{
+		return DragResult(false);
+	}
+}
+
 //p1-p2
 Vec2 MorphGrid::GetPoint(unsigned i, unsigned j) const
 {
