@@ -538,6 +538,7 @@ int main(int argc, char* argv[]) {
 
 		ppt->InsertPPT("D:/HumanTree/PPT2.png");
 		ppt->InsertPPT("askPosition","D:/HumanTree/PPTQ1.png");
+		ppt->InsertPPT("askReason", "D:/HumanTree/PPTQ2.png");
 		scene9->Show(ppt);
 	}
 	//___ wordPPT
@@ -580,6 +581,17 @@ int main(int argc, char* argv[]) {
 	drag2->UsePass(blur);
 	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
 	scene9->Show(drag2);
+
+	Image* drag3Img = new Image(100, 100);
+	drag3Img->ReadFile("D:/HumanTree/IconReason.png");
+	drag3Img->SetPosition(625, 780);
+
+	ShaderDragImage* drag3 = new ShaderDragImage(drag3Img, nullptr, VB_Static, TextureFilter_Nearest);
+	drag3->material_->SetBlendType(Blend_Alpha);
+	drag3->AddDragTarget(&grid);
+	drag3->UsePass(blur);
+	drag3->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	scene9->Show(drag3);
 	//___drags
 	//event: reset mouse
 	Func func9_1 = [&]()
@@ -632,6 +644,14 @@ int main(int argc, char* argv[]) {
 		ppt->ChangeGroup("askPosition");
 	};
 	taskMgr.tasks_.push_back(t1);
+
+	Task t2("askReason");
+	t2.AddCondition(MakePack(drag3, Vec2(800, 536.5)), "DragRelease");
+	t2.taskCompleteFunc_ = [&]()
+	{
+		ppt->ChangeGroup("askReason");
+	};
+	taskMgr.tasks_.push_back(t2);
 	//___ task
 	////////////////////////////////////////////
 	auto DebugJumpToScene = [&](unsigned inx)
