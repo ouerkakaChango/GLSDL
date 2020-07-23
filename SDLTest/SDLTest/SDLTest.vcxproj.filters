@@ -192,6 +192,15 @@
     <ClCompile Include="TaskManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Condition.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PPTHasReadCondition.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Conditions.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h">
@@ -366,6 +375,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TaskManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PPTHasReadCondition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Conditions.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

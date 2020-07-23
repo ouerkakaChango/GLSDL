@@ -9,6 +9,7 @@
 #include "Effect.h"
 #include "God.h"
 #include "SceneShaderImage.h"
+#include "Condition.h"
 
 Scene::Scene()
 {
@@ -119,4 +120,13 @@ void Scene::AddCustomAction(float time, Func func)
 {
 	auto funcAction = new FuncAction(func);
 	timeline_->AddAction(time, funcAction);
+}
+
+void Scene::ConditionShow(Drawable* drawable, Condition* condition)
+{
+	condition->AddFunc(
+		[&,drawable]() mutable
+	{
+		Show(drawable, 0);
+	});
 }

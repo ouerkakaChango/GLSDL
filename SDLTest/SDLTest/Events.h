@@ -35,3 +35,13 @@ public:
 	int x_;
 	int y_;
 };
+
+class PPT_PageFlip : public Event
+{
+public:
+	PPT_PageFlip(const std::string& groupName,unsigned inx, bool bLastPage);
+
+	std::string groupName_;
+	unsigned inx_;
+	bool bLastPage_;
+};

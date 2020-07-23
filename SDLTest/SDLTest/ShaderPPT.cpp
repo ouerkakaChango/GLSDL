@@ -3,6 +3,9 @@
 #include "SDL_image.h"
 #include "Material.h"
 #include "Image.h"
+#include "Button.h"
+#include "God.h"
+#include "Events.h"
 
 ShaderPPT::ShaderPPT(Image* initImg, Material* material, VBDrawType vbDrawType, TextureFilterType texFilterType)
 	:ShaderImage(initImg, material, vbDrawType, texFilterType)
@@ -35,6 +38,8 @@ void ShaderPPT::Flip()
 	}
 	nowInx_ += 1;
 	nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
+	CheckNextButtonStatus();
+	GOD.BroadCast(&PPT_PageFlip(nowGroup_,nowInx_, nowInx_ == texSurfaces_.map_[nowGroup_].size()-1));
 }
 
 void ShaderPPT::GetDrawcall()
@@ -69,9 +74,35 @@ void ShaderPPT::ChangeGroup(const std::string& groupName)
 		nowGroup_ = groupName;
 		nowInx_ = 0;
 		nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
+		CheckNextButtonStatus();
 	}
 	else
 	{
 		abort();
+	}
+}
+
+void ShaderPPT::BindButton(Button* button)
+{
+	nextButton_ = button;
+}
+
+void ShaderPPT::CheckNextButtonStatus()
+{
+	if (nowInx_ == texSurfaces_.map_[nowGroup_].size() - 1)
+	{
+		SetNextButtonActive(false);
+	}
+	else
+	{
+		SetNextButtonActive(true);
+	}
+}
+
+void ShaderPPT::SetNextButtonActive(bool active)
+{
+	if (nextButton_ != nullptr)
+	{
+		nextButton_->SetActive(active);
 	}
 }

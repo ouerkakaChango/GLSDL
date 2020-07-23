@@ -9,6 +9,7 @@ class Timeline;
 class Effect;
 class SoundEffect;
 class SceneShaderImage;
+class Condition;
 
 class Scene : public Activeable
 {
@@ -24,6 +25,7 @@ public:
 	void AddDrawable(Drawable* drawable,bool bActive);
 	//演员上场，可决定出场方式和在Timeline中的位置
 	void Show(Drawable* drawable,float time=0.0f, Effect* effect=nullptr);
+	void ConditionShow(Drawable* drawable, Condition* condition);
 	//设置时长自动落幕
 	void SetAutoEnd(float time);
 	void AddSound(SoundEffect* sound, float time);

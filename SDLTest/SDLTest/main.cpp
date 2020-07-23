@@ -33,6 +33,7 @@
 #include "ShaderQuadGroup.h"
 #include "ShaderPPT.h"
 #include "ShaderDragImage.h"
+#include "Conditions.h"
 #include "Debug.h"
 
 DrawCall gDC;
@@ -525,7 +526,13 @@ int main(int argc, char* argv[]) {
 	scene9->Show(shaderQuads);
 	//___ playGrid
 
+	//--- PPT pre declare
 	ShaderPPT* ppt = nullptr;
+	Image* pptButtonImg = new Image(25, 25);
+	pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
+	pptButtonImg->SetPosition(1250, 250);
+	Button* pptButton = new Button(pptButtonImg);
+	//___ PPT pre declare
 
 	//--- wordPPT
 	{
@@ -536,6 +543,7 @@ int main(int argc, char* argv[]) {
 		ppt = new ShaderPPT(ppt1);
 		ppt->material_->SetBlendType(Blend_Alpha);
 
+		ppt->BindButton(pptButton);
 		ppt->InsertPPT("D:/HumanTree/PPT2.png");
 		ppt->InsertPPT("askPosition","D:/HumanTree/PPTQ1.png");
 		ppt->InsertPPT("askReason", "D:/HumanTree/PPTQ2.png");
@@ -545,11 +553,6 @@ int main(int argc, char* argv[]) {
 
 	//--- PPT button
 	{
-		Image* pptButtonImg = new Image(25, 25);
-		pptButtonImg->ReadFile("D:/HumanTree/rightButton.png");
-		pptButtonImg->SetPosition(1250, 250);
-	
-		Button* pptButton = new Button(pptButtonImg);
 		EventHandler pptButtonFunc = [&](Event* event)
 		{
 			LOG("pptButton");
@@ -559,6 +562,13 @@ int main(int argc, char* argv[]) {
 		scene9->Show(pptButton);
 	}
 	//___ PPT button
+
+	//--- dragConditions
+	PPTHasReadCondition *hasReadMessage1 = new PPTHasReadCondition;
+	hasReadMessage1->Bind(ppt, "default");
+	hasReadMessage1->SetActive(true);
+	//___ dragConditions
+
 	//--- drags
 	Image* drag1Img = new Image(100, 100);
 	drag1Img->ReadFile("D:/HumanTree/IconPos.png");
@@ -567,9 +577,10 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
 	drag1->material_->SetBlendType(Blend_Alpha);
 	drag1->AddDragTarget(&grid);
-	drag1->UsePass(blur);
+	//drag1->UsePass(blur);
 	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	scene9->Show(drag1);
+	//scene9->Show(drag1);
+	scene9->ConditionShow(drag1,hasReadMessage1);
 
 	Image* drag2Img = new Image(100, 100);
 	drag2Img->ReadFile("D:/HumanTree/IconQues.png");
@@ -578,9 +589,10 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag2 = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag2->material_->SetBlendType(Blend_Alpha);
 	drag2->AddDragTarget(&grid);
-	drag2->UsePass(blur);
+	//drag2->UsePass(blur);
 	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	scene9->Show(drag2);
+	//scene9->Show(drag2);
+	scene9->ConditionShow(drag2, hasReadMessage1);
 
 	Image* drag3Img = new Image(100, 100);
 	drag3Img->ReadFile("D:/HumanTree/IconReason.png");
@@ -589,9 +601,10 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag3 = new ShaderDragImage(drag3Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag3->material_->SetBlendType(Blend_Alpha);
 	drag3->AddDragTarget(&grid);
-	drag3->UsePass(blur);
+	//drag3->UsePass(blur);
 	drag3->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	scene9->Show(drag3);
+	//scene9->Show(drag3);
+	scene9->ConditionShow(drag3, hasReadMessage1);
 	//___drags
 	//event: reset mouse
 	Func func9_1 = [&]()

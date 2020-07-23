@@ -34,3 +34,11 @@ LMB_Up::LMB_Up(int x, int y) :x_(x), y_(y)
 {
 	name_ = "LMB_Up";
 }
+
+PPT_PageFlip::PPT_PageFlip(const std::string& groupName, unsigned inx, bool bLastPage)
+	:groupName_(groupName),
+	inx_(inx),
+	bLastPage_(bLastPage)
+{
+	name_ = "PPT_PageFlip";
+}

@@ -42,9 +42,13 @@ void TaskManager::Check(ParamPack param, const std::string& eventName)
 	{//obj based condition
 		objBasedConditions_[param.objPtr_].map_[eventName] = param;
 	}
-	for (auto& task : tasks_)
+	//for (auto& task : tasks_)
+	//{
+	//	CheckTaskSatisfied(task);
+	//}
+	for (unsigned i = 0; i < tasks_.size(); i++)
 	{
-		CheckTaskSatisfied(task);
+		CheckTaskSatisfied(tasks_[i]);
 	}
 }
 

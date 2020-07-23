@@ -129,6 +129,8 @@
     <ClCompile Include="Activeable.cpp" />
     <ClCompile Include="BGMSystem.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Condition.cpp" />
+    <ClCompile Include="Conditions.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DragTarget.cpp" />
@@ -160,6 +162,7 @@
     <ClCompile Include="Numeric.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pass.cpp" />
+    <ClCompile Include="PPTHasReadCondition.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -190,6 +193,8 @@
     <ClInclude Include="Activeable.h" />
     <ClInclude Include="BGMSystem.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Condition.h" />
+    <ClInclude Include="Conditions.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DragTarget.h" />
@@ -220,6 +225,7 @@
     <ClInclude Include="Numeric.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Pass.h" />
+    <ClInclude Include="PPTHasReadCondition.h" />
     <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
