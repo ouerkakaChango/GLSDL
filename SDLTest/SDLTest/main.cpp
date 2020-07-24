@@ -577,9 +577,8 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
 	drag1->material_->SetBlendType(Blend_Alpha);
 	drag1->AddDragTarget(&grid);
-	//drag1->UsePass(blur);
+	drag1->UsePass(blur);
 	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	//scene9->Show(drag1);
 	scene9->ConditionShow(drag1,hasReadMessage1);
 
 	Image* drag2Img = new Image(100, 100);
@@ -589,9 +588,8 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag2 = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag2->material_->SetBlendType(Blend_Alpha);
 	drag2->AddDragTarget(&grid);
-	//drag2->UsePass(blur);
+	drag2->UsePass(blur);
 	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	//scene9->Show(drag2);
 	scene9->ConditionShow(drag2, hasReadMessage1);
 
 	Image* drag3Img = new Image(100, 100);
@@ -601,9 +599,8 @@ int main(int argc, char* argv[]) {
 	ShaderDragImage* drag3 = new ShaderDragImage(drag3Img, nullptr, VB_Static, TextureFilter_Nearest);
 	drag3->material_->SetBlendType(Blend_Alpha);
 	drag3->AddDragTarget(&grid);
-	//drag3->UsePass(blur);
+	drag3->UsePass(blur);
 	drag3->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	//scene9->Show(drag3);
 	scene9->ConditionShow(drag3, hasReadMessage1);
 	//___drags
 	//event: reset mouse
@@ -677,6 +674,7 @@ int main(int argc, char* argv[]) {
 		if (inx >= 8)
 		{
 			cursor->SetActive(true);
+			bgm.ChangeBGM("D:/HumanTree/sound/music2.wav");
 		}
 	};
 	DebugJumpToScene(8);
@@ -748,14 +746,14 @@ int main(int argc, char* argv[]) {
 			deltaTime = (now_ - last_) / 1000.0f;
 		}
 
-		AutoProfiler::dataRoot_->children_.clear();
-
 		if (deltaTime > 0.03 && !GOD.bOldDraw_) //detect too slow frame
 		{
 			std::cout << "Slow"<<deltaTime<<"\n";
 			//???
 			//gWatchDog.Record();
 		}
+		AutoProfiler::dataRoot_->children_.clear();
+
 		if (deltaTime > 0.017f)//·â¶¥60
 		{
 			//???
