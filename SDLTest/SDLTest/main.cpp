@@ -543,6 +543,8 @@ int main(int argc, char* argv[]) {
 		ppt = new ShaderPPT(ppt1);
 		ppt->material_->SetBlendType(Blend_Alpha);
 
+		ppt->SetFlipSound("D:/HumanTree/Sound/click.wav");
+		ppt->SetChangeGroupSound("D:/HumanTree/Sound/click.wav");
 		ppt->BindButton(pptButton);
 		ppt->InsertPPT("D:/HumanTree/PPT2.png");
 		ppt->InsertPPT("askPosition","D:/HumanTree/PPTQ1.png");
@@ -579,6 +581,7 @@ int main(int argc, char* argv[]) {
 	drag1->AddDragTarget(&grid);
 	drag1->UsePass(blur);
 	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag1->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
 	scene9->ConditionShow(drag1,hasReadMessage1);
 
 	Image* drag2Img = new Image(100, 100);
@@ -590,6 +593,7 @@ int main(int argc, char* argv[]) {
 	drag2->AddDragTarget(&grid);
 	drag2->UsePass(blur);
 	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag2->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
 	scene9->ConditionShow(drag2, hasReadMessage1);
 
 	Image* drag3Img = new Image(100, 100);
@@ -601,6 +605,7 @@ int main(int argc, char* argv[]) {
 	drag3->AddDragTarget(&grid);
 	drag3->UsePass(blur);
 	drag3->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag3->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
 	scene9->ConditionShow(drag3, hasReadMessage1);
 	//___drags
 	//event: reset mouse

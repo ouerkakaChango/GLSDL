@@ -93,11 +93,26 @@ void Scene::SetActive(bool active)
 	{
 		sceneColorShaderImg_->SetActive(active);
 	}
-	for (auto& drawable : drawables_)
-	{
-		drawable->SetActive(active);
+
+	if (!active)
+	{//save state when close scene
+		SaveDrawableState();
 	}
 
+	if (bFirstActive_)
+	{
+		for (auto& drawable : drawables_)
+		{
+			drawable->SetActive(active);
+		}
+		bFirstActive_ = false;
+	}
+	else
+	{//restore state when reopen scene
+		RestoreDrawableState();
+	}
+
+	//??? 忘了为啥要这样了
 	if (active)
 	{
 		timeline_->Reset();
@@ -129,4 +144,20 @@ void Scene::ConditionShow(Drawable* drawable, Condition* condition)
 	{
 		Show(drawable, 0);
 	});
+}
+
+void Scene::SaveDrawableState()
+{
+	for (auto& i : drawables_)
+	{
+		drawableStates_[i] = i->GetActive();
+	}
+}
+
+void Scene::RestoreDrawableState()
+{
+	for (auto& i : drawables_)
+	{
+		i->SetActive(drawableStates_[i]);
+	}
 }

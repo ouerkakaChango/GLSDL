@@ -17,6 +17,8 @@ public:
 	void Flip();
 	void ChangeGroup(const std::string& groupName);
 	void BindButton(Button* button);
+	void SetFlipSound(const Path& flipSound);
+	void SetChangeGroupSound(const Path& changeGroupSound);
 protected:
 	void CheckNextButtonStatus();
 	void SetNextButtonActive(bool active);
@@ -24,7 +26,11 @@ protected:
 	MapVector<SDL_Surface*> texSurfaces_;
 	SDL_Surface* nowSurface_{ nullptr };
 	Button* nextButton_{ nullptr };
+	Path flipSound_;
+	Path changeGroupSound_;
 	std::string nowGroup_{ "default" };
 	unsigned nowInx_{ 0 };
+	bool bUseFlipSound_{ false };
+	bool bUseChangeGroupSound_{ false };
 };
 

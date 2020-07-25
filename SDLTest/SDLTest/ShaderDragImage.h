@@ -19,9 +19,13 @@ public:
 	void OnDragRelease(LMB_Up* event);
 	void OnDraging(Mouse_Move* event);
 	void AddDragTarget(DragTarget* target);
+
+	void SetDragReleaseSound(const Path& path);
 protected:
 	DragTarget* dragTarget_{nullptr};
+	Path dragRleaseSound_;
 	Vec2 oriDragPos_;
 	bool bDraging_{ false };
+	bool bUseDragRleaseSound_{ false };
 };
 

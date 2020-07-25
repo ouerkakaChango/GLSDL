@@ -3,6 +3,8 @@
 #include "God.h"
 #include "Image.h"
 #include "DragTarget.h"
+#include "God.h"
+#include "BGMSystem.h"
 #include "Debug.h"
 
 ShaderDragImage::ShaderDragImage(Image* img,
@@ -80,6 +82,10 @@ void ShaderDragImage::OnDragRelease(LMB_Up* event)
 	{
 		GOD.TaskNotify(MakePack(this,result.position_), "DragRelease");
 		SetPosition(result.position_);
+		if (bUseDragRleaseSound_)
+		{
+			GOD.bgmSystem_->PlayChunk(dragRleaseSound_);
+		}
 	}
 }
 
@@ -94,4 +100,10 @@ void ShaderDragImage::OnDraging(Mouse_Move* event)
 {
 	//LOG("Draging");
 	SetPosition(event->x_, event->y_);
+}
+
+void ShaderDragImage::SetDragReleaseSound(const Path& path)
+{
+	bUseDragRleaseSound_ = true;
+	dragRleaseSound_ = path;
 }

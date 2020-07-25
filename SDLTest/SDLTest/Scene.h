@@ -33,10 +33,15 @@ public:
 
 	SceneShaderImage* GetSceneImg() { return sceneColorShaderImg_; }
 protected:
+	void SaveDrawableState();
+	void RestoreDrawableState();
+
 	std::vector<Drawable*> drawables_;
 	std::vector<Effect*> effects_;
+	std::map<Drawable*, bool> drawableStates_;
 	Timeline* timeline_;
 	SceneShaderImage* sceneColorShaderImg_{ nullptr };
+	bool bFirstActive_{true};
 
 	void AddEffect(Effect* effect);
 	friend class ShowAction;

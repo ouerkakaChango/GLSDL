@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Button.h"
 #include "God.h"
+#include "BGMSystem.h"
 #include "Events.h"
 
 ShaderPPT::ShaderPPT(Image* initImg, Material* material, VBDrawType vbDrawType, TextureFilterType texFilterType)
@@ -40,6 +41,10 @@ void ShaderPPT::Flip()
 	nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
 	CheckNextButtonStatus();
 	GOD.BroadCast(&PPT_PageFlip(nowGroup_,nowInx_, nowInx_ == texSurfaces_.map_[nowGroup_].size()-1));
+	if (bUseFlipSound_)
+	{
+		GOD.bgmSystem_->PlayChunk(flipSound_);
+	}
 }
 
 void ShaderPPT::GetDrawcall()
@@ -50,14 +55,6 @@ void ShaderPPT::GetDrawcall()
 		{
 			//??? unconsidered yet
 			abort();
-			//passedRT_->SetTexture(rt_);
-			//passedRT_->UsePass(pass_);
-			//
-			//material_->UpdateParam("tex", rt_);
-			////??? 和SceneShaderImg太像，是否改写合并？
-			//material_->UpdateParam("glowedTex", passedRT_);
-			//
-			//CommitDrawCall();
 		}
 		else
 		{
@@ -75,6 +72,10 @@ void ShaderPPT::ChangeGroup(const std::string& groupName)
 		nowInx_ = 0;
 		nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
 		CheckNextButtonStatus();
+		if (bUseChangeGroupSound_)
+		{
+			GOD.bgmSystem_->PlayChunk(changeGroupSound_);
+		}
 	}
 	else
 	{
@@ -105,4 +106,16 @@ void ShaderPPT::SetNextButtonActive(bool active)
 	{
 		nextButton_->SetActive(active);
 	}
+}
+
+void ShaderPPT::SetFlipSound(const Path& flipSound)
+{
+	bUseFlipSound_ = true;
+	flipSound_ = flipSound;
+}
+
+void ShaderPPT::SetChangeGroupSound(const Path& changeGroupSound)
+{
+	bUseChangeGroupSound_ = true;
+	changeGroupSound_ = changeGroupSound;
 }
