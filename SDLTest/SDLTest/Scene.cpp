@@ -99,17 +99,27 @@ void Scene::SetActive(bool active)
 		SaveDrawableState();
 	}
 
-	if (bFirstActive_)
+	if (active)
+	{
+		if (bFirstActive_)
+		{
+			for (auto& drawable : drawables_)
+			{
+				drawable->SetActive(active);
+			}
+			bFirstActive_ = false;
+		}
+		else
+		{//restore state when reopen scene
+			RestoreDrawableState();
+		}
+	}
+	else
 	{
 		for (auto& drawable : drawables_)
 		{
-			drawable->SetActive(active);
+			drawable->SetActive(false);
 		}
-		bFirstActive_ = false;
-	}
-	else
-	{//restore state when reopen scene
-		RestoreDrawableState();
 	}
 
 	//??? 忘了为啥要这样了

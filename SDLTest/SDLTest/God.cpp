@@ -91,6 +91,7 @@ void God::Update(float deltaTime)
 	Profile("God Update")
 	timeline_->Update(deltaTime);
 	sceneManager_.Update(deltaTime);
+	//(deprecated,old draw)
 	for (auto& drawable : postDrawables_)
 	{
 		drawable->Render();

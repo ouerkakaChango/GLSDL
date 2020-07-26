@@ -84,7 +84,7 @@ private:
 	void InitDefaultAsset();
 
 	MapVector<Object*> eventMapVector_;
-	std::list<Drawable*> postDrawables_;
+	std::list<Drawable*> postDrawables_;	//(deprecated,old draw)
 	Material* defaultMaterial_{nullptr};
 	Timeline* timeline_{nullptr};
 

@@ -568,7 +568,12 @@ int main(int argc, char* argv[]) {
 	//--- dragConditions
 	PPTHasReadCondition *hasReadMessage1 = new PPTHasReadCondition;
 	hasReadMessage1->Bind(ppt, "default");
-	hasReadMessage1->SetActive(true);
+
+	PPTHasReadCondition *hasReadMessage2 = new PPTHasReadCondition;
+	hasReadMessage2->Bind(ppt, "askPosition");
+
+	PPTHasReadCondition *hasReadMessage3 = new PPTHasReadCondition;
+	hasReadMessage3->Bind(ppt, "askReason");
 	//___ dragConditions
 
 	//--- drags
@@ -576,44 +581,51 @@ int main(int argc, char* argv[]) {
 	drag1Img->ReadFile("D:/HumanTree/IconPos.png");
 	drag1Img->SetPosition(800, 780);
 
-	ShaderDragImage* drag1 = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
-	drag1->material_->SetBlendType(Blend_Alpha);
-	drag1->AddDragTarget(&grid);
-	drag1->UsePass(blur);
-	drag1->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	drag1->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
-	scene9->ConditionShow(drag1,hasReadMessage1);
+	ShaderDragImage* drag_Pos = new ShaderDragImage(drag1Img,nullptr,VB_Static,TextureFilter_Nearest);
+	drag_Pos->material_->SetBlendType(Blend_Alpha);
+	drag_Pos->AddDragTarget(&grid);
+	drag_Pos->UsePass(blur);
+	drag_Pos->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag_Pos->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
+	scene9->ConditionShow(drag_Pos,hasReadMessage1);
 
 	Image* drag2Img = new Image(100, 100);
 	drag2Img->ReadFile("D:/HumanTree/IconQues.png");
 	drag2Img->SetPosition(975, 780);
 
-	ShaderDragImage* drag2 = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
-	drag2->material_->SetBlendType(Blend_Alpha);
-	drag2->AddDragTarget(&grid);
-	drag2->UsePass(blur);
-	drag2->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	drag2->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
-	scene9->ConditionShow(drag2, hasReadMessage1);
+	ShaderDragImage* drag_Ques = new ShaderDragImage(drag2Img, nullptr, VB_Static, TextureFilter_Nearest);
+	drag_Ques->material_->SetBlendType(Blend_Alpha);
+	drag_Ques->AddDragTarget(&grid);
+	drag_Ques->UsePass(blur);
+	drag_Ques->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag_Ques->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
+	scene9->ConditionShow(drag_Ques, hasReadMessage1);
 
 	Image* drag3Img = new Image(100, 100);
 	drag3Img->ReadFile("D:/HumanTree/IconReason.png");
 	drag3Img->SetPosition(625, 780);
 
-	ShaderDragImage* drag3 = new ShaderDragImage(drag3Img, nullptr, VB_Static, TextureFilter_Nearest);
-	drag3->material_->SetBlendType(Blend_Alpha);
-	drag3->AddDragTarget(&grid);
-	drag3->UsePass(blur);
-	drag3->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
-	drag3->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
-	scene9->ConditionShow(drag3, hasReadMessage1);
+	ShaderDragImage* drag_Reason = new ShaderDragImage(drag3Img, nullptr, VB_Static, TextureFilter_Nearest);
+	drag_Reason->material_->SetBlendType(Blend_Alpha);
+	drag_Reason->AddDragTarget(&grid);
+	drag_Reason->UsePass(blur);
+	drag_Reason->SetCustomDrawMaterial(drawMat->Clone(), "glowedTex");
+	drag_Reason->SetDragReleaseSound("D:/HumanTree/Sound/placement2.wav");
+	scene9->ConditionShow(drag_Reason, hasReadMessage2);
 	//___drags
 	//event: reset mouse
 	Func func9_1 = [&]()
 	{
 		cursor->SetDefaultImage();
 	};
+	//event: goto recall scene11
+	Func func9_2 = [&]()
+	{
+		//scene11,inx=10
+		sceneMgr.TransToScene(10);
+	};
 	scene9->AddCustomAction(0.0f, func9_1);
+	hasReadMessage3->AddDelayFunc(3.0f, func9_2);
 	//___ Scene 9
 	/////////////////////////////////////////////
 	//Scene 10 (cat scene)
@@ -636,7 +648,7 @@ int main(int argc, char* argv[]) {
 
 	//--- wordBox
 	Image* wordBoxImg = new Image(300, 150);
-	wordBoxImg->ReadFile("D:/HumanTree/wordBox1.png");
+	wordBoxImg->ReadFile("D:/HumanTree/wordBox1_1.png");
 	wordBoxImg->SetPosition(900, 350);
 	wordBoxImg->SetAchorType(Anchor_LeftDown);
 
@@ -649,11 +661,14 @@ int main(int argc, char* argv[]) {
 	scene10->Show(wordBox,0.0f, sizeEff);
 	//___ wordBox
 	/////////////////////////////////////////////
+	//Scene 11 (recall scene)
+	auto scene11 = sceneMgr.AddScene("D:/HumanTree/test.png");
+	/////////////////////////////////////////////
 	//--- task
 	TaskManager& taskMgr = GOD.taskManager_;
 	Task t1("askPosition");
-	t1.AddCondition(MakePack(drag1, Vec2(800, 536.5)), "DragRelease");
-	t1.AddCondition(MakePack(drag2, Vec2(930, 536.5)), "DragRelease");
+	t1.AddCondition(MakePack(drag_Pos, Vec2(800, 536.5)), "DragRelease");
+	t1.AddCondition(MakePack(drag_Ques, Vec2(930, 536.5)), "DragRelease");
 	t1.taskCompleteFunc_ = [&]()
 	{
 		ppt->ChangeGroup("askPosition");
@@ -661,7 +676,8 @@ int main(int argc, char* argv[]) {
 	taskMgr.tasks_.push_back(t1);
 
 	Task t2("askReason");
-	t2.AddCondition(MakePack(drag3, Vec2(800, 536.5)), "DragRelease");
+	t2.AddCondition(MakePack(drag_Pos, Vec2(800, 536.5)), "DragRelease");
+	t2.AddCondition(MakePack(drag_Reason, Vec2(930, 536.5)), "DragRelease");
 	t2.taskCompleteFunc_ = [&]()
 	{
 		ppt->ChangeGroup("askReason");

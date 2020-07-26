@@ -13,5 +13,6 @@ public:
 	void Bind(ShaderPPT* ppt, const std::string& groupName);
 protected:
 	ShaderPPT* ppt_{nullptr};
+	std::string groupName_;
 };
 

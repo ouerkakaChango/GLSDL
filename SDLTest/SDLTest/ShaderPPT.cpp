@@ -40,11 +40,16 @@ void ShaderPPT::Flip()
 	nowInx_ += 1;
 	nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
 	CheckNextButtonStatus();
-	GOD.BroadCast(&PPT_PageFlip(nowGroup_,nowInx_, nowInx_ == texSurfaces_.map_[nowGroup_].size()-1));
+	BroadcastFlipEvent();
 	if (bUseFlipSound_)
 	{
 		GOD.bgmSystem_->PlayChunk(flipSound_);
 	}
+}
+
+void ShaderPPT::BroadcastFlipEvent()
+{
+	GOD.BroadCast(&PPT_PageFlip(nowGroup_, nowInx_, nowInx_ == texSurfaces_.map_[nowGroup_].size() - 1));
 }
 
 void ShaderPPT::GetDrawcall()
@@ -72,6 +77,7 @@ void ShaderPPT::ChangeGroup(const std::string& groupName)
 		nowInx_ = 0;
 		nowSurface_ = texSurfaces_.map_[nowGroup_][nowInx_];
 		CheckNextButtonStatus();
+		BroadcastFlipEvent();
 		if (bUseChangeGroupSound_)
 		{
 			GOD.bgmSystem_->PlayChunk(changeGroupSound_);

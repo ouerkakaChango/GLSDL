@@ -22,6 +22,7 @@ public:
 protected:
 	void CheckNextButtonStatus();
 	void SetNextButtonActive(bool active);
+	void BroadcastFlipEvent();
 
 	MapVector<SDL_Surface*> texSurfaces_;
 	SDL_Surface* nowSurface_{ nullptr };
