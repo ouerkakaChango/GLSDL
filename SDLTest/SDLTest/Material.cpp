@@ -5,6 +5,7 @@
 #include "File.h"
 #include "RenderTexture.h"
 #include "God.h"
+#include "Debug.h"
 
 bool MaterialParam::Check(Material* material)
 {
@@ -143,10 +144,11 @@ void Texture2DParam::UpdateValue()
 			else
 			{
 				//???
-				if (!GOD.bOldDraw_)
-				{
-					abort();
-				}
+				LOG("Warning:RGB texutre,may be having unhandled situation");
+				//if (!GOD.bOldDraw_)
+				//{
+				//	abort();
+				//}
 			}
 			glTexImage2D(GL_TEXTURE_2D, 0, Mode, toUpdateSurface_->w, toUpdateSurface_->h, 0, Mode, GL_UNSIGNED_BYTE, toUpdateSurface_->pixels);
 		}

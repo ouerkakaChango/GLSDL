@@ -663,6 +663,16 @@ int main(int argc, char* argv[]) {
 	/////////////////////////////////////////////
 	//Scene 11 (recall scene)
 	auto scene11 = sceneMgr.AddScene("D:/HumanTree/test.png");
+	auto sceneSImg = scene11->GetSceneImg();
+	//--- glitch
+	Material* glitchMat = new Material;
+	glitchMat->CompileShader("D:/HumanTree/code/quad.vs","D:/HumanTree/code/Glitch.fs");
+	Image* disturbImg = new Image(256, 256);
+	disturbImg->ReadFile("D:/HumanTree/disturbBig.png");
+	glitchMat->UpdateParam("disturbTex",disturbImg->GetSurface());
+	//___ glitch
+	sceneSImg->ChangeMaterial(glitchMat);
+
 	/////////////////////////////////////////////
 	//--- task
 	TaskManager& taskMgr = GOD.taskManager_;
@@ -698,7 +708,7 @@ int main(int argc, char* argv[]) {
 			bgm.ChangeBGM("D:/HumanTree/sound/music2.wav");
 		}
 	};
-	DebugJumpToScene(8);
+	DebugJumpToScene(10);
 
 	//??? debug
 	{
